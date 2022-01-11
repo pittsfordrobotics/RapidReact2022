@@ -12,4 +12,14 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+//    LIMELIGHT
+//    all distances in inches
+
+//    8 ft 8 inches to top of goal
+    public static final double kLimelightTargetHeight = 104;
+//    random numbers
+    public static final double kLimelightRobotHeight = 48;
+//    depending on design limelight could have variable angle
+    public static final double kLimelightAngle = 45;
+}
