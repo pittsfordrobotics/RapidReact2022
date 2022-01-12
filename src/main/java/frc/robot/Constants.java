@@ -16,8 +16,10 @@ public final class Constants {
 //    LIMELIGHT
 //    all distances in inches
 
-//    8 ft 8 inches to top of goal
-    public static final double kLimelightTargetHeight = 104;
+//    104 inches to top of goal
+//    101.625 inches to bottom of vision target
+//    middle is 102.8125 inches from field
+    public static final double kLimelightTargetHeight = 102.8125;
 //    random numbers
     public static final double kLimelightRobotHeight = 48;
 //    depending on design limelight could have variable angle
