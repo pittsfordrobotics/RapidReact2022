@@ -3,32 +3,17 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 import static frc.robot.Constants.*;
 
 public class Limelight extends SubsystemBase {
+    private static Limelight INSTANCE;
 
-    // With eager singleton initialization, any static variables/fields used in the
-    // constructor must appear before the "INSTANCE" variable so that they are initialized
-    // before the constructor is called when the "INSTANCE" variable initializes.
-
-    /**
-     * The Singleton instance of this Limelight. Code should use
-     * the {@link #getInstance()} method to get the single instance (rather
-     * than trying to construct an instance of this class.)
-     */
-    private final static Limelight limelight = new Limelight();
-
-
-    /**
-     * Returns the Singleton instance of this Limelight. This static method
-     * should be used, rather than the constructor, to get the single instance
-     * of this class. For example: {@code Limelight.getInstance();}
-     */
-    @SuppressWarnings("WeakerAccess")
     public static Limelight getInstance() {
-        return limelight;
+        if (INSTANCE == null) {
+            INSTANCE = new Limelight();
+        }
+        return INSTANCE;
     }
 
     /**
