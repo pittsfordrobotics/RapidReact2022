@@ -22,8 +22,8 @@ public class Limelight extends SubsystemBase {
      * the {@link #getInstance()} method to get the singleton instance.
      */
     private Limelight() {
-        setLED(1);
-        setCamMode(0);
+        setLED(LED.OFF);
+        setCamMode(Camera.DRIVER);
     }
 
     public void periodic() {
@@ -48,41 +48,71 @@ public class Limelight extends SubsystemBase {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
     }
 
-    /**
-     * Sets the pipeline of the Limelight.
-     *
-     * @param pipeline :
-     */
-    public void setPipeline(int pipeline) {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeline);
+
+    public enum Pipelines {
+        TEMP(0);
+
+        private int num;
+        Pipelines(int num) {
+            this.num = num;
+        }
+
+        public int getNum() {
+            return num;
+        }
     }
 
-    /**
-     * Sets the LED mode of the Limelight.
-     *
-     * @param mode 0: pipeline mode, 1: off, 2: blink, 3: on
-     */
-    public void setLED(int mode) {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(mode);
+    public void setPipeline(Pipelines pipeline) {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeline.getNum());
     }
 
-    /**
-     * Sets camera mode
-     *
-     * @param mode 0: Vision Processor, 1: Driver Camera
-     */
-    public void setCamMode(int mode) {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(mode);
+
+    public enum LED {
+        PIPELINE(0), OFF(1), BLINK(2), ON(3);
+
+        private int mode;
+
+        LED(int mode) {
+            this.mode = mode;
+        }
+
+        public int getMode() {
+            return mode;
+        }
     }
+
+    public void setLED(LED mode) {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(mode.getMode());
+    }
+
+
+    public enum Camera {
+        VISION(0), DRIVER(1);
+
+        private int num;
+
+        Camera(int num) {
+            this.num = num;
+        }
+
+        public int getNum() {
+            return num;
+        }
+    }
+
+    public void setCamMode(Camera mode) {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(mode.getNum());
+    }
+
 
     public void enable() {
-        setCamMode(0);
-        setLED(3);
+        setCamMode(Camera.VISION);
+        setLED(LED.ON);
     }
 
     public void disable() {
-        setCamMode(1);
-        setLED(1);
+        setCamMode(Camera.DRIVER);
+        setLED(LED.OFF);
     }
 
     public double getDistance() {
