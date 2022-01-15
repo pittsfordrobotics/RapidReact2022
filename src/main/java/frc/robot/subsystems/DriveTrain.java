@@ -8,73 +8,61 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.SlewRateLimiter;
-import edu.wpi.first.wpilibj.controller.PIDController;
+import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.LazySparkMax;
 
-import static frc.robot.Constants.Drive.*;
-import static frc.robot.Constants.Ports.CAN;
+import static frc.robot.Constants.*;
 
 public class DriveTrain extends SubsystemBase {
-    private CANSparkMax m_leftPrimary = new CANSparkMax(CAN.kDriveLeftPrimary, MotorType.kBrushless);
-    private CANSparkMax m_leftFollower = new CANSparkMax(CAN.kDriveLeftFollower, MotorType.kBrushless);
+    private CANSparkMax mLeftPrimary = new LazySparkMax(kDriveCANLeftLeader, IdleMode.kBrake);
+    private CANSparkMax mLeftFollower = new LazySparkMax(kDriveCANLeftFollower, IdleMode.kBrake, mLeftPrimary);
 
-    private CANEncoder m_leftEncoder = m_leftPrimary.getEncoder();
+    private RelativeEncoder mLeftEncoder = mLeftPrimary.getEncoder();
 
-    private CANSparkMax m_rightPrimary = new CANSparkMax(CAN.kDriveRightPrimary, MotorType.kBrushless);
-    private CANSparkMax m_rightFollower = new CANSparkMax(CAN.kDriveRightFollower, MotorType.kBrushless);
+    private CANSparkMax mRightPrimary = new LazySparkMax(kDriveCANRightLeader, IdleMode.kBrake);
+    private CANSparkMax mRightFollower = new LazySparkMax(kDriveCANRightFollower, IdleMode.kBrake, mRightPrimary);
 
-    private CANEncoder m_rightEncoder = m_rightPrimary.getEncoder();
+    private RelativeEncoder mRightEncoder = mRightPrimary.getEncoder();
 
-    private DifferentialDrive m_differentialDrive;
-    private DifferentialDriveOdometry m_odometry;
-    private DifferentialDriveWheelSpeeds m_wheelSpeeds;
-    private Pose2d m_pose;
-    private AHRS m_ahrs;
-    private SlewRateLimiter rateLimit;
     private double throttle;
+    private SlewRateLimiter rateLimit = new SlewRateLimiter(2);
+    private DifferentialDrive mDifferentialDrive;
+    private DifferentialDriveOdometry mOdometry;
+    private DifferentialDriveWheelSpeeds mWheelSpeeds;
+    private Pose2d mPose;
+    private AHRS mAhrs = new AHRS(Port.kMXP);
 
     /**
      * Creates a new DriveTrain.
      */
     public DriveTrain(AHRS ahrs) {
-        initController(m_leftPrimary);
-        initController(m_leftFollower);
-        m_leftEncoder.setPosition(0);
-        m_leftFollower.follow(m_leftPrimary);
-
-        initController(m_rightPrimary);
-        initController(m_rightFollower);
-        m_rightEncoder.setPosition(0);
-        m_rightFollower.follow(m_rightPrimary);
-
         resetEncoders();
 
-        m_differentialDrive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
-        m_differentialDrive.setDeadband(0.08);
+        mDifferentialDrive = new DifferentialDrive(mLeftPrimary, mRightPrimary);
+        mDifferentialDrive.setDeadband(0.05);
 
-        m_ahrs = ahrs;
-        m_ahrs.reset();
+        mAhrs.reset();
 
-        m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
+        mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
 
-        m_pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
-        m_wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+        mPose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
+        mWheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
 
-        m_leftEncoder.setPositionConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio);
-        m_rightEncoder.setPositionConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio);
-        m_leftEncoder.setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
-        m_rightEncoder.setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
+        mLeftEncoder.setPositionConversionFactor(Math.PI * kDriveWheelDiameter / kDriveGearRatio);
+        mRightEncoder.setPositionConversionFactor(Math.PI * kDriveWheelDiameter / kDriveGearRatio);
+        mLeftEncoder.setVelocityConversionFactor(Math.PI * kDriveWheelDiameter / kDriveGearRatio / 60);
+        mRightEncoder.setVelocityConversionFactor(Math.PI * kDriveWheelDiameter / kDriveGearRatio / 60);
 
         setThrottle(0.6);
 
@@ -83,15 +71,15 @@ public class DriveTrain extends SubsystemBase {
 
     public void drive(double speed, double rotation) {
         if (speed < 0.1) {
-            m_differentialDrive.curvatureDrive(speed, rotation, true);
+            mDifferentialDrive.curvatureDrive(speed, rotation, true);
         }
         else {
-            m_differentialDrive.curvatureDrive(speed, rotation, false);
+            mDifferentialDrive.curvatureDrive(speed, rotation, false);
         }
     }
 
     public void setThrottle(double throttle) {
-        m_differentialDrive.setMaxOutput(throttle);
+        mDifferentialDrive.setMaxOutput(throttle);
         this.throttle = throttle;
     }
 
@@ -100,71 +88,62 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void driveVolts(double left, double right) {
-        m_leftPrimary.setVoltage(left);
-        m_rightPrimary.setVoltage(-right);
+        mLeftPrimary.setVoltage(left);
+        mRightPrimary.setVoltage(-right);
 
-        m_differentialDrive.feed();
+        mDifferentialDrive.feed();
     }
 
     public void resetOdometry(Pose2d pose) {
-        m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getAngle()));
+        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(getAngle()));
         resetEncoders();
     }
 
     public void resetEncoders() {
-        m_leftEncoder.setPosition(0);
-        m_rightEncoder.setPosition(0);
+        mLeftEncoder.setPosition(0);
+        mRightEncoder.setPosition(0);
     }
 
     @Override
     public void periodic() {
         // Distance
-        double leftMeters = m_leftEncoder.getPosition();
-        double rightMeters = -m_rightEncoder.getPosition();
+        double leftMeters = mLeftEncoder.getPosition();
+        double rightMeters = -mRightEncoder.getPosition();
 
-        m_pose = m_odometry.update(
+        mPose = mOdometry.update(
                 Rotation2d.fromDegrees(getAngle()),
                 leftMeters,
                 rightMeters);
 
-        m_wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
-        SmartDashboard.putNumber("Velocity Left", getLeftVelocity());
-        SmartDashboard.putNumber("Velocity Right", getRightVelocity());
-        SmartDashboard.putNumber("Throttle", throttle);
-
+        mWheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
     }
 
     public double getLeftVelocity() {
-        return m_leftEncoder.getVelocity();
+        return mLeftEncoder.getVelocity();
     }
 
     public double getRightVelocity() {
-        return -m_rightEncoder.getVelocity();
+        return -mRightEncoder.getVelocity();
     }
 
     public PIDController getLeftController() {
-        return new PIDController(kP, kI, kD);
+        return new PIDController(kDriveP, kDriveI, kDriveD);
     }
 
     public PIDController getRightController() {
-        return new PIDController(kP, kI, kD);
+        return new PIDController(kDriveP, kDriveI, kDriveD);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return m_wheelSpeeds;
+        return mWheelSpeeds;
     }
 
     public Pose2d getPose() {
-        return m_pose;
+        return mPose;
     }
 
     private double getAngle() {
-        return -m_ahrs.getAngle();
-    }
-
-    private void initController(CANSparkMax controller) {
-        controller.restoreFactoryDefaults();
-        controller.setIdleMode(IdleMode.kBrake);
+        return -mAhrs.getAngle();
     }
 
     public SlewRateLimiter getRateLimit() {
@@ -172,15 +151,15 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void enableRateLimit() {
-        rateLimit = new SlewRateLimiter(2);
+        rateLimit.reset(2);
     }
 
     public void disableRateLimit() {
-        rateLimit = new SlewRateLimiter(100000000);
+        rateLimit.reset(Double.POSITIVE_INFINITY);
     }
 
-    public void setRateLimit(SlewRateLimiter rateLimit) {
-        this.rateLimit = rateLimit;
+    public void setRateLimit(double rateLimit) {
+        this.rateLimit.reset(rateLimit);
     }
 
 }

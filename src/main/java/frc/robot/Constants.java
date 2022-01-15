@@ -13,15 +13,35 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-//    LIMELIGHT
-//    all distances in inches
+/**
+ *
+ * DRIVE
+ *
+ */
+    public static final int kDriveCANRightLeader = 1;
+    public static final int kDriveCANRightFollower = 2;
+    public static final int kDriveCANLeftLeader = 3;
+    public static final int kDriveCANLeftFollower = 4;
+
+    public static final int kDriveP = (int) Double.NaN;
+    public static final int kDriveI = (int) Double.NaN;
+    public static final int kDriveD = (int) Double.NaN;
+
+//    measured in meters
+    public static final double kDriveWheelDiameter = Double.NaN;
+    public static final double kDriveGearRatio = Double.NaN;
+
+/**
+ *
+ * LIMELIGHT
+ * all distances measured in inches
+ *
+ **/
 
 //    104 inches to top of goal
 //    101.625 inches to bottom of vision target
 //    middle is 102.8125 inches from field
     public static final double kLimelightTargetHeight = 102.8125;
-//    random numbers
-    public static final double kLimelightRobotHeight = 48;
-//    depending on design limelight could have variable angle
-    public static final double kLimelightAngle = 45;
+    public static final double kLimelightRobotHeight = Double.NaN;
+    public static final double kLimelightAngle = Double.NaN;
 }
