@@ -43,10 +43,16 @@ public class DriveTrain extends SubsystemBase {
     private Pose2d mPose;
     private AHRS mAhrs = new AHRS(Port.kMXP);
 
+    private static DriveTrain mDriveTrain = new DriveTrain();
+
+    public static DriveTrain getInstance() {
+        return mDriveTrain;
+    }
+
     /**
      * Creates a new DriveTrain.
      */
-    public DriveTrain(AHRS ahrs) {
+    private DriveTrain() {
         resetEncoders();
 
         mDifferentialDrive = new DifferentialDrive(mLeftPrimary, mRightPrimary);
