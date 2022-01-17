@@ -24,7 +24,7 @@ import frc.robot.util.LazySparkMax;
 
 import static frc.robot.Constants.*;
 
-public class DriveTrain extends SubsystemBase {
+public class Drive extends SubsystemBase {
     private CANSparkMax mLeftPrimary = new LazySparkMax(kDriveCANLeftLeader, IdleMode.kBrake);
     private CANSparkMax mLeftFollower = new LazySparkMax(kDriveCANLeftFollower, IdleMode.kBrake, mLeftPrimary);
 
@@ -43,16 +43,16 @@ public class DriveTrain extends SubsystemBase {
     private Pose2d mPose;
     private AHRS mAhrs = new AHRS(Port.kMXP);
 
-    private static DriveTrain mDriveTrain = new DriveTrain();
+    private static Drive mDrive = new Drive();
 
-    public static DriveTrain getInstance() {
-        return mDriveTrain;
+    public static Drive getInstance() {
+        return mDrive;
     }
 
     /**
      * Creates a new DriveTrain.
      */
-    private DriveTrain() {
+    private Drive() {
         resetEncoders();
 
         mDifferentialDrive = new DifferentialDrive(mLeftPrimary, mRightPrimary);
