@@ -27,13 +27,13 @@ import static frc.robot.Constants.*;
 public class Drive extends SubsystemBase {
     private CANSparkMax mLeftPrimary = new LazySparkMax(kDriveCANLeftLeader, IdleMode.kBrake);
     private CANSparkMax mLeftFollower = new LazySparkMax(kDriveCANLeftFollower, IdleMode.kBrake, mLeftPrimary);
-
-    private RelativeEncoder mLeftEncoder = mLeftPrimary.getEncoder();
-
     private CANSparkMax mRightPrimary = new LazySparkMax(kDriveCANRightLeader, IdleMode.kBrake);
     private CANSparkMax mRightFollower = new LazySparkMax(kDriveCANRightFollower, IdleMode.kBrake, mRightPrimary);
 
+    private RelativeEncoder mLeftEncoder = mLeftPrimary.getEncoder();
     private RelativeEncoder mRightEncoder = mRightPrimary.getEncoder();
+
+    private AHRS mAhrs = new AHRS(Port.kMXP);
 
     private double throttle;
     private SlewRateLimiter rateLimit = new SlewRateLimiter(2);
@@ -41,10 +41,8 @@ public class Drive extends SubsystemBase {
     private DifferentialDriveOdometry mOdometry;
     private DifferentialDriveWheelSpeeds mWheelSpeeds;
     private Pose2d mPose;
-    private AHRS mAhrs = new AHRS(Port.kMXP);
 
     private static Drive mDrive = new Drive();
-
     public static Drive getInstance() {
         return mDrive;
     }
@@ -73,6 +71,20 @@ public class Drive extends SubsystemBase {
         setThrottle(0.6);
 
         enableRateLimit();
+    }
+
+    @Override
+    public void periodic() {
+        // Distance
+        double leftMeters = mLeftEncoder.getPosition();
+        double rightMeters = -mRightEncoder.getPosition();
+
+        mPose = mOdometry.update(
+                Rotation2d.fromDegrees(getAngle()),
+                leftMeters,
+                rightMeters);
+
+        mWheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
     }
 
     public void drive(double speed, double rotation) {
@@ -108,20 +120,6 @@ public class Drive extends SubsystemBase {
     public void resetEncoders() {
         mLeftEncoder.setPosition(0);
         mRightEncoder.setPosition(0);
-    }
-
-    @Override
-    public void periodic() {
-        // Distance
-        double leftMeters = mLeftEncoder.getPosition();
-        double rightMeters = -mRightEncoder.getPosition();
-
-        mPose = mOdometry.update(
-                Rotation2d.fromDegrees(getAngle()),
-                leftMeters,
-                rightMeters);
-
-        mWheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
     }
 
     public double getLeftVelocity() {
