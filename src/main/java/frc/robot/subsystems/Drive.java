@@ -88,7 +88,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void drive(double speed, double rotation) {
-        if (speed < 0.1) {
+        if (speed < 0.15) {
             mDifferentialDrive.curvatureDrive(speed, rotation, true);
         }
         else {
