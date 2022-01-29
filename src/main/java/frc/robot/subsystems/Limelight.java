@@ -116,7 +116,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getDistance() {
-        return (kLimelightTargetHeight - kLimelightRobotHeight) / Math.tan(kLimelightAngle + getVertical());
+        return (LimelightTargetHeight - LimelightRobotHeight) / Math.tan(LimelightAngle + getVertical());
     }
 
 }

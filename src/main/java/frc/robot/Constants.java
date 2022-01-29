@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -18,18 +20,24 @@ public final class Constants {
  * DRIVE
  *
  */
-    public static final int kDriveCANRightLeader = 1;
-    public static final int kDriveCANRightFollower = 2;
-    public static final int kDriveCANLeftLeader = 3;
-    public static final int kDriveCANLeftFollower = 4;
+    public static final int DriveCANRightLeader = 1;
+    public static final int DriveCANRightFollower = 2;
+    public static final int DriveCANLeftLeader = 3;
+    public static final int DriveCANLeftFollower = 4;
 
-    public static final int kDriveP = (int) Double.NaN;
-    public static final int kDriveI = (int) Double.NaN;
-    public static final int kDriveD = (int) Double.NaN;
+    public static final double DriveP = Double.NaN;
+    public static final double DriveI = Double.NaN;
+    public static final double DriveD = Double.NaN;
+
+    public static final double DriveS = Double.NaN;
+    public static final double DriveV = Double.NaN;
+    public static final double DriveA = Double.NaN;
 
 //    measured in meters
-    public static final double kDriveWheelDiameter = Double.NaN;
-    public static final double kDriveGearRatio = 0.1524;
+    public static final double DriveWheelDiameter = Double.NaN;
+    public static final double DriveGearRatio = 0.1524;
+
+    public static final DifferentialDriveKinematics DriveKinematics = new DifferentialDriveKinematics(0.644);
 
 /**
  *
@@ -41,7 +49,7 @@ public final class Constants {
 //    104 inches to top of goal
 //    101.625 inches to bottom of vision target
 //    middle is 102.8125 inches from field
-    public static final double kLimelightTargetHeight = 102.8125;
-    public static final double kLimelightRobotHeight = Double.NaN;
-    public static final double kLimelightAngle = Double.NaN;
+    public static final double LimelightTargetHeight = 102.8125;
+    public static final double LimelightRobotHeight = Double.NaN;
+    public static final double LimelightAngle = Double.NaN;
 }

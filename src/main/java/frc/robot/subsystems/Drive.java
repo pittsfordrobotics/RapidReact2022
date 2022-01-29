@@ -19,17 +19,16 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LazySparkMax;
 
 import static frc.robot.Constants.*;
 
 public class Drive extends SubsystemBase {
-    private CANSparkMax mLeftPrimary = new LazySparkMax(kDriveCANLeftLeader, IdleMode.kBrake, true);
-    private CANSparkMax mLeftFollower = new LazySparkMax(kDriveCANLeftFollower, IdleMode.kBrake, mLeftPrimary);
-    private CANSparkMax mRightPrimary = new LazySparkMax(kDriveCANRightLeader, IdleMode.kBrake, false);
-    private CANSparkMax mRightFollower = new LazySparkMax(kDriveCANRightFollower, IdleMode.kBrake, mRightPrimary);
+    private CANSparkMax mLeftPrimary = new LazySparkMax(DriveCANLeftLeader, IdleMode.kBrake, true);
+    private CANSparkMax mLeftFollower = new LazySparkMax(DriveCANLeftFollower, IdleMode.kBrake, mLeftPrimary);
+    private CANSparkMax mRightPrimary = new LazySparkMax(DriveCANRightLeader, IdleMode.kBrake, false);
+    private CANSparkMax mRightFollower = new LazySparkMax(DriveCANRightFollower, IdleMode.kBrake, mRightPrimary);
 
     private RelativeEncoder mLeftEncoder = mLeftPrimary.getEncoder();
     private RelativeEncoder mRightEncoder = mRightPrimary.getEncoder();
@@ -64,10 +63,10 @@ public class Drive extends SubsystemBase {
         mPose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
         mWheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
 
-        mLeftEncoder.setPositionConversionFactor(Math.PI * kDriveWheelDiameter / kDriveGearRatio);
-        mRightEncoder.setPositionConversionFactor(Math.PI * kDriveWheelDiameter / kDriveGearRatio);
-        mLeftEncoder.setVelocityConversionFactor(Math.PI * kDriveWheelDiameter / kDriveGearRatio / 60);
-        mRightEncoder.setVelocityConversionFactor(Math.PI * kDriveWheelDiameter / kDriveGearRatio / 60);
+        mLeftEncoder.setPositionConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio);
+        mRightEncoder.setPositionConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio);
+        mLeftEncoder.setVelocityConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio / 60);
+        mRightEncoder.setVelocityConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio / 60);
 
         setThrottle(0.6);
 
@@ -132,11 +131,11 @@ public class Drive extends SubsystemBase {
     }
 
     public PIDController getLeftController() {
-        return new PIDController(kDriveP, kDriveI, kDriveD);
+        return new PIDController(DriveP, DriveI, DriveD);
     }
 
     public PIDController getRightController() {
-        return new PIDController(kDriveP, kDriveI, kDriveD);
+        return new PIDController(DriveP, DriveI, DriveD);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
