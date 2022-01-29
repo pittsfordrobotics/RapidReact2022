@@ -36,20 +36,19 @@ public class DriveXbox extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-//        if (accelerate && Math.abs(mDrive.getLeftVelocity()) > 0) {
-//            accelerate = true;
-//        }
-//        else {
-//            accelerate = mController.getLeftY() - pastInput < 0;
-//        }
-//        pastInput = mController.getLeftY();
-//        if (accelerate) {
-//            mDrive.drive(mDrive.getRateLimit().calculate(mController.getLeftY()), mController.getRightX() * 0.75);
-//        }
-//        else {
-//            mDrive.drive(mController.getLeftY(), mController.getRightX() * 0.75);
-//        }
-        mDrive.drive(mController.getLeftY(), mController.getRightX() * -0.75);
+        if (accelerate && Math.abs(mDrive.getLeftVelocity()) > 0) {
+            accelerate = true;
+        }
+        else {
+            accelerate = mController.getLeftY() - pastInput < 0;
+        }
+        pastInput = mController.getLeftY();
+        if (accelerate) {
+            mDrive.drive(mDrive.getRateLimit().calculate(mController.getLeftY()), mController.getRightX() * -0.75);
+        }
+        else {
+            mDrive.drive(mController.getLeftY(), mController.getRightX() * -0.75);
+        }
     }
 
     // Called once the command ends or is interrupted.

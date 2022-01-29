@@ -34,8 +34,8 @@ public final class Constants {
     public static final double DriveA = Double.NaN;
 
 //    measured in meters
-    public static final double DriveWheelDiameter = Double.NaN;
-    public static final double DriveGearRatio = 0.1524;
+    public static final double DriveWheelDiameter = 0.1524;
+    public static final double DriveGearRatio = Double.NaN;
 
     public static final DifferentialDriveKinematics DriveKinematics = new DifferentialDriveKinematics(0.644);
 
