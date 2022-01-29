@@ -49,7 +49,7 @@ public class DriveXbox extends CommandBase {
 //        else {
 //            mDrive.drive(mController.getLeftY(), mController.getRightX() * 0.75);
 //        }
-        mDrive.drive(mController.getLeftY(), mController.getRightX() * 0.75);
+        mDrive.drive(mController.getLeftY(), mController.getRightX() * -0.75);
     }
 
     // Called once the command ends or is interrupted.
