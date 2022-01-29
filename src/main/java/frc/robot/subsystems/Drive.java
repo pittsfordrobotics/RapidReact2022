@@ -19,15 +19,16 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LazySparkMax;
 
 import static frc.robot.Constants.*;
 
 public class Drive extends SubsystemBase {
-    private CANSparkMax mLeftPrimary = new LazySparkMax(kDriveCANLeftLeader, IdleMode.kBrake);
+    private CANSparkMax mLeftPrimary = new LazySparkMax(kDriveCANLeftLeader, IdleMode.kBrake, true);
     private CANSparkMax mLeftFollower = new LazySparkMax(kDriveCANLeftFollower, IdleMode.kBrake, mLeftPrimary);
-    private CANSparkMax mRightPrimary = new LazySparkMax(kDriveCANRightLeader, IdleMode.kBrake);
+    private CANSparkMax mRightPrimary = new LazySparkMax(kDriveCANRightLeader, IdleMode.kBrake, false);
     private CANSparkMax mRightFollower = new LazySparkMax(kDriveCANRightFollower, IdleMode.kBrake, mRightPrimary);
 
     private RelativeEncoder mLeftEncoder = mLeftPrimary.getEncoder();
@@ -54,7 +55,7 @@ public class Drive extends SubsystemBase {
         resetEncoders();
 
         mDifferentialDrive = new DifferentialDrive(mLeftPrimary, mRightPrimary);
-        mDifferentialDrive.setDeadband(0.05);
+        mDifferentialDrive.setDeadband(0.2);
 
         mAhrs.reset();
 
@@ -77,7 +78,7 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         // Distance
         double leftMeters = mLeftEncoder.getPosition();
-        double rightMeters = -mRightEncoder.getPosition();
+        double rightMeters = mRightEncoder.getPosition();
 
         mPose = mOdometry.update(
                 Rotation2d.fromDegrees(getAngle()),
@@ -107,7 +108,7 @@ public class Drive extends SubsystemBase {
 
     public void driveVolts(double left, double right) {
         mLeftPrimary.setVoltage(left);
-        mRightPrimary.setVoltage(-right);
+        mRightPrimary.setVoltage(right);
 
         mDifferentialDrive.feed();
     }
@@ -127,7 +128,7 @@ public class Drive extends SubsystemBase {
     }
 
     public double getRightVelocity() {
-        return -mRightEncoder.getVelocity();
+        return mRightEncoder.getVelocity();
     }
 
     public PIDController getLeftController() {

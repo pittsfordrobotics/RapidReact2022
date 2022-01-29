@@ -29,7 +29,7 @@ public final class Constants {
 
 //    measured in meters
     public static final double kDriveWheelDiameter = Double.NaN;
-    public static final double kDriveGearRatio = Double.NaN;
+    public static final double kDriveGearRatio = 0.1524;
 
 /**
  *
