@@ -18,27 +18,18 @@ public class DriveXbox extends CommandBase {
     private double pastInput;
     private boolean accelerate;
 
-    private enum Joysticks {
-
-    }
-
-    /**
-     * Creates a new DriveWithJoysticks.
-     */
     public DriveXbox(BetterXboxController xboxController) {
         drive = Drive.getInstance();
         controller = xboxController;
         addRequirements(drive);
     }
 
-    // Called when the command is initially scheduled.
     @Override
     public void initialize() {
         accelerate = false;
         pastInput = 0;
     }
 
-    // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         if (accelerate && Math.abs(drive.getLeftVelocity()) > 0) {
@@ -51,12 +42,10 @@ public class DriveXbox extends CommandBase {
         drive.drive(accelerate ? drive.getRateLimit().calculate(controller.getDriveY()) : controller.getDriveY(), controller.getDriveX() * -0.75);
     }
 
-    // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
     }
 
-    // Returns true when the command should end.
     @Override
     public boolean isFinished() {
         return false;

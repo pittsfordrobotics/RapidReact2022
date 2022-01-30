@@ -47,9 +47,6 @@ public class Drive extends SubsystemBase {
         return INSTANCE;
     }
 
-    /**
-     * Creates a new DriveTrain.
-     */
     private Drive() {
         resetEncoders();
 
@@ -75,7 +72,6 @@ public class Drive extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // Distance
         double leftMeters = leftEncoder.getPosition();
         double rightMeters = rightEncoder.getPosition();
 

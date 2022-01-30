@@ -13,11 +13,6 @@ public class Limelight extends SubsystemBase {
         return INSTANCE;
     }
 
-    /**
-     * Creates a new instance of this Limelight. This constructor
-     * is private since this class is a Singleton. Code should use
-     * the {@link #getInstance()} method to get the singleton instance.
-     */
     private Limelight() {
         setLED(LED.OFF);
         setCamMode(Camera.DRIVER);
