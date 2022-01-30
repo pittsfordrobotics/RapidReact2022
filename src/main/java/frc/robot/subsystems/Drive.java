@@ -25,10 +25,10 @@ import frc.robot.util.LazySparkMax;
 import static frc.robot.Constants.*;
 
 public class Drive extends SubsystemBase {
-    private final CANSparkMax leftPrimary = new LazySparkMax(DriveCANLeftLeader, IdleMode.kBrake, true);
-    private final CANSparkMax leftFollower = new LazySparkMax(DriveCANLeftFollower, IdleMode.kBrake, leftPrimary);
-    private final CANSparkMax rightPrimary = new LazySparkMax(DriveCANRightLeader, IdleMode.kBrake, false);
-    private final CANSparkMax rightFollower = new LazySparkMax(DriveCANRightFollower, IdleMode.kBrake, rightPrimary);
+    private final CANSparkMax leftPrimary = new LazySparkMax(DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, true);
+    private final CANSparkMax leftFollower = new LazySparkMax(DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, leftPrimary);
+    private final CANSparkMax rightPrimary = new LazySparkMax(DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, false);
+    private final CANSparkMax rightFollower = new LazySparkMax(DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, rightPrimary);
 
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
@@ -63,10 +63,10 @@ public class Drive extends SubsystemBase {
         pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
         wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
 
-        leftEncoder.setPositionConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio);
-        rightEncoder.setPositionConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio);
-        leftEncoder.setVelocityConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio / 60);
-        rightEncoder.setVelocityConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio / 60);
+        leftEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO);
+        rightEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO);
+        leftEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO / 60);
+        rightEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO / 60);
 
         setThrottle(0.6);
 
@@ -126,11 +126,11 @@ public class Drive extends SubsystemBase {
     }
 
     public PIDController getLeftController() {
-        return new PIDController(DriveP, DriveI, DriveD);
+        return new PIDController(DRIVE_P, DRIVE_I, DRIVE_D);
     }
 
     public PIDController getRightController() {
-        return new PIDController(DriveP, DriveI, DriveD);
+        return new PIDController(DRIVE_P, DRIVE_I, DRIVE_D);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {

@@ -13,7 +13,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drive;
 import frc.robot.Constants;
 
@@ -33,8 +32,8 @@ public class Pathing extends SequentialCommandGroup {
             traj,
             Drive.getInstance()::getPose,
             new RamseteController(),
-            new SimpleMotorFeedforward(Constants.DriveS, Constants.DriveV, Constants.DriveA),
-            Constants.DriveKinematics,
+            new SimpleMotorFeedforward(Constants.DRIVE_S, Constants.DRIVE_V, Constants.DRIVE_A),
+            Constants.DRIVE_KINEMATICS,
             Drive.getInstance()::getWheelSpeeds,
             Drive.getInstance().getLeftController(),
             Drive.getInstance().getRightController(),

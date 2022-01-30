@@ -10,17 +10,22 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
+import frc.robot.util.BetterXboxController;
 
 public class DriveXbox extends CommandBase {
     private final Drive drive;
-    private final XboxController controller;
+    private final BetterXboxController controller;
     private double pastInput;
     private boolean accelerate;
+
+    private enum Joysticks {
+
+    }
 
     /**
      * Creates a new DriveWithJoysticks.
      */
-    public DriveXbox(XboxController xboxController, boolean isLefty) {
+    public DriveXbox(BetterXboxController xboxController) {
         drive = Drive.getInstance();
         controller = xboxController;
         addRequirements(drive);
@@ -40,15 +45,10 @@ public class DriveXbox extends CommandBase {
             accelerate = true;
         }
         else {
-            accelerate = controller.getLeftY() - pastInput < 0;
+            accelerate = controller.getDriveY() - pastInput < 0;
         }
-        pastInput = controller.getLeftY();
-        if (accelerate) {
-            drive.drive(drive.getRateLimit().calculate(controller.getLeftY()), controller.getRightX() * -0.75);
-        }
-        else {
-            drive.drive(controller.getLeftY(), controller.getRightX() * -0.75);
-        }
+        pastInput = controller.getDriveY();
+        drive.drive(accelerate ? drive.getRateLimit().calculate(controller.getDriveY()) : controller.getDriveY(), controller.getDriveX() * -0.75);
     }
 
     // Called once the command ends or is interrupted.
