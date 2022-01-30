@@ -18,16 +18,16 @@ import frc.robot.subsystems.Drive;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private XboxController mDriverController = new XboxController(0);
-  private XboxController mOperatorController = new XboxController(1);
-  private Drive mDrive = Drive.getInstance();
+  private final XboxController driverController = new XboxController(0);
+  private final XboxController operatorController = new XboxController(1);
+  private final Drive drive = Drive.getInstance();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
-    mDrive.setDefaultCommand(new DriveXbox(mDriverController));
+    drive.setDefaultCommand(new DriveXbox(driverController, false));
   }
 
   /**

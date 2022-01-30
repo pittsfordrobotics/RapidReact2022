@@ -25,26 +25,26 @@ import frc.robot.util.LazySparkMax;
 import static frc.robot.Constants.*;
 
 public class Drive extends SubsystemBase {
-    private final CANSparkMax mLeftPrimary = new LazySparkMax(DriveCANLeftLeader, IdleMode.kBrake, true);
-    private final CANSparkMax mLeftFollower = new LazySparkMax(DriveCANLeftFollower, IdleMode.kBrake, mLeftPrimary);
-    private final CANSparkMax mRightPrimary = new LazySparkMax(DriveCANRightLeader, IdleMode.kBrake, false);
-    private final CANSparkMax mRightFollower = new LazySparkMax(DriveCANRightFollower, IdleMode.kBrake, mRightPrimary);
+    private final CANSparkMax leftPrimary = new LazySparkMax(DriveCANLeftLeader, IdleMode.kBrake, true);
+    private final CANSparkMax leftFollower = new LazySparkMax(DriveCANLeftFollower, IdleMode.kBrake, leftPrimary);
+    private final CANSparkMax rightPrimary = new LazySparkMax(DriveCANRightLeader, IdleMode.kBrake, false);
+    private final CANSparkMax rightFollower = new LazySparkMax(DriveCANRightFollower, IdleMode.kBrake, rightPrimary);
 
-    private final RelativeEncoder mLeftEncoder = mLeftPrimary.getEncoder();
-    private final RelativeEncoder mRightEncoder = mRightPrimary.getEncoder();
+    private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
+    private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
-    private final AHRS mAhrs = new AHRS(Port.kMXP);
+    private final AHRS ahrs = new AHRS(Port.kMXP);
 
     private final SlewRateLimiter rateLimit = new SlewRateLimiter(2);
-    private final DifferentialDrive mDifferentialDrive;
-    private final DifferentialDriveOdometry mOdometry;
-    private DifferentialDriveWheelSpeeds mWheelSpeeds;
-    private Pose2d mPose;
+    private final DifferentialDrive differentialDrive;
+    private final DifferentialDriveOdometry odometry;
+    private DifferentialDriveWheelSpeeds wheelSpeeds;
+    private Pose2d pose;
     private double throttle;
 
-    private static final Drive mDrive = new Drive();
+    private static final Drive INSTANCE = new Drive();
     public static Drive getInstance() {
-        return mDrive;
+        return INSTANCE;
     }
 
     /**
@@ -53,20 +53,20 @@ public class Drive extends SubsystemBase {
     private Drive() {
         resetEncoders();
 
-        mDifferentialDrive = new DifferentialDrive(mLeftPrimary, mRightPrimary);
-        mDifferentialDrive.setDeadband(0.2);
+        differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
+        differentialDrive.setDeadband(0.2);
 
-        mAhrs.reset();
+        ahrs.reset();
 
-        mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
+        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
 
-        mPose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
-        mWheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+        pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
+        wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
 
-        mLeftEncoder.setPositionConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio);
-        mRightEncoder.setPositionConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio);
-        mLeftEncoder.setVelocityConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio / 60);
-        mRightEncoder.setVelocityConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio / 60);
+        leftEncoder.setPositionConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio);
+        rightEncoder.setPositionConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio);
+        leftEncoder.setVelocityConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio / 60);
+        rightEncoder.setVelocityConversionFactor(Math.PI * DriveWheelDiameter / DriveGearRatio / 60);
 
         setThrottle(0.6);
 
@@ -76,23 +76,23 @@ public class Drive extends SubsystemBase {
     @Override
     public void periodic() {
         // Distance
-        double leftMeters = mLeftEncoder.getPosition();
-        double rightMeters = mRightEncoder.getPosition();
+        double leftMeters = leftEncoder.getPosition();
+        double rightMeters = rightEncoder.getPosition();
 
-        mPose = mOdometry.update(
+        pose = odometry.update(
                 Rotation2d.fromDegrees(getAngle()),
                 leftMeters,
                 rightMeters);
 
-        mWheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+        wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
     }
 
     public void drive(double speed, double rotation) {
-        mDifferentialDrive.curvatureDrive(speed, rotation, speed < 0.15);
+        differentialDrive.curvatureDrive(speed, rotation, speed < 0.15);
     }
 
     public void setThrottle(double throttle) {
-        mDifferentialDrive.setMaxOutput(throttle);
+        differentialDrive.setMaxOutput(throttle);
         this.throttle = throttle;
     }
 
@@ -101,28 +101,28 @@ public class Drive extends SubsystemBase {
     }
 
     public void driveVolts(double left, double right) {
-        mLeftPrimary.setVoltage(left);
-        mRightPrimary.setVoltage(right);
+        leftPrimary.setVoltage(left);
+        rightPrimary.setVoltage(right);
 
-        mDifferentialDrive.feed();
+        differentialDrive.feed();
     }
 
     public void resetOdometry(Pose2d pose) {
-        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(getAngle()));
+        odometry.resetPosition(pose, Rotation2d.fromDegrees(getAngle()));
         resetEncoders();
     }
 
     public void resetEncoders() {
-        mLeftEncoder.setPosition(0);
-        mRightEncoder.setPosition(0);
+        leftEncoder.setPosition(0);
+        rightEncoder.setPosition(0);
     }
 
     public double getLeftVelocity() {
-        return mLeftEncoder.getVelocity();
+        return leftEncoder.getVelocity();
     }
 
     public double getRightVelocity() {
-        return mRightEncoder.getVelocity();
+        return rightEncoder.getVelocity();
     }
 
     public PIDController getLeftController() {
@@ -134,15 +134,15 @@ public class Drive extends SubsystemBase {
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return mWheelSpeeds;
+        return wheelSpeeds;
     }
 
     public Pose2d getPose() {
-        return mPose;
+        return pose;
     }
 
     private double getAngle() {
-        return -mAhrs.getAngle();
+        return -ahrs.getAngle();
     }
 
     public SlewRateLimiter getRateLimit() {

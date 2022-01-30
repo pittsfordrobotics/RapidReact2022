@@ -12,18 +12,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
 public class DriveXbox extends CommandBase {
-    private final Drive mDrive;
-    private final XboxController mController;
+    private final Drive drive;
+    private final XboxController controller;
     private double pastInput;
     private boolean accelerate;
 
     /**
      * Creates a new DriveWithJoysticks.
      */
-    public DriveXbox(XboxController xboxController) {
-        mDrive = Drive.getInstance();
-        mController = xboxController;
-        addRequirements(mDrive);
+    public DriveXbox(XboxController xboxController, boolean isLefty) {
+        drive = Drive.getInstance();
+        controller = xboxController;
+        addRequirements(drive);
     }
 
     // Called when the command is initially scheduled.
@@ -36,18 +36,18 @@ public class DriveXbox extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (accelerate && Math.abs(mDrive.getLeftVelocity()) > 0) {
+        if (accelerate && Math.abs(drive.getLeftVelocity()) > 0) {
             accelerate = true;
         }
         else {
-            accelerate = mController.getLeftY() - pastInput < 0;
+            accelerate = controller.getLeftY() - pastInput < 0;
         }
-        pastInput = mController.getLeftY();
+        pastInput = controller.getLeftY();
         if (accelerate) {
-            mDrive.drive(mDrive.getRateLimit().calculate(mController.getLeftY()), mController.getRightX() * -0.75);
+            drive.drive(drive.getRateLimit().calculate(controller.getLeftY()), controller.getRightX() * -0.75);
         }
         else {
-            mDrive.drive(mController.getLeftY(), mController.getRightX() * -0.75);
+            drive.drive(controller.getLeftY(), controller.getRightX() * -0.75);
         }
     }
 
