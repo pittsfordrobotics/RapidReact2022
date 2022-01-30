@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
 public class Limelight extends SubsystemBase {
-    private static Limelight mLimelight = new Limelight();
+    private static Limelight INSTANCE = new Limelight();
 
     public static Limelight getInstance() {
-        return mLimelight;
+        return INSTANCE;
     }
 
     /**
