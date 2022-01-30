@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,15 +15,41 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-//    LIMELIGHT
-//    all distances in inches
+/**
+ *
+ * DRIVE
+ *
+ */
+    public static final int DRIVE_CAN_RIGHT_LEADER = 1;
+    public static final int DRIVE_CAN_RIGHT_FOLLOWER = 2;
+    public static final int DRIVE_CAN_LEFT_LEADER = 3;
+    public static final int DRIVE_CAN_LEFT_FOLLOWER = 4;
+
+    public static final double DRIVE_P = Double.NaN;
+    public static final double DRIVE_I = Double.NaN;
+    public static final double DRIVE_D = Double.NaN;
+
+    public static final double DRIVE_S = Double.NaN;
+    public static final double DRIVE_V = Double.NaN;
+    public static final double DRIVE_A = Double.NaN;
+
+//    measured in meters
+    public static final double DRIVE_WHEEL_DIAMETER = 0.1524;
+    public static final double DRIVE_GEAR_RATIO = Double.NaN;
+
+    public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(0.644);
+
+/**
+ *
+ * LIMELIGHT
+ * all distances measured in inches
+ *
+ **/
 
 //    104 inches to top of goal
 //    101.625 inches to bottom of vision target
 //    middle is 102.8125 inches from field
-    public static final double kLimelightTargetHeight = 102.8125;
-//    random numbers
-    public static final double kLimelightRobotHeight = 48;
-//    depending on design limelight could have variable angle
-    public static final double kLimelightAngle = 45;
+    public static final double LIMELIGHT_TARGET_HEIGHT = 102.8125;
+    public static final double LIMELIGHT_ROBOT_HEIGHT = Double.NaN;
+    public static final double LIMELIGHT_ANGLE = Double.NaN;
 }

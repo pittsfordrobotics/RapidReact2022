@@ -6,7 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.DriveXbox;
+import frc.robot.subsystems.Drive;
+import frc.robot.util.BetterXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,12 +20,18 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
+  private final BetterXboxController driverController = new BetterXboxController(0, false);
+  private final XboxController operatorController = new XboxController(1);
+  private final Drive drive = Drive.getInstance();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    drive.setDefaultCommand(new DriveXbox(driverController));
+
+    SmartDashboard.putString("Driver Mode", driverController.getIsLefty() ? "Left Handed" : "Right Handed");
   }
 
   /**
