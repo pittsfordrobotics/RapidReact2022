@@ -25,24 +25,24 @@ import frc.robot.util.LazySparkMax;
 import static frc.robot.Constants.*;
 
 public class Drive extends SubsystemBase {
-    private CANSparkMax mLeftPrimary = new LazySparkMax(DriveCANLeftLeader, IdleMode.kBrake, true);
-    private CANSparkMax mLeftFollower = new LazySparkMax(DriveCANLeftFollower, IdleMode.kBrake, mLeftPrimary);
-    private CANSparkMax mRightPrimary = new LazySparkMax(DriveCANRightLeader, IdleMode.kBrake, false);
-    private CANSparkMax mRightFollower = new LazySparkMax(DriveCANRightFollower, IdleMode.kBrake, mRightPrimary);
+    private final CANSparkMax mLeftPrimary = new LazySparkMax(DriveCANLeftLeader, IdleMode.kBrake, true);
+    private final CANSparkMax mLeftFollower = new LazySparkMax(DriveCANLeftFollower, IdleMode.kBrake, mLeftPrimary);
+    private final CANSparkMax mRightPrimary = new LazySparkMax(DriveCANRightLeader, IdleMode.kBrake, false);
+    private final CANSparkMax mRightFollower = new LazySparkMax(DriveCANRightFollower, IdleMode.kBrake, mRightPrimary);
 
-    private RelativeEncoder mLeftEncoder = mLeftPrimary.getEncoder();
-    private RelativeEncoder mRightEncoder = mRightPrimary.getEncoder();
+    private final RelativeEncoder mLeftEncoder = mLeftPrimary.getEncoder();
+    private final RelativeEncoder mRightEncoder = mRightPrimary.getEncoder();
 
-    private AHRS mAhrs = new AHRS(Port.kMXP);
+    private final AHRS mAhrs = new AHRS(Port.kMXP);
 
-    private double throttle;
-    private SlewRateLimiter rateLimit = new SlewRateLimiter(2);
-    private DifferentialDrive mDifferentialDrive;
-    private DifferentialDriveOdometry mOdometry;
+    private final SlewRateLimiter rateLimit = new SlewRateLimiter(2);
+    private final DifferentialDrive mDifferentialDrive;
+    private final DifferentialDriveOdometry mOdometry;
     private DifferentialDriveWheelSpeeds mWheelSpeeds;
     private Pose2d mPose;
+    private double throttle;
 
-    private static Drive mDrive = new Drive();
+    private static final Drive mDrive = new Drive();
     public static Drive getInstance() {
         return mDrive;
     }
@@ -88,12 +88,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void drive(double speed, double rotation) {
-        if (speed < 0.15) {
-            mDifferentialDrive.curvatureDrive(speed, rotation, true);
-        }
-        else {
-            mDifferentialDrive.curvatureDrive(speed, rotation, false);
-        }
+        mDifferentialDrive.curvatureDrive(speed, rotation, speed < 0.15);
     }
 
     public void setThrottle(double throttle) {

@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
 public class DriveXbox extends CommandBase {
-    private Drive mDrive;
-    private XboxController mController;
+    private final Drive mDrive;
+    private final XboxController mController;
     private double pastInput;
     private boolean accelerate;
 
