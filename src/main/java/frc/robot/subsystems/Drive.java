@@ -35,10 +35,10 @@ public class Drive extends SubsystemBase {
 
     private final AHRS ahrs = new AHRS(Port.kMXP);
 
-    private final SlewRateLimiter rateLimit = new SlewRateLimiter(2);
     private final DifferentialDrive differentialDrive;
     private final DifferentialDriveOdometry odometry;
     private DifferentialDriveWheelSpeeds wheelSpeeds;
+    private SlewRateLimiter rateLimit;
     private Pose2d pose;
     private double throttle;
 
@@ -146,15 +146,15 @@ public class Drive extends SubsystemBase {
     }
 
     public void enableRateLimit() {
-        rateLimit.reset(2);
+        rateLimit = new SlewRateLimiter(2);
     }
 
     public void disableRateLimit() {
-        rateLimit.reset(Double.POSITIVE_INFINITY);
+        rateLimit = new SlewRateLimiter(Double.POSITIVE_INFINITY);
     }
 
     public void setRateLimit(double rateLimit) {
-        this.rateLimit.reset(rateLimit);
+        this.rateLimit = new SlewRateLimiter(rateLimit);
     }
 
 }
