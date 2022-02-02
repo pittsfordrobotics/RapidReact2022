@@ -27,7 +27,7 @@ public final class Constants {
 
 //    measured in meters
     public static final double DRIVE_WHEEL_DIAMETER = 0.1524;
-    public static final double DRIVE_GEAR_RATIO = Double.NaN;
+    public static final double DRIVE_GEAR_RATIO = 7.31;
 
     public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(0.644);
 
