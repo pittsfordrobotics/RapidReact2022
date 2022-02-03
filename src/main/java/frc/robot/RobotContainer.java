@@ -4,28 +4,36 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveXbox;
 import frc.robot.subsystems.Drive;
-import frc.robot.util.BetterXboxController;
+import frc.robot.util.controller.BetterXboxController;
+import frc.robot.util.controller.ControllerButtons;
+import frc.robot.util.controller.Hand;
 
 public class RobotContainer {
-  private final BetterXboxController driverController = new BetterXboxController(0, false);
-  private final XboxController operatorController = new XboxController(1);
-  private final Drive drive = Drive.getInstance();
+  //  Subsystems
+  public final static Drive drive = Drive.getInstance();
+
+  //  Controllers
+  public final static BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT);
+  public final static XboxController operatorController = new XboxController(1);
+
+  public final static ControllerButtons driverButtons = new ControllerButtons(driverController);
+  public final static ControllerButtons operatorButtons = new ControllerButtons(operatorController);
 
   public RobotContainer() {
     configureButtonBindings();
 
-    drive.setDefaultCommand(new DriveXbox(driverController));
+    drive.setDefaultCommand(new DriveXbox());
 
-    SmartDashboard.putString("Driver Mode", driverController.getIsLefty() ? "Left Handed" : "Right Handed");
+    SmartDashboard.putString("Driver Mode", driverController.getHand() == Hand.LEFT ? "Left Handed" : "Right Handed");
   }
 
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+  }
 
   public Command getAutonomousCommand() {
     return null;
