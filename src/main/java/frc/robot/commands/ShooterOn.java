@@ -7,29 +7,24 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class OffShooterXbox extends CommandBase {
+public class ShooterOn extends CommandBase {
     private final Shooter shooter;
-    private final XboxController controller;
 
-    public OffShooterXbox(XboxController xboxController) {
+    public ShooterOn() {
         shooter = Shooter.getInstance();
-        controller = xboxController;
         addRequirements(shooter);
     }
 
     @Override
     public void initialize() {
-        accelerate = false;
-        pastInput = 0;
     }
 
     @Override
     public void execute() {
-        shooter.TurningShooterOff();
+        shooter.shooterOn();
     }
 
     @Override

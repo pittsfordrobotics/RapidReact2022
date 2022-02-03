@@ -25,12 +25,17 @@ public final class Constants {
     public static final double DRIVE_V = Double.NaN;
     public static final double DRIVE_A = Double.NaN;
 
-    public static final int SHOOTER_CAN_MAIN = 5;
 //    measured in meters
     public static final double DRIVE_WHEEL_DIAMETER = 0.1524;
     public static final double DRIVE_GEAR_RATIO = Double.NaN;
 
     public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(0.644);
+
+/**
+ * SHOOTER
+ */
+    public static final int SHOOTER_CAN_MAIN = 5;
+
 
 /**
  *

@@ -4,11 +4,13 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveXbox;
+import frc.robot.commands.ShooterOff;
+import frc.robot.commands.ShooterOn;
 import frc.robot.subsystems.Drive;
 import frc.robot.util.BetterXboxController;
 
@@ -27,9 +29,9 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     JoystickButton shooterOn = new JoystickButton(driverController, XboxController.Button.kA.value);
-    shooterOn.whenPressed(new StartShooterXbox());
+    shooterOn.whenPressed(new ShooterOn());
     JoystickButton shooterOff = new JoystickButton(driverController, XboxController.Button.kB.value);
-    shooterOff.whenPressed(new OffShooterXbox());
+    shooterOff.whenPressed(new ShooterOff());
   }
 
   public Command getAutonomousCommand() {
