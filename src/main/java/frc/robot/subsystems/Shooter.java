@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
+private final CANSparkMax shootermotor = new LazySparkMax(SHOOTER_CAN_MAIN, IdleMode.coast, false);
 
     private final static Shooter INSTANCE = new Shooter();
 
@@ -16,5 +17,12 @@ public class Shooter extends SubsystemBase {
         //       in the constructor or in the robot coordination class, such as RobotContainer.
         //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
         //       such as SpeedControllers, Encoders, DigitalInputs, etc.
+    }   
+    public void TurningShooterOn() {
+        shootermotor.set(0.7);
     }
+    public void TurningShooterOff() {
+        shootermotor.stopMotor();
+    }
+
 }
