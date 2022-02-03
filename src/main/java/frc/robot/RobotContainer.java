@@ -25,7 +25,12 @@ public class RobotContainer {
     SmartDashboard.putString("Driver Mode", driverController.getIsLefty() ? "Left Handed" : "Right Handed");
   }
 
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    JoystickButton shooterOn = new JoystickButton(driverController, XboxController.Button.kA.value);
+    shooterOn.whenPressed(new StartShooterXbox());
+    JoystickButton shooterOff = new JoystickButton(driverController, XboxController.Button.kB.value);
+    shooterOff.whenPressed(new OffShooterXbox());
+  }
 
   public Command getAutonomousCommand() {
     return null;

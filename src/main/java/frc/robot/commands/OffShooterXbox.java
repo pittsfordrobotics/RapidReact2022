@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterXbox extends CommandBase {
+public class OffShooterXbox extends CommandBase {
     private final Shooter shooter;
     private final XboxController controller;
 
-    public ShooterXbox(XboxController xboxController) {
+    public OffShooterXbox(XboxController xboxController) {
         shooter = Shooter.getInstance();
         controller = xboxController;
         addRequirements(shooter);
