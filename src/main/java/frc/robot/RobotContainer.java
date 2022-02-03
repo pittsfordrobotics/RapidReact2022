@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveXbox;
 import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
-import frc.robot.util.controller.ControllerButtons;
 import frc.robot.util.controller.Hand;
 
 public class RobotContainer {
@@ -19,10 +18,7 @@ public class RobotContainer {
 
   //  Controllers
   public final static BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT);
-  public final static XboxController operatorController = new XboxController(1);
-
-  public final static ControllerButtons driverButtons = new ControllerButtons(driverController);
-  public final static ControllerButtons operatorButtons = new ControllerButtons(operatorController);
+  public final static BetterXboxController operatorController = new BetterXboxController(1);
 
   public RobotContainer() {
     configureButtonBindings();
