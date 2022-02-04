@@ -24,11 +24,31 @@ public class BetterXboxController extends XboxController {
     }
 
     public double getDriveX() {
-        return hand == Hand.LEFT ? super.getRightX() : super.getLeftX();
+        if (hand == null) {
+            return 0;
+        }
+        switch (hand) {
+            case LEFT:
+                return getRightX();
+            case RIGHT:
+                return getLeftX();
+            default:
+                return 0;
+        }
     }
 
     public double getDriveY() {
-        return hand == Hand.LEFT ? super.getLeftY() : super.getRightY();
+        if (hand == null) {
+            return 0;
+        }
+        switch (hand) {
+            case LEFT:
+                return getLeftY();
+            case RIGHT:
+                return getRightY();
+            default:
+                return 0;
+        }
     }
 
     public static class Buttons {
