@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-
 public final class Constants {
 /**
  *
@@ -21,16 +19,14 @@ public final class Constants {
     public static final double DRIVE_I = Double.NaN;
     public static final double DRIVE_D = Double.NaN;
 
-    public static final double DRIVE_S = Double.NaN;
-    public static final double DRIVE_V = Double.NaN;
-    public static final double DRIVE_A = Double.NaN;
+    public static final double DRIVE_S = Double.NaN; // static gain
+    public static final double DRIVE_V = Double.NaN; // velocity gain
+    public static final double DRIVE_A = Double.NaN; // acceleration gain
 
-//    measured in meters
-    public static final double DRIVE_WHEEL_DIAMETER = 0.1524;
+    public static final double DRIVE_WHEEL_DIAMETER = 0.1524; // meters
     public static final double DRIVE_GEAR_RATIO = Double.NaN;
 
-    public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(0.644);
-
+    public static final double DRIVE_TRACK_WIDTH = 0.644; // meters
 /**
  * SHOOTER
  */
@@ -48,6 +44,6 @@ public final class Constants {
 //    101.625 inches to bottom of vision target
 //    middle is 102.8125 inches from field
     public static final double LIMELIGHT_TARGET_HEIGHT = 102.8125;
-    public static final double LIMELIGHT_ROBOT_HEIGHT = Double.NaN;
+    public static final double LIMELIGHT_MOUNTING_HEIGHT = Double.NaN;
     public static final double LIMELIGHT_ANGLE = Double.NaN;
 }

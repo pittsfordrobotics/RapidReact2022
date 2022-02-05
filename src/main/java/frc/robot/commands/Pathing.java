@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -26,7 +27,7 @@ public class Pathing extends SequentialCommandGroup {
             Drive.getInstance()::getPose,
             new RamseteController(),
             new SimpleMotorFeedforward(Constants.DRIVE_S, Constants.DRIVE_V, Constants.DRIVE_A),
-            Constants.DRIVE_KINEMATICS,
+            new DifferentialDriveKinematics(Constants.DRIVE_TRACK_WIDTH),
             Drive.getInstance()::getWheelSpeeds,
             Drive.getInstance().getLeftController(),
             Drive.getInstance().getRightController(),
