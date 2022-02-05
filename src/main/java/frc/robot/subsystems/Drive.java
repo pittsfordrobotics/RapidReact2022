@@ -35,12 +35,12 @@ public class Drive extends SubsystemBase {
 
     private final AHRS ahrs = new AHRS(Port.kMXP);
 
-    private final DifferentialDrive differentialDrive;
-    private final DifferentialDriveOdometry odometry;
-    private DifferentialDriveWheelSpeeds wheelSpeeds;
-    private SlewRateLimiter rateLimit;
-    private Pose2d pose;
-    private double throttle;
+    private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);;
+    private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));;
+    private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);;
+    private SlewRateLimiter rateLimit = new SlewRateLimiter(2);
+    private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));;
+    private double throttle = 0.6;
 
     private static final Drive INSTANCE = new Drive();
     public static Drive getInstance() {
@@ -50,24 +50,16 @@ public class Drive extends SubsystemBase {
     private Drive() {
         resetEncoders();
 
-        differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
         differentialDrive.setDeadband(0.2);
 
         ahrs.reset();
-
-        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
-
-        pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
-        wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
 
         leftEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO);
         rightEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO);
         leftEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO / 60);
         rightEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO / 60);
 
-        setThrottle(0.6);
-
-        enableRateLimit();
+        setThrottle(throttle);
     }
 
     @Override
