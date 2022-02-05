@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveXbox;
+import frc.robot.commands.ExtendIntake;
+import frc.robot.commands.RetractIntake;
 import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
 import frc.robot.util.controller.BetterXboxController.Hand;
@@ -28,6 +30,8 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    driverController.Buttons.A.whenPressed(new ExtendIntake());
+    driverController.Buttons.B.whenPressed(new RetractIntake());
   }
 
   public Command getAutonomousCommand() {

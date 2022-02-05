@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-
 public final class Constants {
 /**
  *
@@ -42,4 +40,13 @@ public final class Constants {
     public static final double LIMELIGHT_TARGET_HEIGHT = 102.8125;
     public static final double LIMELIGHT_MOUNTING_HEIGHT = Double.NaN;
     public static final double LIMELIGHT_ANGLE = Double.NaN;
+
+/**
+ *
+ * INTAKE
+ *
+ */
+    public static final int INTAKE_PNEUMATIC_FORWARD = 0;
+    public static final int INTAKE_PNEUMATIC_REVERSE = 1;
+
 }
