@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 
-public class ExtendIntake extends CommandBase {
+public class IntakeExtend extends CommandBase {
     private final Intake intake = Intake.getInstance();
 
-    public ExtendIntake() {
+    public IntakeExtend() {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(this.intake);

@@ -11,19 +11,40 @@ public class Intake extends SubsystemBase {
 
     private final static Intake INSTANCE = new Intake();
 
+    public enum STATE {
+        RETRACTED, EXTENDED
+    }
+
+    private STATE state = STATE.RETRACTED;
+
     public static Intake getInstance() {
         return INSTANCE;
     }
 
     private Intake() {
-
+        retract();
     }
 
     public void extend() {
         intakePneumatic.set(DoubleSolenoid.Value.kForward);
+        state = STATE.EXTENDED;
     }
 
     public void retract() {
         intakePneumatic.set(DoubleSolenoid.Value.kReverse);
+        state = STATE.RETRACTED;
+    }
+
+    public void toggleIntake() {
+        switch (state){
+            case RETRACTED:
+                extend();
+                break;
+            case EXTENDED:
+                retract();
+                break;
+            default:
+                break;
+        }
     }
 }
