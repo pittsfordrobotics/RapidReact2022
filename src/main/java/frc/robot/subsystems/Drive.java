@@ -25,9 +25,9 @@ import frc.robot.util.LazySparkMax;
 import static frc.robot.Constants.*;
 
 public class Drive extends SubsystemBase {
-    private final CANSparkMax leftPrimary = new LazySparkMax(DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, true);
+    private final CANSparkMax leftPrimary = new LazySparkMax(DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, false);
     private final CANSparkMax leftFollower = new LazySparkMax(DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, leftPrimary);
-    private final CANSparkMax rightPrimary = new LazySparkMax(DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, false);
+    private final CANSparkMax rightPrimary = new LazySparkMax(DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, true);
     private final CANSparkMax rightFollower = new LazySparkMax(DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, rightPrimary);
 
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();

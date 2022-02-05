@@ -35,7 +35,7 @@ public class DriveXbox extends CommandBase {
             accelerate = driverController.getDriveY() - pastInput < 0;
         }
         pastInput = driverController.getDriveY();
-        drive.drive(accelerate ? drive.getRateLimit().calculate(driverController.getDriveY()) : driverController.getDriveY(), driverController.getDriveX() * -0.75);
+        drive.drive(accelerate ? drive.getRateLimit().calculate(-driverController.getDriveY()) : -driverController.getDriveY(), driverController.getDriveX() * 0.75);
     }
 
     @Override
