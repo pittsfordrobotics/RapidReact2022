@@ -8,9 +8,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drive;
 import static frc.robot.RobotContainer.*;
 
 public class DriveXbox extends CommandBase {
+    private final Drive drive = Drive.getInstance();
     private double pastInput;
     private boolean accelerate;
 

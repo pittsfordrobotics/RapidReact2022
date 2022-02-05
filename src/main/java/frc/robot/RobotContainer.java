@@ -4,21 +4,20 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveXbox;
 import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
-import frc.robot.util.controller.Hand;
+import frc.robot.util.controller.BetterXboxController.Hand;
 
 public class RobotContainer {
   //  Subsystems
-  public final static Drive drive = Drive.getInstance();
+  private final Drive drive = Drive.getInstance();
 
   //  Controllers
-  public final static BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT);
-  public final static BetterXboxController operatorController = new BetterXboxController(1);
+  public static final BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT);
+  public static final BetterXboxController operatorController = new BetterXboxController(1);
 
   public RobotContainer() {
     configureButtonBindings();

@@ -8,15 +8,18 @@ public class BetterXboxController extends XboxController {
     private final Hand hand;
     public final Buttons Buttons;
 
-    public BetterXboxController(int port) {
-        super(port);
-        this.hand = null;
-        Buttons = new Buttons(this);
+    public enum Hand {
+        RIGHT, LEFT
     }
+
     public BetterXboxController(int port, Hand hand) {
         super(port);
         this.hand = hand;
         Buttons = new Buttons(this);
+    }
+
+    public BetterXboxController(int port) {
+        this(port, null);
     }
 
     public Hand getHand() {
