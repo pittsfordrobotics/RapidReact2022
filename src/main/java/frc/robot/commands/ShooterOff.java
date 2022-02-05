@@ -11,10 +11,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterOff extends CommandBase {
-    private final Shooter shooter;
+    private final Shooter shooter = Shooter.getInstance();;
 
     public ShooterOff() {
-        shooter = Shooter.getInstance();
         addRequirements(shooter);
     }
 

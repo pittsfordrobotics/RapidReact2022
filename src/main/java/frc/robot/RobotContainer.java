@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveXbox;
 import frc.robot.commands.ShooterOff;
 import frc.robot.commands.ShooterOn;
@@ -31,10 +30,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    JoystickButton shooterOn = new JoystickButton(driverController, XboxController.Button.kA.value);
-    shooterOn.whenPressed(new ShooterOn());
-    JoystickButton shooterOff = new JoystickButton(driverController, XboxController.Button.kB.value);
-    shooterOff.whenPressed(new ShooterOff());
+    driverController.Buttons.A.whenActive(new ShooterOn()).whenInactive(new ShooterOff());
   }
 
   public Command getAutonomousCommand() {
