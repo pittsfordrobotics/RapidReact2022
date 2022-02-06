@@ -10,6 +10,7 @@ public class LazySparkMax extends CANSparkMax {
         setInverted(inverted);
         setIdleMode(mode);
         getEncoder().setPosition(0);
+        burnFlash();
     }
 
     public LazySparkMax(int port, IdleMode mode) {
