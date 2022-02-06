@@ -125,6 +125,20 @@ public class Drive extends SubsystemBase {
         return wheelSpeeds;
     }
 
+    public void coastMode() {
+        leftPrimary.setIdleMode(IdleMode.kCoast);
+        leftFollower.setIdleMode(IdleMode.kCoast);
+        rightPrimary.setIdleMode(IdleMode.kCoast);
+        rightFollower.setIdleMode(IdleMode.kCoast);
+    }
+
+    public void breakMode() {
+        leftPrimary.setIdleMode(IdleMode.kBrake);
+        leftFollower.setIdleMode(IdleMode.kBrake);
+        rightPrimary.setIdleMode(IdleMode.kBrake);
+        rightFollower.setIdleMode(IdleMode.kBrake);
+    }
+
     public Pose2d getPose() {
         return pose;
     }
