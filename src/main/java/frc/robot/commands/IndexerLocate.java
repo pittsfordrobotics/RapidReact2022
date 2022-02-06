@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Ball.LOCATION;
 
 
 public class IndexerLocate extends CommandBase {
@@ -26,6 +27,9 @@ public class IndexerLocate extends CommandBase {
         }
         if (indexer.ballAtShooter()) {
             indexer.advanceToShooter();
+        }
+        else if (indexer.getBall0().getLocation() == LOCATION.SHOOTER) {
+            indexer.shootBall();
         }
     }
 

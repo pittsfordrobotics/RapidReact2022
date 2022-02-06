@@ -4,17 +4,17 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
-import frc.robot.Ball.LOCATION;
 import frc.robot.Ball.COLOR;
-import java.util.ArrayList;
+import frc.robot.Ball.LOCATION;
+
 import static frc.robot.Constants.*;
 
 public class Indexer extends SubsystemBase {
-    private final ColorSensorV3 colorSensor = new ColorSensorV3(INDEXER_COLOR);
-    private final DigitalInput beamBreakTower = new DigitalInput(INDEXER_BEAM_TOWER);
-    private final DigitalInput beamBreakShooter = new DigitalInput(INDEXER_BEAM_SHOOTER);
+    private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(INDEXER_COLOR);
+    private final DigitalInput sensorTower = new DigitalInput(INDEXER_SENSOR_TOWER);
+    private final DigitalInput sensorShooter = new DigitalInput(INDEXER_SENSOR_SHOOTER);
 
-    private final ArrayList<Ball> balls = new ArrayList<>(2);
+    private final Ball[] balls = {new Ball(), new Ball()};
 
     private final static Indexer INSTANCE = new Indexer();
     public static Indexer getInstance() {
@@ -22,61 +22,63 @@ public class Indexer extends SubsystemBase {
     }
 
     private Indexer() {
-        balls.add(new Ball());
-        balls.add(new Ball());
+    }
+
+    public Ball getBall0() {
+        return balls[0];
     }
 
     public void resetBalls() {
-        balls.set(0, new Ball());
-        balls.set(1, new Ball());
+        balls[0] = new Ball();
+        balls[1] = new Ball();
     }
 
     public boolean atMaxBalls() {
-        return balls.size() == 2;
+        return balls[0].getLocation() != LOCATION.FIELD && balls[1].getLocation() != LOCATION.FIELD;
     }
 
     public boolean ballAtIntake() {
-        return colorSensor.getProximity() > INDEXER_COLOR_PROXIMITY;
+        return colorSensorIntake.getProximity() > INDEXER_COLOR_PROXIMITY;
     }
 
     public boolean ballAtTower() {
-        return beamBreakTower.get();
+        return sensorTower.get();
     }
 
     public boolean ballAtShooter() {
-        return beamBreakShooter.get();
+        return sensorShooter.get();
     }
 
     public void intakeBall() {
-        COLOR color = colorSensor.getRed() > colorSensor.getBlue() ? COLOR.RED : COLOR.BLUE;
-        if (balls.get(0).getLocation() == LOCATION.FIELD) {
-            balls.get(0).setLocationColor(LOCATION.INTAKE, color);
+        COLOR color = colorSensorIntake.getRed() > colorSensorIntake.getBlue() ? COLOR.RED : COLOR.BLUE;
+        if (balls[0].getLocation() == LOCATION.FIELD) {
+            balls[0].setLocationColor(LOCATION.INTAKE, color);
         }
         else {
-            balls.get(1).setLocationColor(LOCATION.INTAKE, color);
+            balls[1].setLocationColor(LOCATION.INTAKE, color);
         }
     }
 
     public void shootBall() {
-        balls.set(0, balls.get(1));
-        balls.set(1, new Ball());
+        balls[0] = balls[1];
+        balls[1] = new Ball();
     }
 
     public void advanceToTower() {
-        if (balls.get(0).getLocation() != LOCATION.TOWER) {
-            balls.get(0).setLocation(LOCATION.TOWER);
+        if (balls[0].getLocation() != LOCATION.TOWER) {
+            balls[0].setLocation(LOCATION.TOWER);
         }
         else {
-            balls.get(1).setLocation(LOCATION.TOWER);
+            balls[1].setLocation(LOCATION.TOWER);
         }
     }
 
     public void advanceToShooter() {
-        balls.get(0).setLocation(LOCATION.SHOOTER);
+        balls[0].setLocation(LOCATION.SHOOTER);
     }
 
     public boolean readyToShoot() {
-        return balls.get(0).getLocation() == LOCATION.SHOOTER;
+        return balls[0].getLocation() == LOCATION.SHOOTER;
     }
 
 }
