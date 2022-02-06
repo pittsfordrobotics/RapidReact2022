@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.SPI;
+
 public final class Constants {
 /**
  *
@@ -14,6 +16,7 @@ public final class Constants {
     public static final int DRIVE_CAN_RIGHT_FOLLOWER = 2;
     public static final int DRIVE_CAN_LEFT_LEADER = 3;
     public static final int DRIVE_CAN_LEFT_FOLLOWER = 4;
+    public static final SPI.Port DRIVE_NAVX = SPI.Port.kMXP;
 
     public static final double DRIVE_P = Double.NaN;
     public static final double DRIVE_I = Double.NaN;
