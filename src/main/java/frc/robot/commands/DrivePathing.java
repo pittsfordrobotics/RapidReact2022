@@ -17,9 +17,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drive;
 import static frc.robot.Constants.*;
 
-public class Pathing extends SequentialCommandGroup {
+public class DrivePathing extends SequentialCommandGroup {
 
-  public Pathing(Trajectory traj) {
+  public DrivePathing(Trajectory traj) {
     super(
         new InstantCommand(() -> Drive.getInstance().resetOdometry(traj.getInitialPose()), Drive.getInstance()),
         new RamseteCommand(
