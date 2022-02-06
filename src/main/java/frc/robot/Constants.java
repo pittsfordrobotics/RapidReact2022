@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.I2C;
 
 public final class Constants {
 /**
@@ -29,6 +29,17 @@ public final class Constants {
     public static final double DRIVE_GEAR_RATIO = Double.NaN;
 
     public static final double DRIVE_TRACK_WIDTH = 0.644; // meters
+
+/**
+ *
+ * INDEXER
+ *
+ */
+    public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
+    public static final int INDEXER_BEAM_TOWER = 0;
+    public static final int INDEXER_BEAM_SHOOTER = 1;
+    public static final int INDEXER_COLOR_PROXIMITY = 1700; // from 0 to 2047
+
 /**
  *
  * LIMELIGHT
