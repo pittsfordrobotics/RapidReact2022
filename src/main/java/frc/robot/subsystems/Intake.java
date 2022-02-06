@@ -1,23 +1,19 @@
 package frc.robot.subsystems;
 
 
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.LazySparkMax;
 
 public class Intake extends SubsystemBase {
-    private DoubleSolenoid intakePneumatic = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_PNEUMATIC_FORWARD, Constants.INTAKE_PNEUMATIC_REVERSE);
+    private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_PNEUMATIC_FORWARD, Constants.INTAKE_PNEUMATIC_REVERSE);
+    private final LazySparkMax intake = new LazySparkMax(Constants.INTAKE_CAN_MAIN, CANSparkMax.IdleMode.kBrake);
 
     private final static Intake INSTANCE = new Intake();
-
-    public enum STATE {
-        RETRACTED, EXTENDED
-    }
-
-    private STATE state = STATE.RETRACTED;
-
     public static Intake getInstance() {
         return INSTANCE;
     }
@@ -28,29 +24,34 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putString("Intake State", state.toString());
+        SmartDashboard.putBoolean("Intake Extended", solenoid.get() == DoubleSolenoid.Value.kForward);
     }
 
     public void extend() {
-        intakePneumatic.set(DoubleSolenoid.Value.kForward);
-        state = STATE.EXTENDED;
+        solenoid.set(DoubleSolenoid.Value.kForward);
     }
 
     public void retract() {
-        intakePneumatic.set(DoubleSolenoid.Value.kReverse);
-        state = STATE.RETRACTED;
+        solenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void intakeOn() {
+        intake.set(Constants.INTAKE_MAIN_SPEED);
+    }
+
+    public void intakeOff() {
+        intake.stopMotor();
+    }
+
+    public void reverseIntake() {
+        intake.set(-Constants.INTAKE_MAIN_SPEED);
+    }
+
+    public DoubleSolenoid.Value getState() {
+        return solenoid.get();
     }
 
     public void toggleIntake() {
-        switch (state){
-            case RETRACTED:
-                extend();
-                break;
-            case EXTENDED:
-                retract();
-                break;
-            default:
-                break;
-        }
+        solenoid.toggle();
     }
 }

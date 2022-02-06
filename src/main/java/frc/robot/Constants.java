@@ -27,6 +27,17 @@ public final class Constants {
     public static final double DRIVE_GEAR_RATIO = Double.NaN;
 
     public static final double DRIVE_TRACK_WIDTH = 0.644; // meters
+
+/**
+ *
+ * INTAKE
+ *
+ */
+    public static final int INTAKE_PNEUMATIC_FORWARD = 0;
+    public static final int INTAKE_PNEUMATIC_REVERSE = 1;
+    public static final int INTAKE_CAN_MAIN = 0; // choose CAN
+    public static final double INTAKE_MAIN_SPEED = 1; // figure out speed
+
 /**
  *
  * LIMELIGHT
@@ -40,13 +51,4 @@ public final class Constants {
     public static final double LIMELIGHT_TARGET_HEIGHT = 102.8125;
     public static final double LIMELIGHT_MOUNTING_HEIGHT = Double.NaN;
     public static final double LIMELIGHT_ANGLE = Double.NaN;
-
-/**
- *
- * INTAKE
- *
- */
-    public static final int INTAKE_PNEUMATIC_FORWARD = 0;
-    public static final int INTAKE_PNEUMATIC_REVERSE = 1;
-
 }
