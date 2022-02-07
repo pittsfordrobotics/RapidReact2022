@@ -52,10 +52,10 @@ public class Drive extends SubsystemBase {
 
         ahrs.reset();
 
-        leftEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO);
-        rightEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO);
-        leftEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO / 60);
-        rightEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO / 60);
+        leftEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER_METERS / DRIVE_GEAR_RATIO);
+        rightEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER_METERS / DRIVE_GEAR_RATIO);
+        leftEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER_METERS / DRIVE_GEAR_RATIO / 60);
+        rightEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER_METERS / DRIVE_GEAR_RATIO / 60);
 
         setThrottle(throttle);
     }

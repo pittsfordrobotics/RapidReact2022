@@ -27,7 +27,7 @@ public class DrivePathing extends SequentialCommandGroup {
             Drive.getInstance()::getPose,
             new RamseteController(),
             new SimpleMotorFeedforward(DRIVE_S, DRIVE_V, DRIVE_A),
-            new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH),
+            new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS),
             Drive.getInstance()::getWheelSpeeds,
             Drive.getInstance().getLeftController(),
             Drive.getInstance().getRightController(),

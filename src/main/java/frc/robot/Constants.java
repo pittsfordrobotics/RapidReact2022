@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.util.Units;
 
 public final class Constants {
 /**
@@ -26,10 +27,10 @@ public final class Constants {
     public static final double DRIVE_V = Double.NaN; // velocity gain
     public static final double DRIVE_A = Double.NaN; // acceleration gain
 
-    public static final double DRIVE_WHEEL_DIAMETER = 0.1524; // meters
+    public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inches_to_meters(6);
     public static final double DRIVE_GEAR_RATIO = 7.31;
 
-    public static final double DRIVE_TRACK_WIDTH = 0.644; // meters
+    public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
 /**
  *
  * LIMELIGHT
@@ -40,7 +41,7 @@ public final class Constants {
 //    104 inches to top of goal
 //    101.625 inches to bottom of vision target
 //    middle is 102.8125 inches from field
-    public static final double LIMELIGHT_TARGET_HEIGHT = 102.8125;
+    public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.8125;
     public static final double LIMELIGHT_MOUNTING_HEIGHT = Double.NaN;
     public static final double LIMELIGHT_ANGLE = Double.NaN;
 }
