@@ -6,13 +6,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
-
-import static frc.robot.Constants.*;
+import frc.robot.Constants;
 
 public class Indexer extends SubsystemBase {
-    private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(INDEXER_COLOR);
-    private final DigitalInput sensorTower = new DigitalInput(INDEXER_SENSOR_TOWER);
-    private final DigitalInput sensorShooter = new DigitalInput(INDEXER_SENSOR_SHOOTER);
+    private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
+    private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
+    private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
 
     private final Ball[] balls = {new Ball(), new Ball()};
 
@@ -54,7 +53,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean ballAtIntake() {
-        return colorSensorIntake.getProximity() > INDEXER_COLOR_PROXIMITY;
+        return colorSensorIntake.getProximity() > Constants.INDEXER_COLOR_PROXIMITY;
     }
 
     public boolean ballAtTower() {
