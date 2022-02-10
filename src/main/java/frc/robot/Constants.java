@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-
 public final class Constants {
 /**
  *
@@ -29,6 +27,17 @@ public final class Constants {
     public static final double DRIVE_GEAR_RATIO = Double.NaN;
 
     public static final double DRIVE_TRACK_WIDTH = 0.644; // meters
+
+/**
+ *
+ * INTAKE
+ *
+ */
+    public static final int INTAKE_PNEUMATIC_FORWARD = 0;
+    public static final int INTAKE_PNEUMATIC_REVERSE = 1;
+    public static final int INTAKE_CAN_MAIN = 0; // choose CAN
+    public static final double INTAKE_MAIN_SPEED = 1; // figure out speed
+
 /**
  *
  * LIMELIGHT
