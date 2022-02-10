@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LazySparkMax;
 
-import static frc.robot.Constants.*;
+import static frc.robot.Constants.Drive.*;
 
 public class Drive extends SubsystemBase {
     private final CANSparkMax leftPrimary = new LazySparkMax(DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, true);
@@ -122,11 +122,11 @@ public class Drive extends SubsystemBase {
     }
 
     public PIDController getLeftController() {
-        return new PIDController(DRIVE_P, DRIVE_I, DRIVE_D);
+        return new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
     }
 
     public PIDController getRightController() {
-        return new PIDController(DRIVE_P, DRIVE_I, DRIVE_D);
+        return new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {

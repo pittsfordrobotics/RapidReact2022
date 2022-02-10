@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static frc.robot.Constants.*;
+import static frc.robot.Constants.Limelight.*;
 
 public class Limelight extends SubsystemBase {
     private static Limelight INSTANCE = new Limelight();
@@ -16,33 +18,55 @@ public class Limelight extends SubsystemBase {
     private Limelight() {
         setLED(LED.OFF);
         setCamMode(Camera.DRIVER);
+        LimelightManager limelightManager = new LimelightManager();
     }
 
-    public void periodic() {
-        SmartDashboard.putNumber("Limelight Horizontal", getHorizontal());
-        SmartDashboard.putNumber("Limelight Vertical", getVertical());
-        SmartDashboard.putNumber("Limelight Area", getArea());
+    private static class LimelightManager {
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+        //NetworkTable key names can be found at https://docs.limelightvision.io/en/latest/networktables_api.html
+        //Outputs from Limelight:
+        NetworkTableEntry tv = table.getEntry("tv");
+        NetworkTableEntry tx = table.getEntry("tx");
+        NetworkTableEntry ty = table.getEntry("ty");
+        NetworkTableEntry ta = table.getEntry("ta");
+        NetworkTableEntry ts = table.getEntry("ts");
+        NetworkTableEntry tl = table.getEntry("tl");
+        //NetworkTableEntry tshort = table.getEntry("tshort");
+        //NetworkTableEntry tlong = table.getEntry("tlong");
+        NetworkTableEntry thor = table.getEntry("thor");
+        NetworkTableEntry tvert = table.getEntry("tvert");
+        NetworkTableEntry getpipe = table.getEntry("getpipe");
+        //NetworkTableEntry camtran = table.getEntry("camtran"); //6DOF 3D position solution (translation + YPR)
+
+        //Inputs to Limelight:
+        NetworkTableEntry ledMode = table.getEntry("ledMode");
+        NetworkTableEntry camMode = table.getEntry("camMode");
+        NetworkTableEntry pipeline = table.getEntry("pipeline");
+        //NetworkTableEntry stream = table.getEntry("stream");
+        //NetworkTableEntry snapshot = table.getEntry("snapshot");
+
     }
+    LimelightManager limelightManager = new LimelightManager();
 
     public boolean hasTarget() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0) == 1.0;
+        return limelightManager.tv.getDouble(0.0) == 1.0;
     }
 
     public double getHorizontal() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
+        return limelightManager.tx.getDouble(0.0);
     }
 
     public double getVertical() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
+        return limelightManager.ty.getDouble(0.0);
     }
 
     public double getArea() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
+        return limelightManager.ta.getDouble(0.0);
     }
 
-
     public enum Pipelines {
-        TEMP(0);
+        ; //the cursed lone semicolon
 
         private int num;
         Pipelines(int num) {
@@ -79,7 +103,7 @@ public class Limelight extends SubsystemBase {
 
 
     public enum Camera {
-        VISION(0), DRIVER(1);
+        VISION(0), DRIVER(1); //michael please fix your atrocious naming schemes thanks
 
         private int num;
 
@@ -97,12 +121,12 @@ public class Limelight extends SubsystemBase {
     }
 
 
-    public void enable() {
+    public void enableLimelight() {
         setCamMode(Camera.VISION);
         setLED(LED.ON);
     }
 
-    public void disable() {
+    public void disableLimelight() {
         setCamMode(Camera.DRIVER);
         setLED(LED.OFF);
     }
@@ -111,4 +135,9 @@ public class Limelight extends SubsystemBase {
         return (LIMELIGHT_TARGET_HEIGHT - LIMELIGHT_MOUNTING_HEIGHT) / Math.tan(LIMELIGHT_ANGLE + getVertical());
     }
 
+    public void periodic() {
+        SmartDashboard.putNumber("Limelight Horizontal", getHorizontal());
+        SmartDashboard.putNumber("Limelight Vertical", getVertical());
+        SmartDashboard.putNumber("Limelight Area", getArea());
+    }
 }
