@@ -33,22 +33,6 @@ public final class Constants {
 
 /**
  *
- * INTAKE
- *
- */
-    public static final class Intake {
-        public static final int INTAKE_CAN_MAIN = 0; // choose CAN
-
-        public static final int INTAKE_PNEUMATIC_LEFT_FORWARD = 0;
-        public static final int INTAKE_PNEUMATIC_LEFT_REVERSE = 1;
-
-        public static final int INTAKE_PNEUMATIC_RIGHT_FORWARD = 2;
-        public static final int INTAKE_PNEUMATIC_RIGHT_REVERSE = 3;
-        public static final double INTAKE_MAIN_SPEED = 1; // figure out speed
-    }
-
-/**
- *
  * LIMELIGHT
  * all distances measured in inches
  *
