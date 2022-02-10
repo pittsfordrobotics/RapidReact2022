@@ -4,8 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import static frc.robot.Constants.Limelight.*;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
     private final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
@@ -106,6 +105,6 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getDistance() {
-        return (LIMELIGHT_TARGET_HEIGHT - LIMELIGHT_MOUNTING_HEIGHT) / Math.tan(LIMELIGHT_ANGLE + getVertical());
+        return (Constants.LIMELIGHT_TARGET_HEIGHT - Constants.LIMELIGHT_MOUNTING_HEIGHT) / Math.tan(Constants.LIMELIGHT_ANGLE + getVertical());
     }
 }

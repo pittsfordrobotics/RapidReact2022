@@ -20,15 +20,14 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
-import static frc.robot.Constants.Drive.*;
-
 public class Drive extends SubsystemBase {
-    private final CANSparkMax leftPrimary = new LazySparkMax(DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, true);
-    private final CANSparkMax leftFollower = new LazySparkMax(DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, leftPrimary);
-    private final CANSparkMax rightPrimary = new LazySparkMax(DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, false);
-    private final CANSparkMax rightFollower = new LazySparkMax(DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, rightPrimary);
+    private final CANSparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, true);
+    private final CANSparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, leftPrimary);
+    private final CANSparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, false);
+    private final CANSparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, rightPrimary);
 
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
@@ -60,10 +59,10 @@ public class Drive extends SubsystemBase {
         pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
         wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
 
-        leftEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO);
-        rightEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO);
-        leftEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO / 60);
-        rightEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER / DRIVE_GEAR_RATIO / 60);
+        leftEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER / Constants.DRIVE_GEAR_RATIO);
+        rightEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER / Constants.DRIVE_GEAR_RATIO);
+        leftEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER / Constants.DRIVE_GEAR_RATIO / 60);
+        rightEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER / Constants.DRIVE_GEAR_RATIO / 60);
 
         setThrottle(0.6);
 
@@ -122,11 +121,11 @@ public class Drive extends SubsystemBase {
     }
 
     public PIDController getLeftController() {
-        return new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
+        return new PIDController(Constants.DRIVE_kP, Constants.DRIVE_kI, Constants.DRIVE_kD);
     }
 
     public PIDController getRightController() {
-        return new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
+        return new PIDController(Constants.DRIVE_kP, Constants.DRIVE_kI, Constants.DRIVE_kD);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
