@@ -9,8 +9,9 @@ import frc.robot.util.LazySparkMax;
 import static frc.robot.Constants.*;
 
 public class Intake extends SubsystemBase {
-    private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_PNEUMATIC_FORWARD, INTAKE_PNEUMATIC_REVERSE);
-    private final LazySparkMax intake = new LazySparkMax(INTAKE_CAN_MAIN, CANSparkMax.IdleMode.kBrake);
+    private final DoubleSolenoid solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_PNEUMATIC_LEFT_FORWARD, INTAKE_PNEUMATIC_LEFT_REVERSE);
+    private final DoubleSolenoid solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_PNEUMATIC_RIGHT_FORWARD, INTAKE_PNEUMATIC_RIGHT_REVERSE);
+    private final LazySparkMax motor = new LazySparkMax(INTAKE_CAN_MAIN, CANSparkMax.IdleMode.kBrake);
 
     private final static Intake INSTANCE = new Intake();
     public static Intake getInstance() {
@@ -23,34 +24,37 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Intake Extended", solenoid.get() == DoubleSolenoid.Value.kForward);
+        SmartDashboard.putBoolean("Intake Extended", solenoidLeft.get() == DoubleSolenoid.Value.kForward);
     }
 
     public void extend() {
-        solenoid.set(DoubleSolenoid.Value.kForward);
+        solenoidLeft.set(DoubleSolenoid.Value.kForward);
+        solenoidRight.set(DoubleSolenoid.Value.kForward);
     }
 
     public void retract() {
-        solenoid.set(DoubleSolenoid.Value.kReverse);
+        solenoidLeft.set(DoubleSolenoid.Value.kReverse);
+        solenoidRight.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void intakeOn() {
-        intake.set(INTAKE_MAIN_SPEED);
+    public void motorOn() {
+        motor.set(INTAKE_MAIN_SPEED);
     }
 
-    public void intakeOff() {
-        intake.stopMotor();
+    public void motorOff() {
+        motor.stopMotor();
     }
 
-    public void reverseIntake() {
-        intake.set(-INTAKE_MAIN_SPEED);
+    public void motorReverse() {
+        motor.set(-INTAKE_MAIN_SPEED);
     }
 
     public DoubleSolenoid.Value getState() {
-        return solenoid.get();
+        return solenoidLeft.get();
     }
 
     public void toggleIntake() {
-        solenoid.toggle();
+        solenoidLeft.toggle();
+        solenoidRight.toggle();
     }
 }
