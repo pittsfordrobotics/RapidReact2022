@@ -14,8 +14,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
-import static frc.robot.Constants.*;
 
 public class DrivePathing extends SequentialCommandGroup {
 
@@ -26,8 +26,8 @@ public class DrivePathing extends SequentialCommandGroup {
             traj,
             Drive.getInstance()::getPose,
             new RamseteController(),
-            new SimpleMotorFeedforward(DRIVE_S, DRIVE_V, DRIVE_A),
-            new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS),
+            new SimpleMotorFeedforward(Constants.DRIVE_S, Constants.DRIVE_V, Constants.DRIVE_A),
+            new DifferentialDriveKinematics(Constants.DRIVE_TRACK_WIDTH_METERS),
             Drive.getInstance()::getWheelSpeeds,
             Drive.getInstance().getLeftController(),
             Drive.getInstance().getRightController(),

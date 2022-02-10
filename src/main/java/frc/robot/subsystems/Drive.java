@@ -19,19 +19,19 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
-import static frc.robot.Constants.*;
 
 public class Drive extends SubsystemBase {
-    private final CANSparkMax leftPrimary = new LazySparkMax(DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, false);
-    private final CANSparkMax leftFollower = new LazySparkMax(DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, leftPrimary);
-    private final CANSparkMax rightPrimary = new LazySparkMax(DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, true);
-    private final CANSparkMax rightFollower = new LazySparkMax(DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, rightPrimary);
+    private final CANSparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, true);
+    private final CANSparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, leftPrimary);
+    private final CANSparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, false);
+    private final CANSparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, rightPrimary);
 
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
-    private final AHRS ahrs = new AHRS(DRIVE_NAVX);
+    private final AHRS ahrs = new AHRS(Constants.DRIVE_NAVX);
 
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);;
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));;
@@ -52,10 +52,10 @@ public class Drive extends SubsystemBase {
 
         ahrs.reset();
 
-        leftEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER_METERS / DRIVE_GEAR_RATIO);
-        rightEncoder.setPositionConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER_METERS / DRIVE_GEAR_RATIO);
-        leftEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER_METERS / DRIVE_GEAR_RATIO / 60);
-        rightEncoder.setVelocityConversionFactor(Math.PI * DRIVE_WHEEL_DIAMETER_METERS / DRIVE_GEAR_RATIO / 60);
+        leftEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
+        rightEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
+        leftEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO / 60);
+        rightEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO / 60);
 
         setThrottle(throttle);
     }
@@ -112,29 +112,15 @@ public class Drive extends SubsystemBase {
     }
 
     public PIDController getLeftController() {
-        return new PIDController(DRIVE_P, DRIVE_I, DRIVE_D);
+        return new PIDController(Constants.DRIVE_P, Constants.DRIVE_I, Constants.DRIVE_D);
     }
 
     public PIDController getRightController() {
-        return new PIDController(DRIVE_P, DRIVE_I, DRIVE_D);
+        return new PIDController(Constants.DRIVE_P, Constants.DRIVE_I, Constants.DRIVE_D);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return wheelSpeeds;
-    }
-
-    public void coastMode() {
-        leftPrimary.setIdleMode(IdleMode.kCoast);
-        leftFollower.setIdleMode(IdleMode.kCoast);
-        rightPrimary.setIdleMode(IdleMode.kCoast);
-        rightFollower.setIdleMode(IdleMode.kCoast);
-    }
-
-    public void breakMode() {
-        leftPrimary.setIdleMode(IdleMode.kBrake);
-        leftFollower.setIdleMode(IdleMode.kBrake);
-        rightPrimary.setIdleMode(IdleMode.kBrake);
-        rightFollower.setIdleMode(IdleMode.kBrake);
     }
 
     public Pose2d getPose() {
