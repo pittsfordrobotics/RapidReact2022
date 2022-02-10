@@ -121,11 +121,11 @@ public class Drive extends SubsystemBase {
     }
 
     public PIDController getLeftController() {
-        return new PIDController(Constants.DRIVE_kP, Constants.DRIVE_kI, Constants.DRIVE_kD);
+        return new PIDController(Constants.DRIVE_P, Constants.DRIVE_I, Constants.DRIVE_D);
     }
 
     public PIDController getRightController() {
-        return new PIDController(Constants.DRIVE_kP, Constants.DRIVE_kI, Constants.DRIVE_kD);
+        return new PIDController(Constants.DRIVE_P, Constants.DRIVE_I, Constants.DRIVE_D);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {

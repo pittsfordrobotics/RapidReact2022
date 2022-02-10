@@ -15,9 +15,9 @@ public final class Constants {
     public static final int DRIVE_CAN_LEFT_LEADER = 3;
     public static final int DRIVE_CAN_LEFT_FOLLOWER = 4;
 
-    public static final double DRIVE_kP = Double.NaN;
-    public static final double DRIVE_kI = Double.NaN;
-    public static final double DRIVE_kD = Double.NaN;
+    public static final double DRIVE_P = Double.NaN;
+    public static final double DRIVE_I = Double.NaN;
+    public static final double DRIVE_D = Double.NaN;
 
     public static final double DRIVE_S = Double.NaN; // static gain
     public static final double DRIVE_V = Double.NaN; // velocity gain
