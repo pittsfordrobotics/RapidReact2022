@@ -24,6 +24,22 @@ public class Indexer extends SubsystemBase {
     private Indexer() {
     }
 
+    @Override
+    public void periodic() {
+        if (ballAtIntake()) {
+            intakeBall();
+        }
+        if (ballAtTower()) {
+            advanceToTower();
+        }
+        if (ballAtShooter()) {
+            advanceToShooter();
+        }
+        else if (getBall0().getLocation() == LOCATION.SHOOTER) {
+            shootBall();
+        }
+    }
+
     public Ball getBall0() {
         return balls[0];
     }
