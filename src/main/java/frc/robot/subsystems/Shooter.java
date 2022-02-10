@@ -4,10 +4,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LazySparkMax;
-import static frc.robot.Constants.*;
+import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-private final CANSparkMax shooterMotor = new LazySparkMax(SHOOTER_CAN_MAIN, IdleMode.kCoast, false);
+private final CANSparkMax shooterMotor = new LazySparkMax(Constants.SHOOTER_CAN_MAIN, IdleMode.kCoast, false);
 
     private final static Shooter INSTANCE = new Shooter();
 
