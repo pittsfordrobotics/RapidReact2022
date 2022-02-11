@@ -180,6 +180,10 @@ public class Indexer extends SubsystemBase {
         }
     }
 
+    public void setState(State state) {
+        this.state = state;
+    }
+
     public void stomachMotorOn() {
         stomachMotor.set(Constants.INDEXER_STOMACH_SPEED);
     }
