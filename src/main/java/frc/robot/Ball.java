@@ -3,7 +3,7 @@ package frc.robot;
 public class Ball {
 
     public enum LOCATION {
-        INTAKE, TOWER, SHOOTER, FIELD
+        INTAKE, TOWER_LOW, TOWER_MID, SHOOTER, FIELD
     }
 
     public enum COLOR {
@@ -42,24 +42,6 @@ public class Ball {
     public void setLocationColor(LOCATION location, COLOR color) {
         setLocation(location);
         setColor(color);
-    }
-
-    public void nextLocation() {
-        switch (location) {
-            case INTAKE:
-                location = LOCATION.TOWER;
-                break;
-            case TOWER:
-                location = LOCATION.SHOOTER;
-                break;
-            case SHOOTER:
-                location = LOCATION.FIELD;
-                break;
-            case FIELD:
-                break;
-            default:
-                break;
-        }
     }
 
 }
