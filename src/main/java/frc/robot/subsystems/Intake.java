@@ -1,17 +1,18 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LazySparkMax;
-import static frc.robot.Constants.*;
+import frc.robot.util.LazySparkMax.Motor;
+import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-    private final DoubleSolenoid solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_PNEUMATIC_LEFT_FORWARD, INTAKE_PNEUMATIC_LEFT_REVERSE);
-    private final DoubleSolenoid solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_PNEUMATIC_RIGHT_FORWARD, INTAKE_PNEUMATIC_RIGHT_REVERSE);
-    private final LazySparkMax motor = new LazySparkMax(INTAKE_CAN_MAIN, CANSparkMax.IdleMode.kBrake);
+    private final DoubleSolenoid solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_PNEUMATIC_LEFT_FORWARD, Constants.INTAKE_PNEUMATIC_LEFT_REVERSE);
+    private final DoubleSolenoid solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_PNEUMATIC_RIGHT_FORWARD, Constants.INTAKE_PNEUMATIC_RIGHT_REVERSE);
+    private final LazySparkMax motor = new LazySparkMax(Constants.INTAKE_CAN_MAIN, IdleMode.kBrake, Motor.NEO);
 
     private final static Intake INSTANCE = new Intake();
     public static Intake getInstance() {
@@ -38,7 +39,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void motorOn() {
-        motor.set(INTAKE_MAIN_SPEED);
+        motor.set(Constants.INTAKE_MAIN_SPEED);
     }
 
     public void motorOff() {
@@ -46,7 +47,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void motorReverse() {
-        motor.set(-INTAKE_MAIN_SPEED);
+        motor.set(-Constants.INTAKE_MAIN_SPEED);
     }
 
     public DoubleSolenoid.Value getState() {
