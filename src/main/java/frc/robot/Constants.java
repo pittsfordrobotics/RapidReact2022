@@ -32,6 +32,10 @@ public final class Constants {
  */
     public static final int SHOOTER_CAN_MAIN = 5;
 
+    public static final double SHOOTER_STATIC_GAIN = Double.NaN;
+    public static final double SHOOTER_VELOCITY_GAIN = Double.NaN;
+    public static final double SHOOTER_ACCELERATION_GAIN = Double.NaN;
+
 
 /**
  *
