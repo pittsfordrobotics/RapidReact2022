@@ -9,10 +9,11 @@ import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
+import frc.robot.util.LazySparkMax.Motor;
 
 public class Indexer extends SubsystemBase {
-    private final LazySparkMax stomachMotor = new LazySparkMax(Constants.INDEXER_CAN_STOMACH, IdleMode.kBrake);
-    private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake);
+    private final LazySparkMax stomachMotor = new LazySparkMax(Constants.INDEXER_CAN_STOMACH, IdleMode.kBrake, Motor.NEO);
+    private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake, Motor.NEO);
 
     private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
     private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
@@ -21,6 +22,7 @@ public class Indexer extends SubsystemBase {
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private final static Indexer INSTANCE = new Indexer();
+
     public static Indexer getInstance() {
         return INSTANCE;
     }
