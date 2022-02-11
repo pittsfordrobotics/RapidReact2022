@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -7,8 +8,12 @@ import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
+import frc.robot.util.LazySparkMax;
 
 public class Indexer extends SubsystemBase {
+    private final LazySparkMax stomachMotor = new LazySparkMax(Constants.INDEXER_CAN_STOMACH, IdleMode.kBrake);
+    private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake);
+
     private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
     private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
     private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
@@ -18,9 +23,6 @@ public class Indexer extends SubsystemBase {
     private final static Indexer INSTANCE = new Indexer();
     public static Indexer getInstance() {
         return INSTANCE;
-    }
-
-    private Indexer() {
     }
 
     @Override
@@ -37,6 +39,22 @@ public class Indexer extends SubsystemBase {
         else if (getBall0().getLocation() == LOCATION.SHOOTER) {
             shootBall();
         }
+    }
+
+    public void stomachMotorOn() {
+        stomachMotor.set(Constants.INDEXER_STOMACH_SPEED);
+    }
+
+    public void stomachMotorOff() {
+        stomachMotor.stopMotor();
+    }
+
+    public void towerMotorOn() {
+        stomachMotor.set(Constants.INDEXER_TOWER_SPEED);
+    }
+
+    public void towerMotorOff() {
+        towerMotor.stopMotor();
     }
 
     public Ball getBall0() {

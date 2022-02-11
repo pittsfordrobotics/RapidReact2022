@@ -35,10 +35,17 @@ public final class Constants {
  * INDEXER
  *
  */
+    public static final int INDEXER_CAN_STOMACH = 0; // choose
+    public static final int INDEXER_CAN_TOWER = 0; // choose
+
+    public static final double INDEXER_STOMACH_SPEED = 0.6;
+    public static final double INDEXER_TOWER_SPEED = 0.6;
+
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
+    public static final int INDEXER_COLOR_PROXIMITY = 1700; // from 0 to 2047
+
     public static final int INDEXER_SENSOR_TOWER = 0;
     public static final int INDEXER_SENSOR_SHOOTER = 1;
-    public static final int INDEXER_COLOR_PROXIMITY = 1700; // from 0 to 2047
 
 /**
  *
