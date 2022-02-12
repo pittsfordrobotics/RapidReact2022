@@ -4,7 +4,16 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
 public final class Constants {
 /**
@@ -42,4 +51,28 @@ public final class Constants {
     public static final double LIMELIGHT_TARGET_HEIGHT = 102.8125;
     public static final double LIMELIGHT_MOUNTING_HEIGHT = Double.NaN;
     public static final double LIMELIGHT_ANGLE = Double.NaN;
+
+
+/**
+ * 
+ * TRA JECTORY
+ * 
+ * 
+ */
+    public static final Trajectory simpleForward = TrajectoryGenerator.generateTrajectory(
+        List.of(
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+            new Pose2d(1, -1, Rotation2d.fromDegrees(-90)),
+            new Pose2d(0, -2, Rotation2d.fromDegrees(-180)),
+            new Pose2d(-1, -1, Rotation2d.fromDegrees(-270)),
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0))
+        ),
+        new TrajectoryConfig(1.5, 1)
+        .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH))
+        .addConstraint(
+            new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_S, DRIVE_V, DRIVE_A),
+            new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH),
+            10)
+        )
+    );
 }
