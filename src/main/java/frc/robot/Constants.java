@@ -51,4 +51,5 @@ public final class Constants {
     public static final int CLIMBER_CAN_RIGHT = 0; // :sholthink:
 
     public static final double CLIMBER_SPEED = Double.NaN; // um
+    public static final double CLIMBER_GEAR_RATIO = Double.NaN; // ratiod deactivate
 }
