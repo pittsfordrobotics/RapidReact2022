@@ -16,7 +16,7 @@ public class RobotContainer {
   private final Drive drive = Drive.getInstance();
 
   //  Controllers
-  public static final BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT);
+  public static final BetterXboxController driverController = new BetterXboxController(0, Hand.LEFT);
   public static final BetterXboxController operatorController = new BetterXboxController(1);
 
   public RobotContainer() {
@@ -28,6 +28,10 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    driverController.Buttons.DUp.whenPressed(() -> drive.setThrottle(1));
+    driverController.Buttons.DLeft.whenPressed(() -> drive.setThrottle(0.6));
+    driverController.Buttons.DRight.whenPressed(() -> drive.setThrottle(0.3));
+    driverController.Buttons.DDown.whenPressed(() -> drive.setThrottle(0.2));
   }
 
   public Command getAutonomousCommand() {

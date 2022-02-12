@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import static frc.robot.Constants.*;
 
 public class Limelight extends SubsystemBase {
@@ -18,9 +18,9 @@ public class Limelight extends SubsystemBase {
     }
 
     public void periodic() {
-        SmartDashboard.putNumber("Limelight Horizontal", getHorizontal());
-        SmartDashboard.putNumber("Limelight Vertical", getVertical());
-        SmartDashboard.putNumber("Limelight Area", getArea());
+//        SmartDashboard.putNumber("Limelight Horizontal", getHorizontal());
+//        SmartDashboard.putNumber("Limelight Vertical", getVertical());
+//        SmartDashboard.putNumber("Limelight Area", getArea());
     }
 
     public boolean hasTarget() {

@@ -55,8 +55,8 @@ public class BetterXboxController extends XboxController {
     }
 
     public void rumbleOn() {
-        setRumble(RumbleType.kLeftRumble, 1);
-        setRumble(RumbleType.kRightRumble, 1);
+        setRumble(RumbleType.kLeftRumble, 0.1);
+        setRumble(RumbleType.kRightRumble, 0.1);
     }
 
     public void rumbleOff() {

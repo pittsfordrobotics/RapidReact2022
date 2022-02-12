@@ -33,8 +33,14 @@ public class LazySparkMax extends CANSparkMax {
     }
 
     public LazySparkMax(int port, IdleMode mode, Motor motor, boolean inverted, CANSparkMax leader) {
-        this(port, mode, motor, false);
+        super(port, MotorType.kBrushless);
+        restoreFactoryDefaults();
+        setInverted(inverted);
+        setIdleMode(mode);
+        getEncoder().setPosition(0);
+        setSmartCurrentLimit(motor.getCurrentLimit());
         follow(leader, inverted);
+        burnFlash();
     }
 
     public LazySparkMax(int port, IdleMode mode, Motor motor, CANSparkMax leader) {
