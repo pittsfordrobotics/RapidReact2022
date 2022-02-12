@@ -14,7 +14,7 @@ public class Climber extends SubsystemBase {
     // constructor must appear before the "INSTANCE" variable so that they are initialized 
     // before the constructor is called when the "INSTANCE" variable initializes.
     private final LazySparkMax leftClimber = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kCoast, Motor.NEO);
-    private final LazySparkMax rightClimber = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kCoast, Motor.NEO);
+    private final LazySparkMax rightClimber = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kCoast, Motor.NEO, leftClimber);
 
     private final static Climber INSTANCE = new Climber();
 
@@ -28,14 +28,11 @@ public class Climber extends SubsystemBase {
 
     public void move() { // thanks paras
         leftClimber.set(Constants.CLIMBER_SPEED);
-        rightClimber.set(Constants.CLIMBER_SPEED);
     }
     public void moveBack() {
         leftClimber.set(-Constants.CLIMBER_SPEED);
-        rightClimber.set(-Constants.CLIMBER_SPEED);
     }
     public void stop() {
         leftClimber.stopMotor();
-        rightClimber.stopMotor();
     }
 }
