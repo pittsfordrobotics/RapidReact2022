@@ -37,6 +37,9 @@ public final class Constants {
     public static final double DRIVE_WHEEL_DIAMETER = 0.1524; // meters
     public static final double DRIVE_GEAR_RATIO = Double.NaN;
 
+    public static final double DRIVE_MAX_VELOCITY = Double.NaN; // um
+    public static final double DRIVE_MAX_ACCELERATION = Double.NaN; // yeah idk
+
     public static final double DRIVE_TRACK_WIDTH = 0.644; // meters
 
 /**
@@ -63,14 +66,14 @@ public final class Constants {
         List.of(
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
             new Pose2d(1, -1, Rotation2d.fromDegrees(-90)),
-            new Pose2d(0, -2, Rotation2d.fromDegrees(-180)),
+            new Pose2d(0, -2, Rotation2d.fromDegrees(-180)), // ??????????
             new Pose2d(-1, -1, Rotation2d.fromDegrees(-270)),
             new Pose2d(0, 0, Rotation2d.fromDegrees(0))
         ),
-        new TrajectoryConfig(1.5, 1)
+        new TrajectoryConfig(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION)
         .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH))
         .addConstraint(
-            new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_S, DRIVE_V, DRIVE_A),
+            new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_STATIC_GAIN, DRIVE_VELOCITY_GAIN, DRIVE_ACCELERATION_GAIN),
             new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH),
             10)
         )
