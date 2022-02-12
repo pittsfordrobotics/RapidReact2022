@@ -10,6 +10,7 @@ import frc.robot.commands.DriveXbox;
 import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
 import frc.robot.util.controller.BetterXboxController.Hand;
+import frc.robot.commands.*;
 
 public class RobotContainer {
   //  Subsystems
@@ -28,6 +29,8 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    operatorController.Buttons.RT.whileActiveContinuous(new ClimberUp());
+    operatorController.Buttons.LT.whileActiveContinuous(new ClimberDown());
   }
 
   public Command getAutonomousCommand() {
