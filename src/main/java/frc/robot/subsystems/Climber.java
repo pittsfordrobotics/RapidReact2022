@@ -22,10 +22,7 @@ public class Climber extends SubsystemBase {
     }
 
     private Climber() {
-        // um 
-        leftClimber.restoreFactoryDefaults();
-        rightClimber.restoreFactoryDefaults();
-        stop();
+        
     }
 
     public void move() { // thanks paras
