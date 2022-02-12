@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+/* 
+* i hate paras
+* he sucks
+*/
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -24,13 +28,19 @@ public class Climber extends SubsystemBase {
         return INSTANCE;
     }
 
-    public boolean rotLimit() {
+    public boolean rotLimitUp() {
         if (leftEncoder.getPosition() >= Constants.CLIMBER_ROT_LIMIT) {
             return true;
         } return false;
     }
 
-    public void move() { // thanks paras
+    public boolean rotLimitDown() {
+        if (leftEncoder.getPosition() <= -Constants.CLIMBER_ROT_LIMIT) {
+            return true;
+        } return false;
+    }
+
+    public void move() { 
         leftClimber.set(Constants.CLIMBER_SPEED);
     }
     public void moveBack() {

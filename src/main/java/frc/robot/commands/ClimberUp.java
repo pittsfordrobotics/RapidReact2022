@@ -23,7 +23,7 @@ public class ClimberUp extends CommandBase {
   @Override
   public void execute() {
     climber.move();
-    if (climber.rotLimit()) {
+    if (climber.rotLimitUp()) {
       climber.stop();
     }
   }
