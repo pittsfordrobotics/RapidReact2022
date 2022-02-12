@@ -42,4 +42,13 @@ public final class Constants {
     public static final double LIMELIGHT_TARGET_HEIGHT = 102.8125;
     public static final double LIMELIGHT_MOUNTING_HEIGHT = Double.NaN;
     public static final double LIMELIGHT_ANGLE = Double.NaN;
+/**
+ * 
+ * CLIMBER
+ * 
+ */
+    public static final int CLIMBER_CAN_LEFT = 0; // :sholthink:
+    public static final int CLIMBER_CAN_RIGHT = 0; // :sholthink:
+
+    public static final double CLIMBER_SPEED = Double.NaN; // um
 }
