@@ -23,6 +23,9 @@ public class ClimberDown extends CommandBase {
   @Override
   public void execute() {
     climber.moveBack();
+    if (climber.rotLimit()) {
+      climber.stop();
+    }
   }
 
   // Called once the command ends or is interrupted.

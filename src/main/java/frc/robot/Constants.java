@@ -52,4 +52,5 @@ public final class Constants {
 
     public static final double CLIMBER_SPEED = Double.NaN; // um
     public static final double CLIMBER_GEAR_RATIO = Double.NaN; // ratiod deactivate
+    public static final int CLIMBER_ROT_LIMIT = 0; // change it
 }
