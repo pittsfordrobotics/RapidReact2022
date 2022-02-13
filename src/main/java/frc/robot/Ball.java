@@ -3,7 +3,7 @@ package frc.robot;
 public class Ball {
 
     public enum LOCATION {
-        INTAKE, TOWER_LOW, TOWER_MID, SHOOTER, FIELD
+        INTAKE, TOWER, SHOOTER, FIELD
     }
 
     public enum COLOR {
