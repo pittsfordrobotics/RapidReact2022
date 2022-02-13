@@ -34,9 +34,6 @@ public class DriveXbox extends CommandBase {
 
     @Override
     public void execute() {
-//        SmartDashboard.putNumber("past input", pastInput);
-//        SmartDashboard.putNumber("deadband", MathUtil.applyDeadband((drive.getLeftVelocity()+drive.getRightVelocity())/2,0.2));
-//        SmartDashboard.putNumber("minus", driverController.getDriveY() - pastInput);
         if (Math.abs(MathUtil.applyDeadband((drive.getLeftVelocity()+drive.getRightVelocity())/2,0.2)) == 0) {
             decelerate = false;
         }
@@ -44,16 +41,10 @@ public class DriveXbox extends CommandBase {
             decelerate = driverController.getDriveY() != 0 && (driverController.getDriveY() > 0 ? driverController.getDriveY() - pastInput < 0 : driverController.getDriveY() - pastInput > 0);
         }
         pastInput = driverController.getDriveY();
-        if (decelerate) { driverController.rumbleOn();}
-        else {
-            driverController.rumbleOff();
-        }
 
         velocity = decelerate ? drive.getRateLimit().calculate(driverController.getDriveY()) : driverController.getDriveY();
         drive.getRateLimit().calculate(driverController.getDriveY());
         drive.drive(velocity, -driverController.getDriveX() * 0.5);
-//        drive.drive(driverController.getDriveY(), -driverController.getDriveX() * 0.5);
-
 
         SmartDashboard.putBoolean("decelerating", decelerate);
     }

@@ -37,8 +37,8 @@ public class Drive extends SubsystemBase {
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);;
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));;
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);;
-    private SlewRateLimiter rateLimit = new SlewRateLimiter(1);
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));;
+    private SlewRateLimiter rateLimit = new SlewRateLimiter(1);
     private double throttle = 0.6;
 
     private static final Drive INSTANCE = new Drive();
@@ -77,8 +77,6 @@ public class Drive extends SubsystemBase {
     }
 
     public void drive(double speed, double rotation) {
-        SmartDashboard.putNumber("speed", speed);
-        SmartDashboard.putNumber("rotation", rotation);
         differentialDrive.curvatureDrive(speed, rotation, Math.abs(speed) < 0.15);
     }
 
@@ -117,11 +115,11 @@ public class Drive extends SubsystemBase {
     }
 
     public PIDController getLeftController() {
-        return new PIDController(Constants.DRIVE_P, Constants.DRIVE_I, Constants.DRIVE_D);
+        return new PIDController(Constants.DRIVE_POSITION_GAIN, Constants.DRIVE_INTEGRAL_GAIN, Constants.DRIVE_DERIVATIVE_GAIN);
     }
 
     public PIDController getRightController() {
-        return new PIDController(Constants.DRIVE_P, Constants.DRIVE_I, Constants.DRIVE_D);
+        return new PIDController(Constants.DRIVE_POSITION_GAIN, Constants.DRIVE_INTEGRAL_GAIN, Constants.DRIVE_DERIVATIVE_GAIN);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
