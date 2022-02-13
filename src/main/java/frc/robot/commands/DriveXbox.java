@@ -34,9 +34,9 @@ public class DriveXbox extends CommandBase {
 
     @Override
     public void execute() {
-        SmartDashboard.putNumber("past input", pastInput);
-        SmartDashboard.putNumber("deadband", MathUtil.applyDeadband((drive.getLeftVelocity()+drive.getRightVelocity())/2,0.2));
-        SmartDashboard.putNumber("minus", driverController.getDriveY() - pastInput);
+//        SmartDashboard.putNumber("past input", pastInput);
+//        SmartDashboard.putNumber("deadband", MathUtil.applyDeadband((drive.getLeftVelocity()+drive.getRightVelocity())/2,0.2));
+//        SmartDashboard.putNumber("minus", driverController.getDriveY() - pastInput);
         if (Math.abs(MathUtil.applyDeadband((drive.getLeftVelocity()+drive.getRightVelocity())/2,0.2)) == 0) {
             decelerate = false;
         }

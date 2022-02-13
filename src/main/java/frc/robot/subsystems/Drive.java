@@ -24,10 +24,10 @@ import frc.robot.util.LazySparkMax;
 import frc.robot.util.LazySparkMax.Motor;
 
 public class Drive extends SubsystemBase {
-    private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, Motor.NEO_MAX, true);
-    private final LazySparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, Motor.NEO_MAX, false);
-    private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, Motor.NEO_MAX, leftPrimary);
-    private final LazySparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, Motor.NEO_MAX, rightPrimary);
+    private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, Motor.NEO_MIN, true);
+    private final LazySparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, Motor.NEO_MIN, false);
+    private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, Motor.NEO_MIN, leftPrimary);
+    private final LazySparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, Motor.NEO_MIN, rightPrimary);
 
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
@@ -72,6 +72,8 @@ public class Drive extends SubsystemBase {
                 rightMeters);
 
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+
+        SmartDashboard.putNumber("Throttle", throttle);
     }
 
     public void drive(double speed, double rotation) {
