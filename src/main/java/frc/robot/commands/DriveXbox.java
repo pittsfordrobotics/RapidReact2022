@@ -40,11 +40,10 @@ public class DriveXbox extends CommandBase {
         else if (!decelerate) {
             decelerate = driverController.getDriveY() != 0 && (driverController.getDriveY() > 0 ? driverController.getDriveY() - pastInput < 0 : driverController.getDriveY() - pastInput > 0);
         }
-        pastInput = driverController.getDriveY();
+        pastInput = (driverController.getDriveY() + pastInput) / 2;
 
-        velocity = decelerate ? drive.getRateLimit().calculate(driverController.getDriveY()) : driverController.getDriveY();
         drive.getRateLimit().calculate(driverController.getDriveY());
-        drive.drive(velocity, -driverController.getDriveX() * 0.5);
+        drive.drive(decelerate ? drive.getRateLimit().calculate(driverController.getDriveY()) : driverController.getDriveY(), -driverController.getDriveX() * 0.5);
 
         SmartDashboard.putBoolean("decelerating", decelerate);
     }
