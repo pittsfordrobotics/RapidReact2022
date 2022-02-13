@@ -17,10 +17,10 @@ import java.util.List;
 
 public final class Constants {
 /**
- *
- * DRIVE
- *
- */
+*
+* DRIVE
+*
+*/
     public static final int DRIVE_CAN_RIGHT_LEADER = 1;
     public static final int DRIVE_CAN_RIGHT_FOLLOWER = 2;
     public static final int DRIVE_CAN_LEFT_LEADER = 3;
