@@ -11,19 +11,19 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
-public class Pathing extends SequentialCommandGroup {
+public class AutoPathing extends SequentialCommandGroup {
 
-  public Pathing(Trajectory traj) {
+  public AutoPathing(Trajectory trajectory) {
     super(
-        new InstantCommand(() -> Drive.getInstance().resetOdometry(traj.getInitialPose()), Drive.getInstance()),
+        new DriveZero(),
+        new DriveResetOdometry(trajectory),
         new RamseteCommand(
-            traj,
+            trajectory,
             Drive.getInstance()::getPose,
             new RamseteController(),
             new SimpleMotorFeedforward(Constants.DRIVE_STATIC_GAIN, Constants.DRIVE_VELOCITY_GAIN, Constants.DRIVE_ACCELERATION_GAIN),
@@ -33,7 +33,7 @@ public class Pathing extends SequentialCommandGroup {
             Drive.getInstance().getRightController(),
             Drive.getInstance()::driveVolts,
             Drive.getInstance()),
-        new InstantCommand(() -> Drive.getInstance().driveVolts(0, 0), Drive.getInstance())
+        new DriveZero()
     );
   }
 }
