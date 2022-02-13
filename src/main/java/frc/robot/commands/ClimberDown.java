@@ -20,7 +20,7 @@ public class ClimberDown extends CommandBase {
   @Override
   public void execute() {
     climber.climbBack();
-    if (climber.atLimitDown()) {
+    if (climber.atLimit()) {
       climber.stop();
     }
   }

@@ -23,12 +23,8 @@ public class Climber extends SubsystemBase {
         return INSTANCE;
     }
 
-    public boolean atLimitUp() {
-        return leftEncoder.getPosition() >= Constants.CLIMBER_ROTATION_LIMIT;
-    }
-
-    public boolean atLimitDown() {
-        return leftEncoder.getPosition() <= -Constants.CLIMBER_ROTATION_LIMIT;
+    public boolean atLimit() {
+        return leftEncoder.getPosition() >= Constants.CLIMBER_ROTATION_LIMIT_UP || leftEncoder.getPosition() <= Constants.CLIMBER_ROTATION_LIMIT_DOWN;
     }
 
     public void climbFront() {
