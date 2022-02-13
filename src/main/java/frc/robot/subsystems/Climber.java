@@ -14,38 +14,31 @@ import frc.robot.util.LazySparkMax;
 import frc.robot.util.LazySparkMax.Motor;
 
 public class Climber extends SubsystemBase {
-
-    // With eager singleton initialization, any static variables/fields used in the 
-    // constructor must appear before the "INSTANCE" variable so that they are initialized 
-    // before the constructor is called when the "INSTANCE" variable initializes.
-    private final LazySparkMax leftClimber = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kCoast, Motor.NEO);
-    private final LazySparkMax rightClimber = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kCoast, Motor.NEO, leftClimber);
+    private final LazySparkMax leftClimber = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kBrake, Motor.NEO);
+    private final LazySparkMax rightClimber = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kBrake, Motor.NEO, leftClimber);
     private final RelativeEncoder leftEncoder = leftClimber.getEncoder();
 
     private final static Climber INSTANCE = new Climber();
-
     public static Climber getInstance() {
         return INSTANCE;
     }
 
-    public boolean rotLimitUp() {
-        if (leftEncoder.getPosition() >= Constants.CLIMBER_ROT_LIMIT) {
-            return true;
-        } return false;
+    public boolean atLimitUp() {
+        return leftEncoder.getPosition() >= Constants.CLIMBER_ROTATION_LIMIT;
     }
 
-    public boolean rotLimitDown() {
-        if (leftEncoder.getPosition() <= -Constants.CLIMBER_ROT_LIMIT) {
-            return true;
-        } return false;
+    public boolean atLimitDown() {
+        return leftEncoder.getPosition() <= -Constants.CLIMBER_ROTATION_LIMIT;
     }
 
-    public void move() { 
+    public void climbFront() {
         leftClimber.set(Constants.CLIMBER_SPEED);
     }
-    public void moveBack() {
+
+    public void climbBack() {
         leftClimber.set(-Constants.CLIMBER_SPEED);
     }
+
     public void stop() {
         leftClimber.stopMotor();
     }
