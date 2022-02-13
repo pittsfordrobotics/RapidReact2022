@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,12 +35,15 @@ public class Drive extends SubsystemBase {
 
     private final AHRS ahrs = new AHRS(Constants.DRIVE_NAVX);
 
-    private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);;
-    private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));;
-    private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);;
-    private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));;
-    private SlewRateLimiter rateLimit = new SlewRateLimiter(1);
     private double throttle = 0.6;
+    private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
+    private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
+    private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+    private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
+
+    private SlewRateLimiter rateLimit = new SlewRateLimiter(1);
+    private boolean decelerate = false;
+    private double pastInput = 0;
 
     private static final Drive INSTANCE = new Drive();
     public static Drive getInstance() {
@@ -47,8 +51,6 @@ public class Drive extends SubsystemBase {
     }
 
     private Drive() {
-        resetEncoders();
-
         differentialDrive.setDeadband(0.2);
 
         ahrs.reset();
@@ -74,10 +76,28 @@ public class Drive extends SubsystemBase {
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
 
         SmartDashboard.putNumber("Throttle", throttle);
+        SmartDashboard.putBoolean("Decelerating", decelerate);
     }
 
-    public void drive(double speed, double rotation) {
+    public void driveArcade(double speed, double rotation) {
+        differentialDrive.arcadeDrive(speed, rotation, true);
+    }
+
+    public void driveCurve(double speed, double rotation) {
         differentialDrive.curvatureDrive(speed, rotation, Math.abs(speed) < 0.15);
+    }
+
+    public void driveCurveRateLimited(double speed, double rotation) {
+        if (Math.abs(MathUtil.applyDeadband(getAverageVelocity(),0.2)) == 0) {
+            decelerate = false;
+        }
+        else if (!decelerate) {
+            decelerate = speed != 0 && (speed > 0 ? speed - pastInput < 0 : speed - pastInput > 0);
+        }
+        pastInput = (speed + pastInput) / 2;
+
+        double rateLimitedSpeed = getRateLimit().calculate(speed);
+        driveCurve(decelerate ? rateLimitedSpeed : speed, -rotation * 0.5);
     }
 
     public void setThrottle(double throttle) {
@@ -113,6 +133,8 @@ public class Drive extends SubsystemBase {
     public double getRightVelocity() {
         return rightEncoder.getVelocity();
     }
+
+    public double getAverageVelocity() { return (getLeftVelocity() + getRightVelocity()) / 2; }
 
     public PIDController getLeftController() {
         return new PIDController(Constants.DRIVE_POSITION_GAIN, Constants.DRIVE_INTEGRAL_GAIN, Constants.DRIVE_DERIVATIVE_GAIN);
@@ -153,7 +175,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void enableRateLimit() {
-        rateLimit = new SlewRateLimiter(2);
+        rateLimit = new SlewRateLimiter(1);
     }
 
     public void disableRateLimit() {

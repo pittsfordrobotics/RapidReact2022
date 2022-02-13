@@ -7,19 +7,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
-
 import static frc.robot.RobotContainer.driverController;
 
 public class DriveXbox extends CommandBase {
     private final Drive drive = Drive.getInstance();
-
-    private double pastInput;
-    private double velocity;
-    private boolean decelerate;
 
     public DriveXbox() {
         addRequirements(drive);
@@ -27,25 +20,11 @@ public class DriveXbox extends CommandBase {
 
     @Override
     public void initialize() {
-        decelerate = false;
-        pastInput = 0;
-        velocity = 0;
     }
 
     @Override
     public void execute() {
-        if (Math.abs(MathUtil.applyDeadband((drive.getLeftVelocity()+drive.getRightVelocity())/2,0.2)) == 0) {
-            decelerate = false;
-        }
-        else if (!decelerate) {
-            decelerate = driverController.getDriveY() != 0 && (driverController.getDriveY() > 0 ? driverController.getDriveY() - pastInput < 0 : driverController.getDriveY() - pastInput > 0);
-        }
-        pastInput = (driverController.getDriveY() + pastInput) / 2;
-
-        drive.getRateLimit().calculate(driverController.getDriveY());
-        drive.drive(decelerate ? drive.getRateLimit().calculate(driverController.getDriveY()) : driverController.getDriveY(), -driverController.getDriveX() * 0.5);
-
-        SmartDashboard.putBoolean("decelerating", decelerate);
+        drive.driveCurveRateLimited(driverController.getDriveY(), driverController.getDriveX());
     }
 
     @Override
