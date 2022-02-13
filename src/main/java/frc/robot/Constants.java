@@ -12,7 +12,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-
+import frc.robot.util.Units;
 import java.util.List;
 
 public final class Constants {
@@ -55,6 +55,16 @@ public final class Constants {
     public static final double LIMELIGHT_MOUNTING_HEIGHT = Double.NaN;
     public static final double LIMELIGHT_ANGLE = Double.NaN;
 
+/**
+ *
+ * FIELD DIMENSIONS
+ * https://firstfrc.blob.core.windows.net/frc2022/FieldAssets/2022LayoutMarkingDiagram.pdf
+ *
+ */
+    public static final double FIELD_TARMAC_LINE_TO_BALL_METERS = Units.inches_to_meters(40.44);
+    public static final double FIELD_BALL_TO_FENDER_METERS = Units.inches_to_meters(116.17);
+    public static final double FIELD_TARMAC_OUTSIDE_TIP_TO_FENDER_METERS = Units.inches_to_meters(84.75);
+    public static final double FIELD_TARMAC_OUTSIDE_EDGE_METERS = Units.inches_to_meters(82.83);
 
 /**
  *
