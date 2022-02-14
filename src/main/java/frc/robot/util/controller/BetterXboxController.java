@@ -4,22 +4,35 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
+import java.util.HashMap;
+
 public class BetterXboxController extends XboxController {
     private final Hand hand;
     public final Buttons Buttons;
+
+    private static HashMap<Humans, BetterXboxController> controllers = new HashMap<>();
 
     public enum Hand {
         RIGHT, LEFT
     }
 
-    public BetterXboxController(int port, Hand hand) {
+    public enum Humans {
+        DRIVER, OPERATOR
+    }
+
+    public BetterXboxController(int port, Hand hand, Humans humans) {
         super(port);
         this.hand = hand;
         Buttons = new Buttons(this);
+        controllers.put(humans, this);
     }
 
-    public BetterXboxController(int port) {
-        this(port, null);
+    public BetterXboxController(int port, Humans humans) {
+        this(port, null, humans);
+    }
+
+    public static BetterXboxController getController(Humans humans) {
+        return controllers.get(humans);
     }
 
     public Hand getHand() {
