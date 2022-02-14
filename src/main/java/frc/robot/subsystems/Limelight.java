@@ -1,48 +1,16 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import static frc.robot.Constants.*;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
-    private static Limelight INSTANCE = new Limelight();
-
-    public static Limelight getInstance() {
-        return INSTANCE;
-    }
-
-    private Limelight() {
-        setLED(LED.OFF);
-        setCamMode(Camera.DRIVER);
-    }
-
-    public void periodic() {
-        SmartDashboard.putNumber("Limelight Horizontal", getHorizontal());
-        SmartDashboard.putNumber("Limelight Vertical", getVertical());
-        SmartDashboard.putNumber("Limelight Area", getArea());
-    }
-
-    public boolean hasTarget() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0) == 1.0;
-    }
-
-    public double getHorizontal() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
-    }
-
-    public double getVertical() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
-    }
-
-    public double getArea() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
-    }
-
+    private final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
     public enum Pipelines {
-        TEMP(0);
+        ;
 
         private int num;
         Pipelines(int num) {
@@ -53,11 +21,6 @@ public class Limelight extends SubsystemBase {
             return num;
         }
     }
-
-    public void setPipeline(Pipelines pipeline) {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeline.getNum());
-    }
-
 
     public enum LED {
         PIPELINE(0), OFF(1), BLINK(2), ON(3);
@@ -73,17 +36,12 @@ public class Limelight extends SubsystemBase {
         }
     }
 
-    public void setLED(LED mode) {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(mode.getMode());
-    }
-
-
-    public enum Camera {
-        VISION(0), DRIVER(1);
+    public enum CameraMode {
+        VISION_PROCESSING(0), DRIVER_CAMERA(1);
 
         private int num;
 
-        Camera(int num) {
+        CameraMode(int num) {
             this.num = num;
         }
 
@@ -92,23 +50,61 @@ public class Limelight extends SubsystemBase {
         }
     }
 
-    public void setCamMode(Camera mode) {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(mode.getNum());
+    private static final Limelight INSTANCE = new Limelight();
+    public static Limelight getInstance() {
+        return INSTANCE;
     }
 
+    private Limelight() {
+        setLED(LED.OFF);
+        setCamMode(CameraMode.DRIVER_CAMERA);
+    }
+
+    public void periodic() {
+        SmartDashboard.putNumber("Limelight Horizontal", getHorizontal());
+        SmartDashboard.putNumber("Limelight Vertical", getVertical());
+        SmartDashboard.putNumber("Limelight Area", getArea());
+    }
+
+    public boolean hasTarget() {
+        return limelight.getEntry("tv").getDouble(0.0) == 1.0;
+    }
+
+    public double getHorizontal() {
+        return limelight.getEntry("tx").getDouble(0.0);
+    }
+
+    public double getVertical() {
+        return limelight.getEntry("ty").getDouble(0.0);
+    }
+
+    public double getArea() {
+        return limelight.getEntry("ta").getDouble(0.0);
+    }
+
+    public void setPipeline(Pipelines pipeline) {
+        limelight.getEntry("pipeline").setNumber(pipeline.getNum());
+    }
+
+    public void setLED(LED mode) {
+        limelight.getEntry("ledMode").setNumber(mode.getMode());
+    }
+
+    public void setCamMode(CameraMode mode) {
+        limelight.getEntry("camMode").setNumber(mode.getNum());
+    }
 
     public void enable() {
-        setCamMode(Camera.VISION);
+        setCamMode(CameraMode.VISION_PROCESSING);
         setLED(LED.ON);
     }
 
     public void disable() {
-        setCamMode(Camera.DRIVER);
+        setCamMode(CameraMode.DRIVER_CAMERA);
         setLED(LED.OFF);
     }
 
     public double getDistance() {
-        return (LIMELIGHT_TARGET_HEIGHT - LIMELIGHT_MOUNTING_HEIGHT) / Math.tan(LIMELIGHT_ANGLE + getVertical());
+        return (Constants.LIMELIGHT_TARGET_HEIGHT - Constants.LIMELIGHT_MOUNTING_HEIGHT) / Math.tan(Constants.LIMELIGHT_ANGLE + getVertical());
     }
-
 }
