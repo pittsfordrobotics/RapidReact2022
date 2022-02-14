@@ -6,8 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.CompressorAuto;
 import frc.robot.commands.DriveXbox;
 import frc.robot.commands.IntakeToggle;
+import frc.robot.subsystems.Compressor7;
 import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
 import frc.robot.util.controller.BetterXboxController.Hand;
@@ -15,6 +17,7 @@ import frc.robot.util.controller.BetterXboxController.Hand;
 public class RobotContainer {
   //  Subsystems
   private final Drive drive = Drive.getInstance();
+  private final Compressor7 compressor = Compressor7.getInstance();
 
   //  Controllers
   public static final BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT);
@@ -24,6 +27,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(new DriveXbox());
+    compressor.setDefaultCommand(new CompressorAuto());
 
     SmartDashboard.putString("Driver Mode", driverController.getHand() == Hand.LEFT ? "Left Handed" : "Right Handed");
   }
