@@ -5,9 +5,9 @@ package frc.robot.subsystems;
 * he sucks
 */
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
-
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
@@ -21,6 +21,13 @@ public class Climber extends SubsystemBase {
     private final static Climber INSTANCE = new Climber();
     public static Climber getInstance() {
         return INSTANCE;
+    }
+
+    private Climber() {
+        leftClimber.enableSoftLimit(SoftLimitDirection.kForward, true);
+        leftClimber.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        leftClimber.setSoftLimit(SoftLimitDirection.kForward, Constants.CLIMBER_ROTATION_LIMIT_UP);
+        leftClimber.setSoftLimit(SoftLimitDirection.kReverse, Constants.CLIMBER_ROTATION_LIMIT_DOWN);
     }
 
     public boolean atLimit() {
