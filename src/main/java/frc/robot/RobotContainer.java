@@ -11,8 +11,8 @@ import frc.robot.commands.AutoPathing;
 import frc.robot.commands.DriveXbox;
 import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
-import frc.robot.util.controller.BetterXboxController.Humans;
 import frc.robot.util.controller.BetterXboxController.Hand;
+import frc.robot.util.controller.BetterXboxController.Humans;
 
 public class RobotContainer {
   private final Drive drive = Drive.getInstance();
@@ -20,17 +20,17 @@ public class RobotContainer {
   private final BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT, Humans.DRIVER);
   private final BetterXboxController operatorController = new BetterXboxController(1, Humans.OPERATOR);
 
-  private final SendableChooser<Command> commandChooser = new SendableChooser<Command>();
+  private final SendableChooser<Command> commandChooser = new SendableChooser<>();
 
   public RobotContainer() {
-    commandChooser.setDefaultOption("Path Planner Test", new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
-    SmartDashboard.putData("Auto Command", commandChooser);
+    configureButtonBindings();
 
     Drive.getInstance().setDefaultCommand(new DriveXbox());
 
-    SmartDashboard.putString("Driver Mode", driverController.getHand() == Hand.LEFT ? "Left Handed" : "Right Handed");
+    commandChooser.setDefaultOption("Path Planner Test", new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
 
-    configureButtonBindings();
+    SmartDashboard.putData("Auto Command", commandChooser);
+    SmartDashboard.putString("Driver Mode", driverController.getHand() == Hand.LEFT ? "Left Handed" : "Right Handed");
   }
 
   private void configureButtonBindings() {
