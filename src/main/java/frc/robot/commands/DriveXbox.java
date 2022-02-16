@@ -9,10 +9,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
-import static frc.robot.RobotContainer.*;
+import frc.robot.util.controller.BetterXboxController;
+import frc.robot.util.controller.BetterXboxController.Humans;
 
 public class DriveXbox extends CommandBase {
     private final Drive drive = Drive.getInstance();
+    private final BetterXboxController driverController = BetterXboxController.getController(Humans.DRIVER);
     private double pastInput;
     private boolean accelerate;
 

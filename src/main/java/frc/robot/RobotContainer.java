@@ -11,15 +11,14 @@ import frc.robot.commands.DriveXbox;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
+import frc.robot.util.controller.BetterXboxController.Humans;
 import frc.robot.util.controller.BetterXboxController.Hand;
 
 public class RobotContainer {
-  //  Subsystems
   private final Drive drive = Drive.getInstance();
 
-  //  Controllers
-  public static final BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT);
-  public static final BetterXboxController operatorController = new BetterXboxController(1);
+  private final BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT, Humans.DRIVER);
+  private final BetterXboxController operatorController = new BetterXboxController(1, Humans.OPERATOR);
 
   public RobotContainer() {
     configureButtonBindings();
