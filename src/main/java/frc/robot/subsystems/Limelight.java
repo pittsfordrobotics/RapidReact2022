@@ -94,6 +94,10 @@ public class Limelight extends SubsystemBase {
         limelight.getEntry("camMode").setNumber(mode.getNum());
     }
 
+    public double getLatency() {
+        return limelight.getEntry("tl").getDouble(0.0)/1000.0 + Constants.LIMELIGHT_CAPTURE_LATENCY; //in seconds
+    }
+
     public void enable() {
         setCamMode(CameraMode.VISION_PROCESSING);
         setLED(LED.ON);

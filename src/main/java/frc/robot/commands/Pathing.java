@@ -24,7 +24,7 @@ public class Pathing extends SequentialCommandGroup {
         new InstantCommand(() -> Drive.getInstance().resetOdometry(traj.getInitialPose()), Drive.getInstance()),
         new RamseteCommand(
             traj,
-            Drive.getInstance()::getPose,
+            Drive.getInstance()::getOdometryPose,
             new RamseteController(),
             new SimpleMotorFeedforward(Constants.DRIVE_STATIC_GAIN, Constants.DRIVE_VELOCITY_GAIN, Constants.DRIVE_ACCELERATION_GAIN),
             new DifferentialDriveKinematics(Constants.DRIVE_TRACK_WIDTH),

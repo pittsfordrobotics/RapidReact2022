@@ -40,4 +40,5 @@ public final class Constants {
     public static final double LIMELIGHT_TARGET_HEIGHT = 102.8125;
     public static final double LIMELIGHT_MOUNTING_HEIGHT = Double.NaN;
     public static final double LIMELIGHT_ANGLE = Double.NaN;
+    public static final double LIMELIGHT_CAPTURE_LATENCY = 11.0/1000.0; //seconds
 }
