@@ -22,13 +22,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
-import frc.robot.util.LazySparkMax.Motor;
 
 public class Drive extends SubsystemBase {
-    private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, Motor.NEO_MIN, true);
-    private final LazySparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, Motor.NEO_MIN, false);
-    private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, Motor.NEO_MIN, leftPrimary);
-    private final LazySparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, Motor.NEO_MIN, rightPrimary);
+    private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, 60,true);
+    private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, 60, leftPrimary);
+    private final LazySparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, 60, false);
+    private final LazySparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, 60, rightPrimary);
 
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();

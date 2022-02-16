@@ -4,46 +4,27 @@ import com.revrobotics.CANSparkMax;
 
 public class LazySparkMax extends CANSparkMax {
 
-    public enum Motor {
-        NEO_MIN(40), NEO(50), NEO_MAX(60), NEO_550_MIN(20), NEO_550(30), NEO_550_MAX(40);
-
-        private final int currentLimit;
-
-        Motor(int currentLimit) {
-            this.currentLimit = currentLimit;
-        }
-
-        public int getCurrentLimit() {
-            return currentLimit;
-        }
-    }
-
-    public LazySparkMax(int port, IdleMode mode, Motor motor, boolean inverted) {
+    public LazySparkMax(int port, IdleMode mode, int currentLimit, boolean inverted) {
         super(port, MotorType.kBrushless);
         restoreFactoryDefaults();
         setInverted(inverted);
         setIdleMode(mode);
         getEncoder().setPosition(0);
-        setSmartCurrentLimit(motor.getCurrentLimit());
+        setSmartCurrentLimit(currentLimit);
         burnFlash();
     }
 
-    public LazySparkMax(int port, IdleMode mode, Motor motor) {
-        this(port, mode, motor, false);
+    public LazySparkMax(int port, IdleMode mode, int currentLimit) {
+        this(port, mode, currentLimit, false);
     }
 
-    public LazySparkMax(int port, IdleMode mode, Motor motor, boolean inverted, CANSparkMax leader) {
-        super(port, MotorType.kBrushless);
-        restoreFactoryDefaults();
-        setInverted(inverted);
-        setIdleMode(mode);
-        getEncoder().setPosition(0);
-        setSmartCurrentLimit(motor.getCurrentLimit());
+    public LazySparkMax(int port, IdleMode mode, int currentLimit, boolean inverted, CANSparkMax leader) {
+        this(port, mode, currentLimit, false);
         follow(leader, inverted);
         burnFlash();
     }
 
-    public LazySparkMax(int port, IdleMode mode, Motor motor, CANSparkMax leader) {
-        this(port, mode, motor,false, leader);
+    public LazySparkMax(int port, IdleMode mode, int currentLimit, CANSparkMax leader) {
+        this(port, mode, currentLimit,false, leader);
     }
 }
