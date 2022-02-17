@@ -29,7 +29,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    InstantCommand shooterOn = new InstantCommand(()-> Shooter.getInstance().shooterOn(3000),Shooter.getInstance());
+    InstantCommand shooterOn = new InstantCommand(()-> Shooter.getInstance().setShooterSpeed(3000),Shooter.getInstance());
     InstantCommand shooterOff = new InstantCommand(()-> Shooter.getInstance().shooterOff(),Shooter.getInstance());
     driverController.Buttons.A.whenActive(shooterOn).whenInactive(shooterOff);
   }

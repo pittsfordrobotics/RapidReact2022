@@ -20,8 +20,12 @@ public class Shooter extends SubsystemBase {
         return INSTANCE;
     }
 
-    public void shooterOn(double speed) {
+    public void setShooterSpeed(double speed) {
         shooterMotor.set(bangBangController.calculate(shooterEncoder.getVelocity(), speed) + 0.9 * shooterFeedforward.calculate(speed));
+    }
+
+    public void shootLow() {
+        setShooterSpeed(Constants.SHOOTER_LOW_GOAL_SPEED);
     }
 
     public void shooterOff() {
