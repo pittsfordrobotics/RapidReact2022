@@ -36,7 +36,7 @@ public final class Constants {
     public static final double DRIVE_ACCELERATION_GAIN = Double.NaN;
 
     public static final double DRIVE_WHEEL_DIAMETER = 0.1524; // meters
-    public static final double DRIVE_GEAR_RATIO = Double.NaN;
+    public static final double DRIVE_GEAR_RATIO = 7.31;
 
     public static final double DRIVE_MAX_VELOCITY = Double.NaN; // um
     public static final double DRIVE_MAX_ACCELERATION = Double.NaN; // yeah idk
