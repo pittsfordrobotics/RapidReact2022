@@ -6,9 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.CompressorAuto;
+import frc.robot.commands.CompressorSmart;
 import frc.robot.commands.DriveXbox;
-import frc.robot.commands.IntakeToggle;
+import frc.robot.commands.IntakeSmart;
 import frc.robot.subsystems.Compressor7;
 import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
@@ -26,13 +26,13 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(new DriveXbox());
-    compressor.setDefaultCommand(new CompressorAuto());
+    compressor.setDefaultCommand(new CompressorSmart());
 
     SmartDashboard.putString("Driver Mode", driverController.getHand() == Hand.LEFT ? "Left Handed" : "Right Handed");
   }
 
   private void configureButtonBindings() {
-    driverController.Buttons.A.whenPressed(new IntakeToggle());
+    driverController.Buttons.A.whenPressed(new IntakeSmart());
   }
 
   public Command getAutonomousCommand() {

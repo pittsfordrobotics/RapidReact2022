@@ -6,10 +6,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Compressor7;
 
 
-public class CompressorAuto extends CommandBase {
+public class CompressorSmart extends CommandBase {
     private final Compressor7 compressor = Compressor7.getInstance();
 
-    public CompressorAuto() {
+    public CompressorSmart() {
         addRequirements(this.compressor);
     }
 
