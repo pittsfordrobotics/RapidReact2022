@@ -38,8 +38,8 @@ public final class Constants {
     public static final double DRIVE_WHEEL_DIAMETER = 0.1524; // meters
     public static final double DRIVE_GEAR_RATIO = 7.31;
 
-    public static final double DRIVE_MAX_VELOCITY = Double.NaN; // um
-    public static final double DRIVE_MAX_ACCELERATION = Double.NaN; // yeah idk
+    public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = Double.NaN; // um
+    public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = Double.NaN; // yeah idk
 
     public static final double DRIVE_TRACK_WIDTH = 0.644; // meters
 
@@ -76,7 +76,7 @@ public final class Constants {
  * ALL IN METERS
  *
  */
-    private static final TrajectoryConfig TRAJECTORY_CONFIG = new TrajectoryConfig(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION)
+    private static final TrajectoryConfig TRAJECTORY_CONFIG = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
             .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH))
             .addConstraint(
                     new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_STATIC_GAIN, DRIVE_VELOCITY_GAIN, DRIVE_ACCELERATION_GAIN),
@@ -84,7 +84,7 @@ public final class Constants {
                             10)
             );
 
-    private static final TrajectoryConfig TRAJECTORY_CONFIG_REVERSED = new TrajectoryConfig(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION)
+    private static final TrajectoryConfig TRAJECTORY_CONFIG_REVERSED = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
             .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH))
             .setReversed(true)
             .addConstraint(
