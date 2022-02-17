@@ -3,13 +3,13 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
-import frc.robot.util.LazySparkMax.Motor;
 
 public class Indexer extends SubsystemBase {
     private final LazySparkMax stomachMotor = new LazySparkMax(Constants.INDEXER_CAN_STOMACH, IdleMode.kBrake, 50);
@@ -155,6 +155,7 @@ public class Indexer extends SubsystemBase {
                 stomachMotorOff();
                 towerMotorOff();
         }
+        SmartDashboard.putString("Indexer state", state.toString());
     }
 
     public void setState(State state) {
