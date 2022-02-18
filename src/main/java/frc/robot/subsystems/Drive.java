@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
@@ -16,7 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -31,7 +32,8 @@ public class Drive extends SubsystemBase {
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
-    private final AHRS ahrs = new AHRS(Port.kMXP);
+    private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
+    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
 
     private final SlewRateLimiter rateLimit = new SlewRateLimiter(2);
     private final DifferentialDrive differentialDrive;
@@ -50,8 +52,6 @@ public class Drive extends SubsystemBase {
 
         differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
         differentialDrive.setDeadband(0.2);
-
-        ahrs.reset();
 
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
 
@@ -136,7 +136,8 @@ public class Drive extends SubsystemBase {
     }
 
     private double getAngle() {
-        return -ahrs.getAngle();
+//        return ahrs.getAngle();
+        return pigeon.getAngle();
     }
 
     public SlewRateLimiter getRateLimit() {

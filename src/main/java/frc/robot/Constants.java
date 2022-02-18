@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.pathplanner.lib.PathPlanner;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.util.Units;
+
 import java.util.List;
 
 public final class Constants {
@@ -22,10 +24,13 @@ public final class Constants {
 * DRIVE
 *
 */
+    public static final int DRIVE_CAN_PIGEON = 0;
     public static final int DRIVE_CAN_RIGHT_LEADER = 1;
     public static final int DRIVE_CAN_RIGHT_FOLLOWER = 2;
     public static final int DRIVE_CAN_LEFT_LEADER = 3;
     public static final int DRIVE_CAN_LEFT_FOLLOWER = 4;
+
+    public static final Pigeon2Configuration DRIVE_PIGEON_DEFAULT_CONFIG = new Pigeon2Configuration();
 
     public static final double DRIVE_POSITION_GAIN = Double.NaN;
     public static final double DRIVE_INTEGRAL_GAIN = Double.NaN;
