@@ -201,6 +201,20 @@ public class Drive extends SubsystemBase {
         leftPrimary.setIdleMode(IdleMode.kBrake);
     }
 
+    public void setCoastMode() {
+        rightPrimary.setIdleMode(IdleMode.kCoast);
+        rightFollower.setIdleMode(IdleMode.kCoast);
+        leftPrimary.setIdleMode(IdleMode.kCoast);
+        leftPrimary.setIdleMode(IdleMode.kCoast);
+    }
+
+    public void setBrakeMode() {
+        rightPrimary.setIdleMode(IdleMode.kBrake);
+        rightFollower.setIdleMode(IdleMode.kBrake);
+        leftPrimary.setIdleMode(IdleMode.kBrake);
+        leftPrimary.setIdleMode(IdleMode.kBrake);
+    }
+
     public SlewRateLimiter getRateLimit() {
         return rateLimit;
     }
