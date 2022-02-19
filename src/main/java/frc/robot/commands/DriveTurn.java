@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drive;
 public class DriveTurn extends CommandBase {
   private final double angle;
   private final Drive drive = Drive.getInstance();
-  private final PIDController pidController = new PIDController(1,0,0);
+  private final PIDController pidController = new PIDController(0.075,0,0);
   private double endingAngle;
   private double throttle;
 
@@ -25,10 +25,10 @@ public class DriveTurn extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pidController.setSetpoint(angle);
     throttle = drive.getThrottle();
     endingAngle = drive.getAngle() + angle;
     drive.setThrottle(0.6);
+    pidController.setSetpoint(endingAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,12 +52,13 @@ public class DriveTurn extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double currentAngle = drive.getAngle();
-    if(angle >= 0) {
-      return currentAngle > endingAngle;
-    }
-    else {
-      return currentAngle < endingAngle;
-    }
+    // double currentAngle = drive.getAngle();
+    // if(angle >= 0) {
+    //   return currentAngle > endingAngle;
+    // }
+    // else {
+    //   return currentAngle < endingAngle;
+   //    }
+   return pidController.atSetpoint();
   }
 }
