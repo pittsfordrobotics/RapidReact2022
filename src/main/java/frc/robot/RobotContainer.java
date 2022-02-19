@@ -7,12 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
 import frc.robot.util.controller.BetterXboxController.Hand;
 import frc.robot.util.controller.BetterXboxController.Humans;
-import frc.robot.subsystems.*;
-import frc.robot.commands.*;
 
 public class RobotContainer {
   private final Drive drive = Drive.getInstance();
@@ -41,19 +40,17 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    InstantCommand shooterOn = new InstantCommand(()-> Shooter.getInstance().setShooterSpeed(3000),Shooter.getInstance());
-    InstantCommand shooterOff = new InstantCommand(()-> Shooter.getInstance().shooterOff(),Shooter.getInstance());
-    driverController.Buttons.A.whenActive(shooterOn).whenInactive(shooterOff);
+    driverController.A.whenActive(new CG_LowShot());
 
-    driverController.Buttons.B.whenPressed(new IntakeSmart());
+    driverController.B.whenPressed(new IntakeSmart());
 
-    driverController.Buttons.DUp.whenPressed(() -> drive.setThrottle(1));
-    driverController.Buttons.DLeft.whenPressed(() -> drive.setThrottle(0.7));
-    driverController.Buttons.DRight.whenPressed(() -> drive.setThrottle(0.4));
-    driverController.Buttons.DDown.whenPressed(() -> drive.setThrottle(0.1));
+    driverController.DUp.whenPressed(() -> drive.setThrottle(1));
+    driverController.DLeft.whenPressed(() -> drive.setThrottle(0.7));
+    driverController.DRight.whenPressed(() -> drive.setThrottle(0.4));
+    driverController.DDown.whenPressed(() -> drive.setThrottle(0.1));
     
-    operatorController.Buttons.RT.whileActiveContinuous(new ClimberUp());
-    operatorController.Buttons.LT.whileActiveContinuous(new ClimberDown());
+    operatorController.RT.whileActiveContinuous(new ClimberUp());
+    operatorController.LT.whileActiveContinuous(new ClimberDown());
   }
 
   public Command getAutonomousCommand() {

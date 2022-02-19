@@ -8,7 +8,21 @@ import java.util.HashMap;
 
 public class BetterXboxController extends XboxController {
     private final Hand hand;
-    public final Buttons Buttons;
+//    public final Buttons Buttons;
+    public final JoystickButton A;
+    public final JoystickButton B;
+    public final JoystickButton X;
+    public final JoystickButton Y;
+    public final JoystickButton LB;
+    public final JoystickButton RB;
+    public final POVButton DUp;
+    public final POVButton DRight;
+    public final POVButton DDown;
+    public final POVButton DLeft;
+    public final TriggerButton LT;
+    public final TriggerButton RT;
+    public final JoystickButton Start;
+    public final JoystickButton Back;
 
     private static HashMap<Humans, BetterXboxController> controllers = new HashMap<>();
 
@@ -23,7 +37,21 @@ public class BetterXboxController extends XboxController {
     public BetterXboxController(int port, Hand hand, Humans humans) {
         super(port);
         this.hand = hand;
-        Buttons = new Buttons(this);
+        A = new JoystickButton(this, XboxController.Button.kA.value);
+        B = new JoystickButton(this, XboxController.Button.kB.value);
+        X = new JoystickButton(this, XboxController.Button.kX.value);
+        Y = new JoystickButton(this, XboxController.Button.kY.value);
+        LB = new JoystickButton(this, XboxController.Button.kLeftBumper.value);
+        RB = new JoystickButton(this, XboxController.Button.kRightBumper.value);
+        DUp = new POVButton(this, 0);
+        DRight = new POVButton(this, 90);
+        DDown = new POVButton(this, 180);
+        DLeft = new POVButton(this, 270);
+        LT = new TriggerButton(this, Hand.LEFT);
+        RT = new TriggerButton(this, Hand.RIGHT);
+        Start = new JoystickButton(this, XboxController.Button.kStart.value);
+        Back = new JoystickButton(this, XboxController.Button.kBack.value);
+
         controllers.put(humans, this);
     }
 
@@ -75,39 +103,5 @@ public class BetterXboxController extends XboxController {
     public void rumbleOff() {
         setRumble(RumbleType.kLeftRumble, 0);
         setRumble(RumbleType.kRightRumble, 0);
-    }
-
-    public static class Buttons {
-        public final JoystickButton A;
-        public final JoystickButton B;
-        public final JoystickButton X;
-        public final JoystickButton Y;
-        public final JoystickButton LB;
-        public final JoystickButton RB;
-        public final POVButton DUp;
-        public final POVButton DRight;
-        public final POVButton DDown;
-        public final POVButton DLeft;
-        public final TriggerButton LT;
-        public final TriggerButton RT;
-        public final JoystickButton Start;
-        public final JoystickButton Back;
-
-        private Buttons(XboxController controller) {
-            A = new JoystickButton(controller, XboxController.Button.kA.value);
-            B = new JoystickButton(controller, XboxController.Button.kB.value);
-            X = new JoystickButton(controller, XboxController.Button.kX.value);
-            Y = new JoystickButton(controller, XboxController.Button.kY.value);
-            LB = new JoystickButton(controller, XboxController.Button.kLeftBumper.value);
-            RB = new JoystickButton(controller, XboxController.Button.kRightBumper.value);
-            DUp = new POVButton(controller, 0);
-            DRight = new POVButton(controller, 90);
-            DDown = new POVButton(controller, 180);
-            DLeft = new POVButton(controller, 270);
-            LT = new TriggerButton(controller, Hand.LEFT);
-            RT = new TriggerButton(controller, Hand.RIGHT);
-            Start = new JoystickButton(controller, XboxController.Button.kStart.value);
-            Back = new JoystickButton(controller, XboxController.Button.kBack.value);
-        }
     }
 }
