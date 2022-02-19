@@ -188,5 +188,5 @@ public final class Constants {
 //            TRAJECTORY_CONFIG
 //    );
 
-    public static final Trajectory TRAJECTORY_PATHPLANNER_TEST = PathPlanner.loadPath("Test", 10, 5);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_TEST = PathPlanner.loadPath("Test", 10, 2, false);
 }

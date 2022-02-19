@@ -27,7 +27,7 @@ public class DriveXbox extends CommandBase {
 
     @Override
     public void execute() {
-        drive.driveCurveRateLimited(driverController.getDriveY(), driverController.getDriveX());
+        drive.driveCurveRateLimited(-driverController.getDriveY(), -driverController.getDriveX());
     }
 
     @Override
