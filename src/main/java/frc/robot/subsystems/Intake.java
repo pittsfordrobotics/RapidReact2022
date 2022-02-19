@@ -2,15 +2,14 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 public class Intake extends SubsystemBase {
-    private final DoubleSolenoid solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_PNEUMATIC_LEFT_FORWARD, Constants.INTAKE_PNEUMATIC_LEFT_REVERSE);
-    private final DoubleSolenoid solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_PNEUMATIC_RIGHT_FORWARD, Constants.INTAKE_PNEUMATIC_RIGHT_REVERSE);
+//    private final DoubleSolenoid solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_PNEUMATIC_LEFT_FORWARD, Constants.INTAKE_PNEUMATIC_LEFT_REVERSE);
+//    private final DoubleSolenoid solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_PNEUMATIC_RIGHT_FORWARD, Constants.INTAKE_PNEUMATIC_RIGHT_REVERSE);
     private final LazySparkMax motor = new LazySparkMax(Constants.INTAKE_CAN_MAIN, IdleMode.kBrake, 50);
 
     private DoubleSolenoid.Value state = DoubleSolenoid.Value.kReverse;
@@ -30,13 +29,13 @@ public class Intake extends SubsystemBase {
     }
 
     public void extend() {
-        solenoidLeft.set(DoubleSolenoid.Value.kForward);
-        solenoidRight.set(DoubleSolenoid.Value.kForward);
+//        solenoidLeft.set(DoubleSolenoid.Value.kForward);
+//        solenoidRight.set(DoubleSolenoid.Value.kForward);
     }
 
     public void retract() {
-        solenoidLeft.set(DoubleSolenoid.Value.kReverse);
-        solenoidRight.set(DoubleSolenoid.Value.kReverse);
+//        solenoidLeft.set(DoubleSolenoid.Value.kReverse);
+//        solenoidRight.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void motorOn() {
@@ -52,20 +51,21 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean isExtended() {
-        return solenoidLeft.get() == DoubleSolenoid.Value.kForward;
+        return false;
+//        return solenoidLeft.get() == DoubleSolenoid.Value.kForward;
     }
 
     public void toggleSolenoid() {
-        solenoidLeft.toggle();
-        solenoidRight.toggle();
+//        solenoidLeft.toggle();
+//        solenoidRight.toggle();
     }
 
     public void smartMotor() {
-        if (isExtended()) {
-            motorOn();
-        }
-        else if (!isExtended()) {
-            motorOff();
-        }
+//        if (isExtended()) {
+//            motorOn();
+//        }
+//        else if (!isExtended()) {
+//            motorOff();
+//        }
     }
 }

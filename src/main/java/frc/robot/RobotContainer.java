@@ -19,9 +19,9 @@ public class RobotContainer {
   private final Hood hood = Hood.getInstance();
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
-  private final Compressor7 compressor = Compressor7.getInstance();
+//  private final Compressor7 compressor = Compressor7.getInstance();
 
-  private final BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT, Humans.DRIVER);
+  private final BetterXboxController driverController = new BetterXboxController(0, Hand.LEFT, Humans.DRIVER);
   private final BetterXboxController operatorController = new BetterXboxController(1, Humans.OPERATOR);
 
   private final SendableChooser<Command> commandChooser = new SendableChooser<>();
@@ -33,7 +33,7 @@ public class RobotContainer {
     shooter.setDefaultCommand(new ShooterDefault());
     intake.setDefaultCommand(new IntakeDefault());
     hood.setDefaultCommand(new HoodDefault());
-    compressor.setDefaultCommand(new CompressorSmart());
+//    compressor.setDefaultCommand(new CompressorSmart());
 
     commandChooser.setDefaultOption("Path Planner Test", new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
 
