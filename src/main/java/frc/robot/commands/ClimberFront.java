@@ -7,10 +7,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
-public class ClimberDown extends CommandBase {
+public class ClimberFront extends CommandBase {
   private final Climber climber = Climber.getInstance();
 
-  public ClimberDown() {
+  public ClimberFront() {
     addRequirements(this.climber);
   }
 
@@ -19,7 +19,7 @@ public class ClimberDown extends CommandBase {
 
   @Override
   public void execute() {
-    climber.climbBack();
+    climber.climbFront();
 //    if (climber.atLimit()) {
 //      climber.stop();
 //    }

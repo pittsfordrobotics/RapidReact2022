@@ -49,8 +49,8 @@ public class RobotContainer {
     driverController.DRight.whenPressed(() -> drive.setThrottle(0.4));
     driverController.DDown.whenPressed(() -> drive.setThrottle(0.1));
     
-    operatorController.RT.whileActiveContinuous(new ClimberUp());
-    operatorController.LT.whileActiveContinuous(new ClimberDown());
+    operatorController.RT.and(operatorController.LB.negate()).whileActiveContinuous(new ClimberFront());
+    operatorController.RT.and(operatorController.LB).whileActiveContinuous(new ClimberBack());
   }
 
   public Command getAutonomousCommand() {
