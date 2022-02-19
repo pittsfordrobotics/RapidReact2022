@@ -13,6 +13,7 @@ import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
 import frc.robot.util.controller.BetterXboxController.Hand;
 import frc.robot.util.controller.BetterXboxController.Humans;
+import frc.robot.commands.*;
 
 public class RobotContainer {
   private final Drive drive = Drive.getInstance();
@@ -38,6 +39,10 @@ public class RobotContainer {
     driverController.Buttons.DLeft.whenPressed(() -> drive.setThrottle(0.7));
     driverController.Buttons.DRight.whenPressed(() -> drive.setThrottle(0.4));
     driverController.Buttons.DDown.whenPressed(() -> drive.setThrottle(0.1));
+    
+    operatorController.Buttons.RT.whileActiveContinuous(new ClimberUp());
+    operatorController.Buttons.LT.whileActiveContinuous(new ClimberDown());
+
   }
 
   public Command getAutonomousCommand() {

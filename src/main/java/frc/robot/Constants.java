@@ -66,6 +66,18 @@ public final class Constants {
 
 /**
  *
+ * CLIMBER
+ * 
+ */
+    public static final int CLIMBER_CAN_LEFT = 0; // :sholthink:
+    public static final int CLIMBER_CAN_RIGHT = 0; // :sholthink:
+
+    public static final double CLIMBER_SPEED = Double.NaN; // um
+    public static final double CLIMBER_GEAR_RATIO = Double.NaN; // ratiod deactivate
+    public static final int CLIMBER_ROTATION_LIMIT_UP = 0; // change it
+    public static final int CLIMBER_ROTATION_LIMIT_DOWN = 0; // change it
+/**
+ *
  * FIELD DIMENSIONS
  * https://firstfrc.blob.core.windows.net/frc2022/FieldAssets/2022LayoutMarkingDiagram.pdf
  *
