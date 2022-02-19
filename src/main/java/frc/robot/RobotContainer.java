@@ -44,6 +44,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverController.A.whenActive(new CG_LowShot());
     driverController.B.whenPressed(new IntakeSmart());
+    driverController.Y.whenPressed(new DriveTurn(180));
+
 
     driverController.DUp.whenPressed(() -> drive.setThrottle(1));
     driverController.DLeft.whenPressed(() -> drive.setThrottle(0.7));

@@ -163,7 +163,7 @@ public class Drive extends SubsystemBase {
         return pose;
     }
 
-    private double getAngle() {
+    public double getAngle() {
         return -ahrs.getAngle();
 //        return pigeon.getAngle();
     }
