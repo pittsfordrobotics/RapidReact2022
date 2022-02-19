@@ -21,6 +21,7 @@ public class LazySparkMax extends CANSparkMax {
     public LazySparkMax(int port, IdleMode mode, int currentLimit, boolean inverted, CANSparkMax leader) {
         this(port, mode, currentLimit, false);
         follow(leader, inverted);
+        burnFlash();
     }
 
     public LazySparkMax(int port, IdleMode mode, int currentLimit, CANSparkMax leader) {
