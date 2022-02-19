@@ -8,16 +8,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Compressor7;
-import frc.robot.subsystems.Drive;
 import frc.robot.util.controller.BetterXboxController;
 import frc.robot.util.controller.BetterXboxController.Hand;
 import frc.robot.util.controller.BetterXboxController.Humans;
+import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 public class RobotContainer {
   private final Drive drive = Drive.getInstance();
+  private final Indexer indexer = Indexer.getInstance();
   private final Compressor7 compressor = Compressor7.getInstance();
 
   private final BetterXboxController driverController = new BetterXboxController(0, Hand.RIGHT, Humans.DRIVER);

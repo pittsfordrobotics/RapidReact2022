@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C;
 import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.pathplanner.lib.PathPlanner;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -49,6 +50,7 @@ public final class Constants {
     public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = Double.NaN; // yeah idk
 
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
+
 /**
  *
  * INTAKE
@@ -77,6 +79,23 @@ public final class Constants {
     public static final double HOOD_DERIVATIVE_GAIN = Double.NaN;
 
     public static final double HOOD_ROTATIONS_TO_DEGREES = Double.NaN;
+
+/**
+ *
+ * INDEXER
+ *
+ */
+    public static final int INDEXER_CAN_STOMACH = 0; // choose
+    public static final int INDEXER_CAN_TOWER = 0; // choose
+
+    public static final double INDEXER_STOMACH_SPEED = 0.6;
+    public static final double INDEXER_TOWER_SPEED = 0.6;
+
+    public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
+    public static final int INDEXER_COLOR_PROXIMITY = 1700; // from 0 to 2047
+
+    public static final int INDEXER_SENSOR_TOWER = 0;
+    public static final int INDEXER_SENSOR_SHOOTER = 1;
 
 /**
  *
@@ -117,6 +136,7 @@ public final class Constants {
     public static final double CLIMBER_GEAR_RATIO = Double.NaN; // ratiod deactivate
     public static final int CLIMBER_ROTATION_LIMIT_UP = 0; // change it
     public static final int CLIMBER_ROTATION_LIMIT_DOWN = 0; // change it
+  
 /**
  *
  * FIELD DIMENSIONS
