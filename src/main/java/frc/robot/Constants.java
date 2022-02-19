@@ -79,12 +79,24 @@ public final class Constants {
     public static final double HOOD_ROTATIONS_TO_DEGREES = Double.NaN;
 
 /**
-*
-* LIMELIGHT
-* all distances measured in inches
-*
-**/
+ *
+ * SHOOTER
+ *
+ */
+    public static final int SHOOTER_CAN_MAIN = 5;
 
+    public static final double SHOOTER_STATIC_GAIN = Double.NaN;
+    public static final double SHOOTER_VELOCITY_GAIN = Double.NaN;
+    public static final double SHOOTER_ACCELERATION_GAIN = Double.NaN;
+
+    public static final double SHOOTER_LOW_GOAL_SPEED = Double.NaN;
+
+/**
+ *
+ * LIMELIGHT
+ * all distances measured in inches
+ *
+ **/
 //    104 inches to top of goal
 //    101.625 inches to bottom of vision target
 //    middle is 102.8125 inches from field
