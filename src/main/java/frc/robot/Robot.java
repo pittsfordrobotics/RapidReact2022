@@ -7,8 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Limelight;
 
 public class Robot extends TimedRobot {
+  private final Drive drive = Drive.getInstance();
+  private final Limelight limelight = Limelight.getInstance();
+
   private Command autonomousCommand;
 
   private RobotContainer robotContainer;
@@ -24,13 +29,17 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    drive.coastMode();
+    limelight.disable();
+  }
 
   @Override
   public void disabledPeriodic() {}
 
   @Override
   public void autonomousInit() {
+    drive.breakMode();
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     if (autonomousCommand != null) {
@@ -43,6 +52,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    drive.breakMode();
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }

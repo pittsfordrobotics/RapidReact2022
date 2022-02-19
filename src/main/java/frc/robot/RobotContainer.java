@@ -35,8 +35,14 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    driverController.Buttons.DUp.whenPressed(() -> drive.setThrottle(1));
+    driverController.Buttons.DLeft.whenPressed(() -> drive.setThrottle(0.7));
+    driverController.Buttons.DRight.whenPressed(() -> drive.setThrottle(0.4));
+    driverController.Buttons.DDown.whenPressed(() -> drive.setThrottle(0.1));
+    
     operatorController.Buttons.RT.whileActiveContinuous(new ClimberUp());
     operatorController.Buttons.LT.whileActiveContinuous(new ClimberDown());
+
   }
 
   public Command getAutonomousCommand() {

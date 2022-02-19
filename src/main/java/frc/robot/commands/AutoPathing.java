@@ -27,7 +27,7 @@ public class AutoPathing extends SequentialCommandGroup {
             Drive.getInstance()::getPose,
             new RamseteController(),
             new SimpleMotorFeedforward(Constants.DRIVE_STATIC_GAIN, Constants.DRIVE_VELOCITY_GAIN, Constants.DRIVE_ACCELERATION_GAIN),
-            new DifferentialDriveKinematics(Constants.DRIVE_TRACK_WIDTH),
+            new DifferentialDriveKinematics(Constants.DRIVE_TRACK_WIDTH_METERS),
             Drive.getInstance()::getWheelSpeeds,
             Drive.getInstance().getLeftController(),
             Drive.getInstance().getRightController(),
