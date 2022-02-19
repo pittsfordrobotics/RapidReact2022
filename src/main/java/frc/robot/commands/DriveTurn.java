@@ -18,6 +18,7 @@ public class DriveTurn extends CommandBase {
   public DriveTurn(double angle) {
     this.angle = angle;
     addRequirements(this.drive);
+    pidController.setTolerance(1);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -33,12 +34,13 @@ public class DriveTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(angle < 0) {
-      drive.driveArcade(0, 1);
-    }
-    else {
-      drive.driveArcade(0, -1);
-    }
+    // if(angle < 0) {
+    //   drive.driveArcade(0, 1);
+    // }
+    // else {
+    //   drive.driveArcade(0, -1);
+    // }
+    drive.driveArcade(0, pidController.calculate(drive.getAngle()));
   }
 
   // Called once the command ends or is interrupted.
