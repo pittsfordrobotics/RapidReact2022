@@ -45,10 +45,10 @@ public class RobotContainer {
     driverController.A.whenActive(new CG_LowShot());
     driverController.B.whenPressed(new IntakeSmart());
 
-    driverController.DUp.whenPressed(() -> drive.setThrottle(1));
-    driverController.DLeft.whenPressed(() -> drive.setThrottle(0.7));
-    driverController.DRight.whenPressed(() -> drive.setThrottle(0.4));
-    driverController.DDown.whenPressed(() -> drive.setThrottle(0.1));
+    driverController.DUp.whenPressed(new DriveSetThrottle(1));
+    driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
+    driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
+    driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
     
     operatorController.RT.and(operatorController.LB.negate()).whileActiveContinuous(new ClimberFront());
     operatorController.RT.and(operatorController.LB).whileActiveContinuous(new ClimberBack());
