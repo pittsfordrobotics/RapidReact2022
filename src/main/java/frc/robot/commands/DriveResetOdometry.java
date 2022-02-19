@@ -10,8 +10,8 @@ public class DriveResetOdometry extends CommandBase {
     private Trajectory trajectory;
 
     public DriveResetOdometry(Trajectory trajectory) {
-        addRequirements(this.drive);
         this.trajectory = trajectory;
+        addRequirements(this.drive);
     }
 
     @Override

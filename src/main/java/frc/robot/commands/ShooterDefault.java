@@ -1,20 +1,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 
-public class IntakeUp extends CommandBase {
-    private final Intake intake = Intake.getInstance();
+public class ShooterDefault extends CommandBase {
+    private final Shooter shooter = Shooter.getInstance();
 
-    public IntakeUp() {
-        addRequirements(this.intake);
+    public ShooterDefault() {
+        addRequirements(this.shooter);
     }
 
     @Override
     public void initialize() {
-        intake.retract();
-        intake.motorOff();
+        shooter.setShooterSpeed(0);
     }
 
     @Override
@@ -23,7 +22,7 @@ public class IntakeUp extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override

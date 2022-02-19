@@ -1,20 +1,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Hood;
 
 
-public class IntakeUp extends CommandBase {
-    private final Intake intake = Intake.getInstance();
+public class HoodPrimed extends CommandBase {
+    private final Hood hood = Hood.getInstance();
 
-    public IntakeUp() {
-        addRequirements(this.intake);
+    public HoodPrimed() {
+        addRequirements(this.hood);
     }
 
     @Override
     public void initialize() {
-        intake.retract();
-        intake.motorOff();
     }
 
     @Override
@@ -23,10 +21,11 @@ public class IntakeUp extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return hood.isAtPosition();
     }
 
     @Override
     public void end(boolean interrupted) {
+
     }
 }

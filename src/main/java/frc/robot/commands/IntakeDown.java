@@ -23,7 +23,6 @@ public class IntakeDown extends CommandBase {
 
     @Override
     public boolean isFinished() {
-//        TODO: add code from indexer
         return false;
     }
 

@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.util.LookupTable;
 import frc.robot.util.Units;
 import java.util.List;
 
@@ -73,12 +74,19 @@ public final class Constants {
  */
     public static final int HOOD_CAN_MAIN = 0;
 
-    public static final float HOOD_MAX_POSITION = Float.NaN;
     public static final double HOOD_POSITION_GAIN = Double.NaN;
     public static final double HOOD_INTEGRAL_GAIN = Double.NaN;
     public static final double HOOD_DERIVATIVE_GAIN = Double.NaN;
-
     public static final double HOOD_ROTATIONS_TO_DEGREES = Double.NaN;
+
+    public static final float HOOD_POSITION_MAX = Float.NaN;
+    public static final float HOOD_POSITION_LOW = Float.NaN;
+
+    public static final LookupTable HOOD_TABLE = new LookupTable();
+
+    static {
+        HOOD_TABLE.put(0, 0);
+    }
 
 /**
  *
@@ -108,7 +116,13 @@ public final class Constants {
     public static final double SHOOTER_VELOCITY_GAIN = Double.NaN;
     public static final double SHOOTER_ACCELERATION_GAIN = Double.NaN;
 
-    public static final double SHOOTER_LOW_GOAL_SPEED = Double.NaN;
+    public static final double SHOOTER_LOW_SPEED = Double.NaN;
+
+    public static final LookupTable SHOOTER_TABLE = new LookupTable();
+
+    static {
+        SHOOTER_TABLE.put(0,3000);
+    }
 
 /**
  *

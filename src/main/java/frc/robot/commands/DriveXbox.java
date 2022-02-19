@@ -16,8 +16,6 @@ import frc.robot.util.controller.BetterXboxController.Humans;
 public class DriveXbox extends CommandBase {
     private final Drive drive = Drive.getInstance();
     private final BetterXboxController driverController = BetterXboxController.getController(Humans.DRIVER);
-    private double pastInput;
-    private boolean accelerate;
 
     public DriveXbox() {
         addRequirements(drive);
