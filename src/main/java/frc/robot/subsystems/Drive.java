@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
@@ -33,6 +34,8 @@ public class Drive extends SubsystemBase {
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
     private final AHRS ahrs = new AHRS(Constants.DRIVE_NAVX);
+//    private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
+//    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
 
     private double throttle = 0.6;
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
@@ -167,6 +170,21 @@ public class Drive extends SubsystemBase {
 
     private double getAngle() {
         return -ahrs.getAngle();
+//        return pigeon.getAngle();
+    }
+
+    public void setCoastMode() {
+        rightPrimary.setIdleMode(IdleMode.kCoast);
+        rightFollower.setIdleMode(IdleMode.kCoast);
+        leftPrimary.setIdleMode(IdleMode.kCoast);
+        leftPrimary.setIdleMode(IdleMode.kCoast);
+    }
+
+    public void setBrakeMode() {
+        rightPrimary.setIdleMode(IdleMode.kBrake);
+        rightFollower.setIdleMode(IdleMode.kBrake);
+        leftPrimary.setIdleMode(IdleMode.kBrake);
+        leftPrimary.setIdleMode(IdleMode.kBrake);
     }
 
     public SlewRateLimiter getRateLimit() {
