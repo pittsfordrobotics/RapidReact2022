@@ -2,34 +2,30 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
 
-public class IntakeSmart extends CommandBase {
-    private final Intake intake = Intake.getInstance();
+
+public class IndexerShoot extends CommandBase {
     private final Indexer indexer = Indexer.getInstance();
 
-    public IntakeSmart() {
-        addRequirements(this.intake, this.indexer);
+    public IndexerShoot() {
+        addRequirements(this.indexer);
     }
 
     @Override
     public void initialize() {
-        intake.toggleSolenoid();
+        indexer.setStateShoot();
     }
 
     @Override
     public void execute() {
-        intake.smartMotor();
     }
 
     @Override
     public boolean isFinished() {
-        return !intake.isExtended() || indexer.isFull();
+        return indexer.isEmpty();
     }
 
     @Override
     public void end(boolean interrupted) {
-        intake.retract();
-        intake.motorOff();
     }
 }

@@ -16,6 +16,8 @@ import frc.robot.commands.*;
 
 public class RobotContainer {
   private final Drive drive = Drive.getInstance();
+  private final Shooter shooter = Shooter.getInstance();
+  private final Hood hood = Hood.getInstance();
   private final Indexer indexer = Indexer.getInstance();
   private final Compressor7 compressor = Compressor7.getInstance();
 
@@ -28,6 +30,8 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(new DriveXbox());
+    shooter.setDefaultCommand(new ShooterDefault());
+    hood.setDefaultCommand(new HoodDefault());
     compressor.setDefaultCommand(new CompressorSmart());
 
     commandChooser.setDefaultOption("Path Planner Test", new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_TEST));

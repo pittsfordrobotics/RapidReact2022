@@ -1,24 +1,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 
-public class IntakeDown extends CommandBase {
-    private final Intake intake = Intake.getInstance();
+public class ShooterDefault extends CommandBase {
+    private final Shooter shooter = Shooter.getInstance();
 
-    public IntakeDown() {
-        addRequirements(this.intake);
+    public ShooterDefault() {
+        addRequirements(this.shooter);
     }
 
     @Override
     public void initialize() {
-        intake.extend();
+        shooter.setShooterSpeed(0);
     }
 
     @Override
     public void execute() {
-        intake.motorOn();
     }
 
     @Override

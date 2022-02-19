@@ -22,7 +22,7 @@ public class Indexer extends SubsystemBase {
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private enum State {
-        FIELD, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, TOWER2, ARMED1INTAKE1, ARMED1, ARMED2
+        FIELD, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, TOWER2, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2
     }
     private State state = State.FIELD;
 
@@ -114,16 +114,7 @@ public class Indexer extends SubsystemBase {
             case ARMED1INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
-                if (!ballAtShooter() && !ballAtTower()) {
-                    shootBall();
-                    state = State.INTAKE1;
-                }
-                else if (!ballAtShooter() && ballAtTower()) {
-                    shootBall();
-                    advanceToTower();
-                    state = State.TOWER1;
-                }
-                else if (ballAtShooter() && ballAtTower()) {
+                    if (ballAtShooter() && ballAtTower()) {
                     advanceToTower();
                     state = State.ARMED2;
                 }
@@ -131,16 +122,7 @@ public class Indexer extends SubsystemBase {
             case ARMED1:
                 stomachMotorOff();
                 towerMotorOff();
-                if (!ballAtShooter() && !ballAtIntake()) {
-                    shootBall();
-                    state = State.FIELD;
-                }
-                else if (!ballAtShooter() && ballAtIntake()) {
-                    shootBall();
-                    intakeBall();
-                    state = State.INTAKE1;
-                }
-                else if (ballAtShooter() && ballAtIntake()) {
+                if (ballAtShooter() && ballAtIntake()) {
                     intakeBall();
                     state = State.ARMED1INTAKE1;
                 }
@@ -148,11 +130,38 @@ public class Indexer extends SubsystemBase {
             case ARMED2:
                 stomachMotorOff();
                 towerMotorOff();
+                break;
+            case SHOOTING1INTAKE1:
+                stomachMotorOn();
+                towerMotorOn();
+                if (!ballAtShooter() && !ballAtTower()) {
+                    shootBall();
+                    state = State.INTAKE1;
+                }
+                else if (!ballAtShooter() && ballAtTower()) {
+                    state = State.SHOOTING1;
+                }
+                else if (ballAtShooter() && ballAtTower()) {
+                    state = State.SHOOTING2;
+                }
+            case SHOOTING1:
+                stomachMotorOn();
+                towerMotorOn();
+                if (!ballAtShooter() && ballAtIntake()) {
+                    shootBall();
+                    state = State.INTAKE1;
+                }
+                else if (!ballAtShooter()) {
+                    shootBall();
+                    state = State.FIELD;
+                }
+            case SHOOTING2:
+                stomachMotorOn();
+                towerMotorOn();
                 if (!ballAtShooter()) {
                     shootBall();
-                    state = State.ARMED1;
+                    state = State.SHOOTING1;
                 }
-                break;
             default:
                 stomachMotorOff();
                 towerMotorOff();
@@ -160,8 +169,20 @@ public class Indexer extends SubsystemBase {
         SmartDashboard.putString("Indexer state", state.toString());
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setStateShoot() {
+        switch (state) {
+            case ARMED1INTAKE1:
+                state = State.SHOOTING1INTAKE1;
+                break;
+            case ARMED1:
+                state = State.SHOOTING1;
+                break;
+            case ARMED2:
+                state = State.SHOOTING2;
+                break;
+            default:
+                break;
+        }
     }
 
     public void stomachMotorOn() {
@@ -191,6 +212,10 @@ public class Indexer extends SubsystemBase {
 
     public boolean isFull() {
         return balls[0].getLocation() != LOCATION.FIELD && balls[1].getLocation() != LOCATION.FIELD;
+    }
+
+    public boolean isEmpty() {
+        return balls[0].getLocation() == LOCATION.FIELD && balls[1].getLocation() == LOCATION.FIELD;
     }
 
     public int ballCount() {
@@ -238,11 +263,11 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean ableToShoot() {
-        return state == State.ARMED1 || state == State.ARMED2;
+        return state == State.ARMED1 || state == State.ARMED2 || state == State.ARMED1INTAKE1;
     }
 
     public boolean fullyLoaded() {
-        return state == State.ARMED1 || state == State.ARMED2;
+        return state == State.ARMED2;
     }
 
 }
