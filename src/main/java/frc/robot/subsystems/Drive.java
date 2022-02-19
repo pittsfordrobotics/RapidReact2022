@@ -24,10 +24,10 @@ import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 public class Drive extends SubsystemBase {
-    private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, 60,true);
-    private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, 60, leftPrimary);
-    private final LazySparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, 60, false);
-    private final LazySparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, 60, rightPrimary);
+    private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, 80,true);
+    private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, 80, leftPrimary);
+    private final LazySparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, 80, false);
+    private final LazySparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, 80, rightPrimary);
 
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
@@ -52,7 +52,6 @@ public class Drive extends SubsystemBase {
     private Drive() {
         differentialDrive.setDeadband(0.2);
 
-//        ahrs.reset();
         pigeon.reset();
 
         leftEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
@@ -74,10 +73,11 @@ public class Drive extends SubsystemBase {
 
         SmartDashboard.putNumber("Throttle", throttle);
         SmartDashboard.putBoolean("Decelerating", decelerate);
+        SmartDashboard.putNumber("Pigeon", getAngle());
     }
 
     public void driveArcade(double speed, double rotation) {
-        differentialDrive.arcadeDrive(speed, rotation, true);
+        differentialDrive.arcadeDrive(speed, rotation, false);
     }
 
     public void driveCurve(double speed, double rotation) {
@@ -121,6 +121,10 @@ public class Drive extends SubsystemBase {
     public void resetEncoders() {
         leftEncoder.setPosition(0);
         rightEncoder.setPosition(0);
+    }
+
+    public void resetGyro() {
+        pigeon.reset();
     }
 
     public double getLeftVelocity() {
