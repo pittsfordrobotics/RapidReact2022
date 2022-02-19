@@ -7,12 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.util.controller.BetterXboxController;
 import frc.robot.util.controller.BetterXboxController.Hand;
 import frc.robot.util.controller.BetterXboxController.Humans;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Compressor7;
+import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 public class RobotContainer {
@@ -38,7 +37,11 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    driverController.Buttons.A.whenPressed(new IntakeSmart());
+    InstantCommand shooterOn = new InstantCommand(()-> Shooter.getInstance().setShooterSpeed(3000),Shooter.getInstance());
+    InstantCommand shooterOff = new InstantCommand(()-> Shooter.getInstance().shooterOff(),Shooter.getInstance());
+    driverController.Buttons.A.whenActive(shooterOn).whenInactive(shooterOff);
+
+    driverController.Buttons.B.whenPressed(new IntakeSmart());
 
     driverController.Buttons.DUp.whenPressed(() -> drive.setThrottle(1));
     driverController.Buttons.DLeft.whenPressed(() -> drive.setThrottle(0.7));
