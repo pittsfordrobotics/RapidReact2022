@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
+
 import frc.robot.util.controller.BetterXboxController;
 import frc.robot.util.controller.BetterXboxController.Humans;
 
@@ -24,20 +25,11 @@ public class DriveXbox extends CommandBase {
 
     @Override
     public void initialize() {
-        accelerate = false;
-        pastInput = 0;
     }
 
     @Override
     public void execute() {
-        if (accelerate && Math.abs(drive.getLeftVelocity()) > 0) {
-            accelerate = true;
-        }
-        else {
-            accelerate = driverController.getDriveY() - pastInput < 0;
-        }
-        pastInput = driverController.getDriveY();
-        drive.drive(accelerate ? drive.getRateLimit().calculate(driverController.getDriveY()) : driverController.getDriveY(), driverController.getDriveX() * -0.75);
+        drive.driveCurveRateLimited(driverController.getDriveY(), driverController.getDriveX());
     }
 
     @Override
