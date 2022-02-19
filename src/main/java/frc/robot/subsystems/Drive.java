@@ -65,13 +65,10 @@ public class Drive extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double leftMeters = leftEncoder.getPosition();
-        double rightMeters = rightEncoder.getPosition();
-
         pose = odometry.update(
                 Rotation2d.fromDegrees(getAngle()),
-                leftMeters,
-                rightMeters);
+                leftEncoder.getPosition(),
+                rightEncoder.getPosition());
 
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
 
@@ -100,6 +97,13 @@ public class Drive extends SubsystemBase {
         driveCurve(decelerate ? rateLimitedSpeed : speed, -rotation * 0.5);
     }
 
+    public void driveVolts(double left, double right) {
+        leftPrimary.setVoltage(left);
+        rightPrimary.setVoltage(right);
+
+        differentialDrive.feed();
+    }
+
     public void setThrottle(double throttle) {
         differentialDrive.setMaxOutput(throttle);
         this.throttle = throttle;
@@ -107,13 +111,6 @@ public class Drive extends SubsystemBase {
 
     public double getThrottle() {
         return throttle;
-    }
-
-    public void driveVolts(double left, double right) {
-        leftPrimary.setVoltage(left);
-        rightPrimary.setVoltage(right);
-
-        differentialDrive.feed();
     }
 
     public void resetOdometry(Pose2d pose) {

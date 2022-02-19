@@ -35,7 +35,7 @@ public class RobotContainer {
     hood.setDefaultCommand(new HoodDefault());
     compressor.setDefaultCommand(new CompressorSmart());
 
-    commandChooser.setDefaultOption("Path Planner Test", new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
+    commandChooser.setDefaultOption("Path Planner Test", new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
 
     SmartDashboard.putData("Auto Command", commandChooser);
     SmartDashboard.putString("Driver Mode", driverController.getHand() == Hand.LEFT ? "Left Handed" : "Right Handed");
@@ -43,7 +43,6 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     driverController.A.whenActive(new CG_LowShot());
-
     driverController.B.whenPressed(new IntakeSmart());
 
     driverController.DUp.whenPressed(() -> drive.setThrottle(1));

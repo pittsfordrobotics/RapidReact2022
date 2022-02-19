@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 public class BetterXboxController extends XboxController {
     private final Hand hand;
-//    public final Buttons Buttons;
     public final JoystickButton A;
     public final JoystickButton B;
     public final JoystickButton X;
