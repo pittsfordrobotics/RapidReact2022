@@ -51,7 +51,6 @@ public final class Constants {
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
 /**
  *
-<<<<<<< HEAD
  * INTAKE
  *
  */
@@ -67,12 +66,25 @@ public final class Constants {
 
 /**
  *
-=======
->>>>>>> master
- * LIMELIGHT
- * all distances measured in inches
+ * HOOD
  *
- **/
+ */
+    public static final int HOOD_CAN_MAIN = 0;
+
+    public static final float HOOD_MAX_POSITION = Float.NaN;
+    public static final double HOOD_POSITION_GAIN = Double.NaN;
+    public static final double HOOD_INTEGRAL_GAIN = Double.NaN;
+    public static final double HOOD_DERIVATIVE_GAIN = Double.NaN;
+
+    public static final double HOOD_ROTATIONS_TO_DEGREES = Double.NaN;
+
+/**
+*
+* LIMELIGHT
+* all distances measured in inches
+*
+**/
+
 //    104 inches to top of goal
 //    101.625 inches to bottom of vision target
 //    middle is 102.8125 inches from field
