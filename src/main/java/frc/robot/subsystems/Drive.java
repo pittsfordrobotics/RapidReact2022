@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
@@ -32,8 +32,7 @@ public class Drive extends SubsystemBase {
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
-    private final AHRS ahrs = new AHRS(Constants.DRIVE_NAVX);
-//    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
+    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
 
     private double throttle = 0.6;
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
@@ -53,7 +52,8 @@ public class Drive extends SubsystemBase {
     private Drive() {
         differentialDrive.setDeadband(0.2);
 
-        ahrs.reset();
+//        ahrs.reset();
+        pigeon.reset();
 
         leftEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
         rightEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
@@ -164,8 +164,8 @@ public class Drive extends SubsystemBase {
     }
 
     public double getAngle() {
-        return -ahrs.getAngle();
-//        return pigeon.getAngle();
+//        return -ahrs.getAngle();
+        return -pigeon.getAngle();
     }
 
     public SlewRateLimiter getRateLimit() {
