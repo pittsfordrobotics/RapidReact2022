@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
@@ -24,16 +24,15 @@ import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 public class Drive extends SubsystemBase {
-    private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, 60,true);
-    private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, 60, leftPrimary);
-    private final LazySparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, 60, false);
-    private final LazySparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, 60, rightPrimary);
+    private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, 80,true);
+    private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, 80, leftPrimary);
+    private final LazySparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, 80, false);
+    private final LazySparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, 80, rightPrimary);
 
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
-    private final AHRS ahrs = new AHRS(Constants.DRIVE_NAVX);
-//    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
+    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
 
     private double throttle = 0.6;
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
@@ -53,7 +52,7 @@ public class Drive extends SubsystemBase {
     private Drive() {
         differentialDrive.setDeadband(0.2);
 
-        ahrs.reset();
+        pigeon.reset();
 
         leftEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
         rightEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
@@ -74,10 +73,11 @@ public class Drive extends SubsystemBase {
 
         SmartDashboard.putNumber("Throttle", throttle);
         SmartDashboard.putBoolean("Decelerating", decelerate);
+        SmartDashboard.putNumber("Pigeon", getAngle());
     }
 
     public void driveArcade(double speed, double rotation) {
-        differentialDrive.arcadeDrive(speed, rotation, true);
+        differentialDrive.arcadeDrive(speed, rotation, false);
     }
 
     public void driveCurve(double speed, double rotation) {
@@ -123,6 +123,10 @@ public class Drive extends SubsystemBase {
         rightEncoder.setPosition(0);
     }
 
+    public void resetGyro() {
+        pigeon.reset();
+    }
+
     public double getLeftVelocity() {
         return leftEncoder.getVelocity();
     }
@@ -163,9 +167,9 @@ public class Drive extends SubsystemBase {
         return pose;
     }
 
-    private double getAngle() {
-        return -ahrs.getAngle();
-//        return pigeon.getAngle();
+    public double getAngle() {
+//        return -ahrs.getAngle();
+        return -pigeon.getAngle();
     }
 
     public SlewRateLimiter getRateLimit() {

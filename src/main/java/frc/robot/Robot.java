@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Drive;
@@ -22,6 +23,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robotContainer = new RobotContainer();
     drive.coastMode();
+    SmartDashboard.putNumber("PID TURN", 0.01);
+    SmartDashboard.putNumber("PID TURN D", 0.01);
   }
 
   @Override
@@ -53,6 +56,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    drive.resetGyro();
     drive.breakMode();
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
@@ -60,7 +64,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
   public void testInit() {
@@ -68,5 +73,6 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 }
