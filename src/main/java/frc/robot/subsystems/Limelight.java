@@ -2,9 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import org.jetbrains.annotations.NotNull;
 
 public class Limelight extends SubsystemBase {
     private final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
@@ -60,12 +60,6 @@ public class Limelight extends SubsystemBase {
         setCamMode(CameraMode.DRIVER_CAMERA);
     }
 
-    public void periodic() {
-        SmartDashboard.putNumber("Limelight Horizontal", getHorizontal());
-        SmartDashboard.putNumber("Limelight Vertical", getVertical());
-        SmartDashboard.putNumber("Limelight Area", getArea());
-    }
-
     public boolean hasTarget() {
         return limelight.getEntry("tv").getDouble(0.0) == 1.0;
     }
@@ -86,7 +80,7 @@ public class Limelight extends SubsystemBase {
         limelight.getEntry("pipeline").setNumber(pipeline.getNum());
     }
 
-    public void setLED(LED mode) {
+    public void setLED(@NotNull LED mode) {
         limelight.getEntry("ledMode").setNumber(mode.getMode());
     }
 
@@ -105,6 +99,6 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getDistance() {
-        return (Constants.LIMELIGHT_TARGET_HEIGHT - Constants.LIMELIGHT_MOUNTING_HEIGHT) / Math.tan(Constants.LIMELIGHT_ANGLE + getVertical());
+        return (Constants.LIMELIGHT_TARGET_HEIGHT_INCHES - Constants.LIMELIGHT_MOUNTING_HEIGHT) / Math.tan(Constants.LIMELIGHT_ANGLE + getVertical());
     }
 }
