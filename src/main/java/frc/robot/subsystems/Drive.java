@@ -33,7 +33,6 @@ public class Drive extends SubsystemBase {
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
     private final AHRS ahrs = new AHRS(Constants.DRIVE_NAVX);
-//    private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
 //    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
 
     private double throttle = 0.6;

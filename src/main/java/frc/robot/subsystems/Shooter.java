@@ -15,10 +15,11 @@ public class Shooter extends SubsystemBase {
     private final BangBangController bangBangController = new BangBangController();
 
     private final static Shooter INSTANCE = new Shooter();
-
     public static Shooter getInstance() {
         return INSTANCE;
     }
+
+    private Shooter() {}
 
     public void setShooterSpeed(double speed) {
         shooterMotor.set(bangBangController.calculate(shooterEncoder.getVelocity(), speed) + 0.9 * shooterFeedforward.calculate(speed));

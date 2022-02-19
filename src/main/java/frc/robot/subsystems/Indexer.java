@@ -31,6 +31,8 @@ public class Indexer extends SubsystemBase {
         return INSTANCE;
     }
 
+    private Indexer() {}
+
     @Override
     public void periodic() {
         switch (state) {
@@ -187,7 +189,7 @@ public class Indexer extends SubsystemBase {
         balls[1] = new Ball();
     }
 
-    public boolean atMaxBalls() {
+    public boolean isFull() {
         return balls[0].getLocation() != LOCATION.FIELD && balls[1].getLocation() != LOCATION.FIELD;
     }
 
