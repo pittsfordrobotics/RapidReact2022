@@ -24,7 +24,7 @@ public class DriveTurn extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pidController.setSetpoint();
+    pidController.setSetpoint(angle);
     throttle = drive.getThrottle();
     endingAngle = drive.getAngle() + angle;
     drive.setThrottle(0.6);
