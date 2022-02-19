@@ -17,6 +17,7 @@ public class RobotContainer {
   private final Drive drive = Drive.getInstance();
   private final Shooter shooter = Shooter.getInstance();
   private final Hood hood = Hood.getInstance();
+  private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
   private final Compressor7 compressor = Compressor7.getInstance();
 
@@ -30,6 +31,7 @@ public class RobotContainer {
 
     drive.setDefaultCommand(new DriveXbox());
     shooter.setDefaultCommand(new ShooterDefault());
+    intake.setDefaultCommand(new IntakeDefault());
     hood.setDefaultCommand(new HoodDefault());
     compressor.setDefaultCommand(new CompressorSmart());
 

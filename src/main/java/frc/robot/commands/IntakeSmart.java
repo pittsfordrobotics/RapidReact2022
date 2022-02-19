@@ -29,7 +29,5 @@ public class IntakeSmart extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        intake.retract();
-        intake.motorOff();
     }
 }
