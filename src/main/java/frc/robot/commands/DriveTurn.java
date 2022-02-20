@@ -49,13 +49,6 @@ public class DriveTurn extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // double currentAngle = drive.getAngle();
-    // if(angle >= 0) {
-    //   return currentAngle > endingAngle;
-    // }
-    // else {
-    //   return currentAngle < endingAngle;
-   //    }
    return pidController.atSetpoint();
   }
 }

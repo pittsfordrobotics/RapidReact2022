@@ -16,9 +16,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
-public class DrivePathing extends SequentialCommandGroup {
-
-  public DrivePathing(Trajectory trajectory) {
+public class AutoPathing extends SequentialCommandGroup {
+  public AutoPathing(Trajectory trajectory) {
     super(
         new DriveZero(),
         new DriveResetOdometry(trajectory),
