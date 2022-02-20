@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
-//TODO: add PID controller and constants
 public class Hood extends SubsystemBase {
     private LazySparkMax hoodMotor = new LazySparkMax(Constants.HOOD_CAN_MAIN, IdleMode.kBrake, 40);
     private RelativeEncoder hoodEncoder = hoodMotor.getEncoder();
