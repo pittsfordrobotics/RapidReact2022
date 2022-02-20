@@ -11,7 +11,6 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
 import frc.robot.util.controller.BetterXboxController.Hand;
-import frc.robot.util.controller.BetterXboxController.Humans;
 
 public class RobotContainer {
   private final Drive drive = Drive.getInstance();
@@ -21,8 +20,8 @@ public class RobotContainer {
   private final Indexer indexer = Indexer.getInstance();
 //  private final Compressor7 compressor = Compressor7.getInstance();
 
-  private final BetterXboxController driverController = new BetterXboxController(0, Hand.LEFT, Humans.DRIVER);
-  private final BetterXboxController operatorController = new BetterXboxController(1, Humans.OPERATOR);
+  private final BetterXboxController driverController = new BetterXboxController(0, BetterXboxController.Hand.LEFT, BetterXboxController.Humans.DRIVER);
+  private final BetterXboxController operatorController = new BetterXboxController(1, BetterXboxController.Humans.OPERATOR);
 
   private final SendableChooser<Command> commandChooser = new SendableChooser<>();
 
