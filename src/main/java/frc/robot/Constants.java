@@ -24,6 +24,7 @@ public final class Constants {
     public static final int DRIVE_CAN_LEFT_LEADER = 3;
     public static final int DRIVE_CAN_LEFT_FOLLOWER = 4;
 
+    public static final double DRIVE_RATE_LIMIT = 1;
     public static final SPI.Port DRIVE_NAVX = SPI.Port.kMXP;
 
     public static final Pigeon2Configuration DRIVE_PIGEON_CONFIG = new Pigeon2Configuration();

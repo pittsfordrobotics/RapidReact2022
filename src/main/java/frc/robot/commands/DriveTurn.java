@@ -36,7 +36,7 @@ public class DriveTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.driveArcade(0, Math.min(pidController.calculate(drive.getAngle()),0.7));
+    drive.driveArcade(0, Math.min(pidController.calculate(drive.getAngle()),0.7), false);
     SmartDashboard.putNumber("PID OUT", Math.min(pidController.calculate(drive.getAngle()),0.7));
   }
 
