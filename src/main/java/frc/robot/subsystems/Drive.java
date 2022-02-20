@@ -52,6 +52,7 @@ public class Drive extends SubsystemBase {
     private Drive() {
         differentialDrive.setDeadband(0.2);
 
+        pigeon.configAllSettings(Constants.DRIVE_PIGEON_CONFIG);
         pigeon.reset();
 
         leftEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
@@ -168,7 +169,6 @@ public class Drive extends SubsystemBase {
     }
 
     public double getAngle() {
-//        return -ahrs.getAngle();
         return -pigeon.getAngle();
     }
 
