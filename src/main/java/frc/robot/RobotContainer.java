@@ -38,6 +38,8 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Command", commandChooser);
     SmartDashboard.putString("Driver Mode", driverController.getHand() == Hand.LEFT ? "Left Handed" : "Right Handed");
+    SmartDashboard.putBoolean("A BUTTON", driverController.A.get());
+    SmartDashboard.putNumber("Left X", driverController.getLeftX());
   }
 
   private void configureButtonBindings() {
