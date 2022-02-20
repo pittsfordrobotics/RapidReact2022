@@ -76,17 +76,18 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("Pigeon", getAngle());
     }
 
-    public void driveArcade(double speed, double rotation) {
-        differentialDrive.arcadeDrive(speed, rotation, false);
+    public void driveArcade(double speed, double rotation, boolean squared) {
+        differentialDrive.arcadeDrive(speed, rotation, squared);
     }
 
-    public void driveCurve(double speed, double rotation) {
-        differentialDrive.curvatureDrive(speed, rotation, Math.abs(speed) < 0.15);
-    }
-
-    public void driveCurveRateLimited(double speed, double rotation) {
-        if (MathUtil.applyDeadband(getAverageVelocity(), 0.2) == 0) rateLimit.reset(0);
-        driveCurve(rateLimit.calculate(speed), rotation);
+    public void driveCurve(double speed, double rotation, boolean rateLimited) {
+        if (rateLimited) {
+            if (MathUtil.applyDeadband(getAverageVelocity(), 0.2) == 0) rateLimit.reset(0);
+            differentialDrive.curvatureDrive(speed, rotation, Math.abs(speed) < 0.15);
+        }
+        else {
+            differentialDrive.curvatureDrive(speed, rotation, Math.abs(speed) < 0.15);
+        }
     }
 
     public void driveVolts(double left, double right) {
