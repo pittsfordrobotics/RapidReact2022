@@ -9,7 +9,6 @@ import com.pathplanner.lib.PathPlanner;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.SPI;
 import frc.robot.util.LookupTable;
 
 public final class Constants {
@@ -24,9 +23,9 @@ public final class Constants {
     public static final int DRIVE_CAN_LEFT_LEADER = 3;
     public static final int DRIVE_CAN_LEFT_FOLLOWER = 4;
 
-    public static final SPI.Port DRIVE_NAVX = SPI.Port.kMXP;
-
     public static final Pigeon2Configuration DRIVE_PIGEON_DEFAULT_CONFIG = new Pigeon2Configuration();
+    public static final double DRIVE_RATE_LIMIT = 1;
+
 
     public static final double DRIVE_GEAR_RATIO = 7.31;
     public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);

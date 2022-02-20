@@ -34,13 +34,13 @@ public class Drive extends SubsystemBase {
 
     private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
 
-    private double throttle = 0.6;
+    private double throttle;
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
 
-    private SlewRateLimiter rateLimit = new SlewRateLimiter(1);
+    private SlewRateLimiter rateLimit = new SlewRateLimiter(Constants.DRIVE_RATE_LIMIT);
     private boolean decelerate = false;
     private double pastInput = 0;
 
@@ -59,7 +59,7 @@ public class Drive extends SubsystemBase {
         leftEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO / 60);
         rightEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO / 60);
 
-        setThrottle(throttle);
+        setThrottle(0.7);
     }
 
     @Override
@@ -85,16 +85,8 @@ public class Drive extends SubsystemBase {
     }
 
     public void driveCurveRateLimited(double speed, double rotation) {
-        if (Math.abs(MathUtil.applyDeadband(getAverageVelocity(),0.2)) == 0) {
-            decelerate = false;
-        }
-        else if (!decelerate) {
-            decelerate = speed != 0 && (speed > 0 ? speed - pastInput < 0 : speed - pastInput > 0);
-        }
-        pastInput = (speed + pastInput) / 2;
-
-        double rateLimitedSpeed = getRateLimit().calculate(speed);
-        driveCurve(decelerate ? rateLimitedSpeed : speed, -rotation * 0.5);
+        if (MathUtil.applyDeadband(getAverageVelocity(), 0.2) == 0) rateLimit.reset(0);
+        driveCurve(rateLimit.calculate(speed), rotation);
     }
 
     public void driveVolts(double left, double right) {
@@ -168,24 +160,11 @@ public class Drive extends SubsystemBase {
     }
 
     public double getAngle() {
-//        return -ahrs.getAngle();
         return -pigeon.getAngle();
     }
 
     public SlewRateLimiter getRateLimit() {
         return rateLimit;
-    }
-
-    public void enableRateLimit() {
-        rateLimit = new SlewRateLimiter(1);
-    }
-
-    public void disableRateLimit() {
-        rateLimit = new SlewRateLimiter(Double.POSITIVE_INFINITY);
-    }
-
-    public void setRateLimit(double rateLimit) {
-        this.rateLimit = new SlewRateLimiter(rateLimit);
     }
 
 }
