@@ -10,7 +10,7 @@ public class AutoBottomLow2 extends SequentialCommandGroup {
                 new IntakeDown(),
                 new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW1),
                 new IntakeUp(),
-                new DriveTurn(180),
+                new AutoTurn(180),
                 new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2),
                 new CG_LowShot()
         );

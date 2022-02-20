@@ -4,19 +4,20 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
-public class DriveTurn extends CommandBase {
+public class AutoTurn extends CommandBase {
   private final double angle;
   private final Drive drive = Drive.getInstance();
   private final PIDController pidController = new PIDController(0.01,0,0);
   private double endingAngle;
   private double throttle;
 
-  public DriveTurn(double angle) {
+  public AutoTurn(double angle) {
     this.angle = angle;
     addRequirements(this.drive);
     pidController.setTolerance(5);
@@ -36,7 +37,7 @@ public class DriveTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.driveArcade(0, Math.min(pidController.calculate(drive.getAngle()),0.7));
+    drive.driveArcade(0, MathUtil.clamp(pidController.calculate(drive.getAngle()), -0.7, 0.7));
     SmartDashboard.putNumber("PID OUT", Math.min(pidController.calculate(drive.getAngle()),0.7));
   }
 
