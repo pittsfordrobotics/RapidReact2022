@@ -38,7 +38,6 @@ public class RobotContainer {
     commandChooser.setDefaultOption("Path Planner Test", new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
 
     SmartDashboard.putData("Auto Command", commandChooser);
-    SmartDashboard.putString("Driver Mode", driverController.getHand() == Hand.LEFT ? "Left Handed" : "Right Handed");
   }
 
   private void configureButtonBindings() {
