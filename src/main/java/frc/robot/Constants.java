@@ -28,7 +28,7 @@ public final class Constants {
 
     public static final Pigeon2Configuration DRIVE_PIGEON_DEFAULT_CONFIG = new Pigeon2Configuration();
 
-    public static final double DRIVE_GEAR_RATIO = 7.31;
+    public static final double DRIVE_GEAR_RATIO = 6.818;
     public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
 
     public static final double DRIVE_POSITION_GAIN = Double.NaN;
