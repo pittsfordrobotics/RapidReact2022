@@ -10,35 +10,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
+// TODO: TUNE P CONTROLLER WITH FINISHED CHASSIS
 public class AutoTurn extends CommandBase {
   private final double angle;
   private final Drive drive = Drive.getInstance();
-  private final PIDController pidController = new PIDController(0.01,0,0);
-  private double endingAngle;
+  private final PIDController pidController = new PIDController(0.01,0, 0);
   private double throttle;
 
   public AutoTurn(double angle) {
     this.angle = angle;
+    pidController.setTolerance(1);
     addRequirements(this.drive);
-    pidController.setTolerance(5);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pidController.setP(SmartDashboard.getNumber("PID TURN", 0));
-    pidController.setD(SmartDashboard.getNumber("PID TURN D", 0));
+//    pidController.setP(SmartDashboard.getNumber("PID TURN", 0));
     throttle = drive.getThrottle();
-    endingAngle = drive.getAngle() + angle;
     drive.setThrottle(0.6);
-    pidController.setSetpoint(endingAngle);
+    pidController.setSetpoint(drive.getAngle() + angle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.driveArcade(0, MathUtil.clamp(pidController.calculate(drive.getAngle()), -0.7, 0.7));
-    SmartDashboard.putNumber("PID OUT", Math.min(pidController.calculate(drive.getAngle()),0.7));
+    drive.driveArcade(0, MathUtil.clamp(pidController.calculate(drive.getAngle()) + angle < 0 ? -0.1 : 0.1, -0.5, 0.5), false);
+//    SmartDashboard.putNumber("PID OUT", Math.min(pidController.calculate(drive.getAngle()),0.7));
   }
 
   // Called once the command ends or is interrupted.

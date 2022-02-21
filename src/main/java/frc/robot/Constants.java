@@ -33,11 +33,16 @@ public final class Constants {
     public static final int DRIVE_CAN_LEFT_LEADER = 3;
     public static final int DRIVE_CAN_LEFT_FOLLOWER = 4;
 
+    public static final double DRIVE_RATE_LIMIT = 1;
     public static final SPI.Port DRIVE_NAVX = SPI.Port.kMXP;
 
-    public static final Pigeon2Configuration DRIVE_PIGEON_DEFAULT_CONFIG = new Pigeon2Configuration();
+    public static final Pigeon2Configuration DRIVE_PIGEON_CONFIG = new Pigeon2Configuration();
 
-    public static final double DRIVE_GEAR_RATIO = 7.31;
+    static {
+        DRIVE_PIGEON_CONFIG.EnableCompass = false;
+    }
+
+    public static final double DRIVE_GEAR_RATIO = 6.818;
     public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
 
     public static final double DRIVE_POSITION_GAIN = Double.NaN;
@@ -100,8 +105,8 @@ public final class Constants {
     public static final double INDEXER_STOMACH_SPEED = 0.6;
     public static final double INDEXER_TOWER_SPEED = 0.6;
 
-    public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
-    public static final int INDEXER_COLOR_PROXIMITY = 1700; // from 0 to 2047
+    public static final I2C.Port INDEXER_COLOR = I2C.Port.kOnboard;
+    public static final int INDEXER_COLOR_PROXIMITY = 500; // from 0 to 2047
 
     public static final int INDEXER_SENSOR_TOWER = 0;
     public static final int INDEXER_SENSOR_SHOOTER = 1;

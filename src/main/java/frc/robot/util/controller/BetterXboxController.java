@@ -48,9 +48,8 @@ public class BetterXboxController extends XboxController {
         DLeft = new POVButton(this, 270);
         LT = new TriggerButton(this, Hand.LEFT);
         RT = new TriggerButton(this, Hand.RIGHT);
-        Start = new JoystickButton(this, XboxController.Button.kStart.value);
         Back = new JoystickButton(this, XboxController.Button.kBack.value);
-
+        Start = new JoystickButton(this, XboxController.Button.kStart.value);
         controllers.put(humans, this);
     }
 
