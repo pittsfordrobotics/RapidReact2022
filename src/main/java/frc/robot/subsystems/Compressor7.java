@@ -1,3 +1,5 @@
+//TODO: RE-ENABLE solenoids after they are wired
+
 //package frc.robot.subsystems;
 //
 //import edu.wpi.first.wpilibj.Compressor;

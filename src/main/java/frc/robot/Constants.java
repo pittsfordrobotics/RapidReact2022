@@ -194,14 +194,6 @@ public final class Constants {
                             10)
             );
 
-    public static final Trajectory TRAJECTORY_FORWARD = TrajectoryGenerator.generateTrajectory(
-            List.of(
-                    new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                    new Pose2d(1, 0, Rotation2d.fromDegrees(0))
-            ),
-            TRAJECTORY_CONFIG
-    );
-
     public static final Trajectory TRAJECTORY_BACKWARD = TrajectoryGenerator.generateTrajectory(
             List.of(
                     new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
@@ -210,6 +202,14 @@ public final class Constants {
             TRAJECTORY_CONFIG_REVERSED
     );
 
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW1 = PathPlanner.loadPath("BottomBall2Low1", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low2", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW3 = PathPlanner.loadPath("BottomBall3Low3", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW4 = PathPlanner.loadPath("BottomBall3Low4", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL5_LOW3 = PathPlanner.loadPath("BottomBall5Low3", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL5_LOW4 = PathPlanner.loadPath("BottomBall5Low4", 10, 3, false);
+
+//    TODO: make these exist
     public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW1 = PathPlanner.loadPath("BottomBall2Low1", 10, 3, false);
     public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low2", 10, 3, false);
     public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW3 = PathPlanner.loadPath("BottomBall3Low3", 10, 3, false);
