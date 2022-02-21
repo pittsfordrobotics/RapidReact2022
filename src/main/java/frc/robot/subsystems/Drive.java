@@ -150,7 +150,7 @@ public class Drive extends SubsystemBase {
         rightFollower.setIdleMode(IdleMode.kCoast);
     }
 
-    public void breakMode() {
+    public void brakeMode() {
         leftPrimary.setIdleMode(IdleMode.kBrake);
         leftFollower.setIdleMode(IdleMode.kBrake);
         rightPrimary.setIdleMode(IdleMode.kBrake);
@@ -161,6 +161,10 @@ public class Drive extends SubsystemBase {
         return pose;
     }
 
+    /**
+     * Gets the pigeon's angle
+     * @return current angle; positive = clockwise
+     */
     public double getAngle() {
         return -pigeon.getAngle();
     }

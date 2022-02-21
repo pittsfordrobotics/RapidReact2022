@@ -59,13 +59,4 @@ public class Intake extends SubsystemBase {
 //        solenoidLeft.toggle();
 //        solenoidRight.toggle();
     }
-
-    public void smartMotor() {
-//        if (isExtended()) {
-//            motorOn();
-//        }
-//        else if (!isExtended()) {
-//            motorOff();
-//        }
-    }
 }

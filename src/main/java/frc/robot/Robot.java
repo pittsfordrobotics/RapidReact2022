@@ -34,7 +34,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    drive.coastMode();
+    if (drive.getAverageVelocity() == 0) {
+      drive.coastMode();
+    }
     limelight.disable();
   }
 
@@ -43,7 +45,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    drive.breakMode();
+    drive.brakeMode();
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     if (autonomousCommand != null) {
@@ -56,7 +58,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    drive.breakMode();
+    drive.brakeMode();
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }

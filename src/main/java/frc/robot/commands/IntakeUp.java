@@ -13,12 +13,12 @@ public class IntakeUp extends CommandBase {
 
     @Override
     public void initialize() {
-        intake.retract();
-        intake.motorOff();
     }
 
     @Override
     public void execute() {
+        intake.retract();
+        intake.motorOff();
     }
 
     @Override

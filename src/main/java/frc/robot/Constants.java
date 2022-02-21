@@ -6,11 +6,20 @@ package frc.robot;
 
 import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.pathplanner.lib.PathPlanner;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.util.LookupTable;
+
+import java.util.List;
 
 public final class Constants {
 /**
@@ -168,30 +177,43 @@ public final class Constants {
  * ALL IN METERS
  *
  */
-//    private static final TrajectoryConfig TRAJECTORY_CONFIG = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
-//            .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS))
-//            .addConstraint(
-//                    new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_STATIC_GAIN, DRIVE_VELOCITY_GAIN, DRIVE_ACCELERATION_GAIN),
-//                            new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS),
-//                            10)
-//            );
-//
-//    private static final TrajectoryConfig TRAJECTORY_CONFIG_REVERSED = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
-//            .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS))
-//            .setReversed(true)
-//            .addConstraint(
-//                new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_STATIC_GAIN, DRIVE_VELOCITY_GAIN, DRIVE_ACCELERATION_GAIN),
-//                            new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS),
-//                            10)
-//            );
+    private static final TrajectoryConfig TRAJECTORY_CONFIG = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
+            .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS))
+            .addConstraint(
+                    new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_STATIC_GAIN, DRIVE_VELOCITY_GAIN, DRIVE_ACCELERATION_GAIN),
+                            new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS),
+                            10)
+            );
 
-//    public static final Trajectory TRAJECTORY_FORWARD = TrajectoryGenerator.generateTrajectory(
-//            List.of(
-//                    new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-//                    new Pose2d(1, 0, Rotation2d.fromDegrees(0))
-//            ),
-//            TRAJECTORY_CONFIG
-//    );
+    private static final TrajectoryConfig TRAJECTORY_CONFIG_REVERSED = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
+            .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS))
+            .setReversed(true)
+            .addConstraint(
+                new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_STATIC_GAIN, DRIVE_VELOCITY_GAIN, DRIVE_ACCELERATION_GAIN),
+                            new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS),
+                            10)
+            );
 
-    public static final Trajectory TRAJECTORY_PATHPLANNER_TEST = PathPlanner.loadPath("Test", 10, 2, false);
+    public static final Trajectory TRAJECTORY_FORWARD = TrajectoryGenerator.generateTrajectory(
+            List.of(
+                    new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                    new Pose2d(1, 0, Rotation2d.fromDegrees(0))
+            ),
+            TRAJECTORY_CONFIG
+    );
+
+    public static final Trajectory TRAJECTORY_BACKWARD = TrajectoryGenerator.generateTrajectory(
+            List.of(
+                    new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                    new Pose2d(-1, 0, Rotation2d.fromDegrees(0))
+            ),
+            TRAJECTORY_CONFIG_REVERSED
+    );
+
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW1 = PathPlanner.loadPath("BottomBall2Low1", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low2", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW3 = PathPlanner.loadPath("BottomBall3Low3", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW4 = PathPlanner.loadPath("BottomBall3Low4", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL5_LOW3 = PathPlanner.loadPath("BottomBall5Low3", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL5_LOW4 = PathPlanner.loadPath("BottomBall5Low4", 10, 3, false);
 }

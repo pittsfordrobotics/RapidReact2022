@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
-import frc.robot.util.controller.BetterXboxController.Hand;
 
 public class RobotContainer {
   private final Drive drive = Drive.getInstance();
@@ -30,11 +29,11 @@ public class RobotContainer {
 
     drive.setDefaultCommand(new DriveXbox());
     shooter.setDefaultCommand(new ShooterDefault());
-    intake.setDefaultCommand(new IntakeDefault());
-    hood.setDefaultCommand(new HoodDefault());
 //    compressor.setDefaultCommand(new CompressorSmart());
 
-    commandChooser.setDefaultOption("Path Planner Test", new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
+    commandChooser.setDefaultOption("2 Ball Low", new AutoBottomLow2());
+    commandChooser.addOption("3 Ball Low", new AutoBottomLow3());
+    commandChooser.addOption("5 Ball Low", new AutoBottomLow5());
 
     SmartDashboard.putData("Auto Command", commandChooser);
   }
@@ -42,7 +41,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 //    driverController.A.whenActive(new CG_LowShot());
 //    driverController.B.whenPressed(new IntakeSmart());
-    driverController.Y.whenPressed(new DriveTurn(180));
+    driverController.Y.whenPressed(new AutoTurn(180));
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
