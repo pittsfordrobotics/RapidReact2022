@@ -20,14 +20,11 @@ public class ClimberBack extends CommandBase {
   @Override
   public void execute() {
     climber.climbBack();
-//    if (climber.atLimit()) {
-//      climber.stop();
-//    }
   }
 
   @Override
   public void end(boolean interrupted) {
-    climber.stop();
+    climber.stopAll();
   }
 
   @Override

@@ -153,10 +153,9 @@ public final class Constants {
     public static final int CLIMBER_CAN_RIGHT = 11;
 
     public static final double CLIMBER_SPEED = Double.NaN;
-    public static final double CLIMBER_GEAR_RATIO = Double.NaN;
-    public static final int CLIMBER_ROTATION_LIMIT_UP = 0;
-    public static final int CLIMBER_ROTATION_LIMIT_DOWN = 0;
-  
+    public static final double CLIMBER_GEAR_RATIO = 125;
+    public static final double CLIMBER_ROTATIONS_FRONT_TO_CENTER = Double.NaN;
+
 /**
  *
  * FIELD DIMENSIONS
