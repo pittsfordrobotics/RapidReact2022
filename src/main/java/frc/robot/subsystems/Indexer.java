@@ -19,12 +19,15 @@ public class Indexer extends SubsystemBase {
     private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
     private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
 
+    private boolean ballStillAtIntake = false;
+    private boolean ballStillAtShooter = false;
+
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private enum State {
-        FIELD, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, TOWER2, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2
+        FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, TOWER2, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1TOWER1, SHOOTING1, SHOOTING2
     }
-    private State state = State.FIELD;
+    private State state = State.FIELD2;
 
     private final static Indexer INSTANCE = new Indexer();
     public static Indexer getInstance() {
@@ -36,10 +39,10 @@ public class Indexer extends SubsystemBase {
     @Override
     public void periodic() {
         switch (state) {
-            case FIELD:
+            case FIELD2:
                 stomachMotorOff();
                 towerMotorOff();
-                if (ballAtIntake()) {
+                if (getBallAtIntake()) {
                     intakeBall();
                     state = State.INTAKE1;
                 }
@@ -47,16 +50,16 @@ public class Indexer extends SubsystemBase {
             case INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
-                if (ballAtTower() && !ballAtIntake()) {
+                if (getBallAtTower() && !getBallAtIntake()) {
                     advanceToTower();
                     state = State.TOWER1;
                 }
-                else if (ballAtTower() && ballAtIntake()) {
+                else if (getBallAtTower() && getBallAtIntake()) {
                     advanceToTower();
                     intakeBall();
                     state = State.TOWER1INTAKE1;
                 }
-                else if (!ballAtTower() && ballAtIntake()) {
+                else if (!getBallAtTower() && getBallAtIntake()) {
                     intakeBall();
                     state = State.INTAKE2;
                 }
@@ -64,7 +67,7 @@ public class Indexer extends SubsystemBase {
             case INTAKE2:
                 stomachMotorOn();
                 towerMotorOff();
-                if (ballAtTower()) {
+                if (getBallAtTower()) {
                     advanceToTower();
                     state = State.TOWER1INTAKE1;
                 }
@@ -72,33 +75,29 @@ public class Indexer extends SubsystemBase {
             case TOWER1INTAKE1:
                 stomachMotorOn();
                 towerMotorOn();
-                if (ballAtShooter() && !ballAtTower()) {
+                if (getBallAtShooter() && !getBallAtTower()) {
                     advanceToShooter();
                     state = State.ARMED1INTAKE1;
                 }
-                else if (ballAtShooter() && ballAtTower()) {
+                else if (getBallAtShooter() && getBallAtTower()) {
                     advanceToShooter();
                     advanceToTower();
                     state = State.ARMED2;
-                }
-                else if (!ballAtShooter() && ballAtTower()) {
-                    advanceToTower();
-                    state = State.TOWER2;
                 }
                 break;
             case TOWER1:
                 stomachMotorOff();
                 towerMotorOn();
-                if (ballAtShooter() && !ballAtIntake()) {
+                if (getBallAtShooter() && !getBallAtIntake()) {
                     advanceToShooter();
                     state = State.ARMED1;
                 }
-                else if (ballAtShooter() && ballAtIntake()) {
+                else if (getBallAtShooter() && getBallAtIntake()) {
                     advanceToShooter();
                     intakeBall();
                     state = State.ARMED1INTAKE1;
                 }
-                else if (!ballAtShooter() && ballAtIntake()) {
+                else if (!getBallAtShooter() && getBallAtIntake()) {
                     intakeBall();
                     state = State.TOWER1INTAKE1;
                 }
@@ -106,7 +105,7 @@ public class Indexer extends SubsystemBase {
             case TOWER2:
                 stomachMotorOff();
                 towerMotorOn();
-                if (ballAtShooter()) {
+                if (getBallAtShooter()) {
                     advanceToShooter();
                     state = State.ARMED2;
                 }
@@ -114,15 +113,20 @@ public class Indexer extends SubsystemBase {
             case ARMED1INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
-                    if (ballAtShooter() && ballAtTower()) {
+                if (getBallAtShooter() && getBallAtTower()) {
                     advanceToTower();
                     state = State.ARMED2;
+                }
+                if (!getBallAtShooter() && getBallAtTower()) {
+                    shootBall();
+                    advanceToTower();
+                    state = State.TOWER2;
                 }
                 break;
             case ARMED1:
                 stomachMotorOff();
                 towerMotorOff();
-                if (ballAtShooter() && ballAtIntake()) {
+                if (getBallAtShooter() && getBallAtIntake()) {
                     intakeBall();
                     state = State.ARMED1INTAKE1;
                 }
@@ -134,39 +138,46 @@ public class Indexer extends SubsystemBase {
             case SHOOTING1INTAKE1:
                 stomachMotorOn();
                 towerMotorOn();
-                if (!ballAtShooter() && !ballAtTower()) {
+                if (!getBallAtShooter() && !getBallAtTower()) {
                     shootBall();
                     state = State.INTAKE1;
                 }
-                else if (!ballAtShooter() && ballAtTower()) {
+                else if (!getBallAtShooter() && getBallAtTower()) {
                     state = State.SHOOTING1;
                 }
-                else if (ballAtShooter() && ballAtTower()) {
+                else if (getBallAtShooter() && getBallAtTower()) {
                     state = State.SHOOTING2;
                 }
+                break;
             case SHOOTING1:
-                stomachMotorOn();
+                stomachMotorOff();
                 towerMotorOn();
-                if (!ballAtShooter() && ballAtIntake()) {
+                if (!getBallAtShooter() && getBallAtIntake()) {
                     shootBall();
                     state = State.INTAKE1;
                 }
-                else if (!ballAtShooter()) {
+                else if (!getBallAtShooter()) {
                     shootBall();
-                    state = State.FIELD;
+                    state = State.FIELD2;
                 }
+                break;
             case SHOOTING2:
                 stomachMotorOn();
                 towerMotorOn();
-                if (!ballAtShooter()) {
+                if (!getBallAtShooter()) {
                     shootBall();
                     state = State.SHOOTING1;
                 }
+                break;
             default:
                 stomachMotorOff();
                 towerMotorOff();
         }
         SmartDashboard.putString("Indexer state", state.toString());
+        SmartDashboard.putString("Ball 1", balls[0].getColor().toString());
+        SmartDashboard.putString("Ball 2", balls[1].getColor().toString());
+        SmartDashboard.putBoolean("Ball at color", getBallAtIntake());
+        SmartDashboard.putBoolean("Ball at Tower", getBallAtTower());
     }
 
     public void setStateShoot() {
@@ -222,16 +233,25 @@ public class Indexer extends SubsystemBase {
         return (balls[0].getLocation() != LOCATION.FIELD ? 1 : 0) + (balls[1].getLocation() != LOCATION.FIELD ? 1 : 0);
     }
 
-    public boolean ballAtIntake() {
-        return colorSensorIntake.getProximity() > Constants.INDEXER_COLOR_PROXIMITY;
+    public boolean getBallAtIntake() {
+        boolean ballAtIntake = false;
+        if (ballStillAtIntake) {
+            ballStillAtIntake = colorSensorIntake.getProximity() > Constants.INDEXER_COLOR_PROXIMITY;
+        }
+        else {
+            ballAtIntake = colorSensorIntake.getProximity() > Constants.INDEXER_COLOR_PROXIMITY;
+            ballStillAtIntake = ballAtIntake;
+        }
+        return ballAtIntake;
     }
 
-    public boolean ballAtTower() {
-        return sensorTower.get();
+    public boolean getBallAtTower() {
+        boolean ballAtTower = false;
+        return !sensorTower.get();
     }
 
-    public boolean ballAtShooter() {
-        return sensorShooter.get();
+    public boolean getBallAtShooter() {
+        return !sensorShooter.get();
     }
 
     public void intakeBall() {
