@@ -19,7 +19,7 @@ public class IntakeSmart extends CommandBase {
 
     @Override
     public void execute() {
-        intake.smartMotor();
+        intake.motorOn();
     }
 
     @Override
@@ -29,5 +29,6 @@ public class IntakeSmart extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        intake.motorOff();
     }
 }

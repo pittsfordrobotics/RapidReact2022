@@ -13,17 +13,17 @@ public class IntakeDown extends CommandBase {
 
     @Override
     public void initialize() {
-        intake.extend();
     }
 
     @Override
     public void execute() {
+        intake.extend();
         intake.motorOn();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override

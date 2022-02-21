@@ -205,8 +205,10 @@ public final class Constants {
             TRAJECTORY_CONFIG_REVERSED
     );
 
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW1 = PathPlanner.loadPath("BottomBall2Low1", 10, 2, false);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low1", 10, 2, false);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW3 = PathPlanner.loadPath("BottomBall2Low1", 10, 2, false);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW4 = PathPlanner.loadPath("BottomBall2Low1", 10, 2, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW1 = PathPlanner.loadPath("BottomBall2Low1", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low2", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW3 = PathPlanner.loadPath("BottomBall3Low3", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW4 = PathPlanner.loadPath("BottomBall3Low4", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL5_LOW3 = PathPlanner.loadPath("BottomBall5Low3", 10, 3, false);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL5_LOW4 = PathPlanner.loadPath("BottomBall5Low4", 10, 3, false);
 }

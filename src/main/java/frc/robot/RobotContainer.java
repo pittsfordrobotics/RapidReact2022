@@ -31,11 +31,11 @@ public class RobotContainer {
 
     drive.setDefaultCommand(new DriveXbox());
     shooter.setDefaultCommand(new ShooterDefault());
-    intake.setDefaultCommand(new IntakeDefault());
-    hood.setDefaultCommand(new HoodDefault());
 //    compressor.setDefaultCommand(new CompressorSmart());
 
-    commandChooser.setDefaultOption("Path Planner Test", new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
+    commandChooser.setDefaultOption("2 Ball Low", new AutoBottomLow2());
+    commandChooser.addOption("3 Ball Low", new AutoBottomLow3());
+    commandChooser.addOption("5 Ball Low", new AutoBottomLow5());
 
     SmartDashboard.putData("Auto Command", commandChooser);
     SmartDashboard.putString("Driver Mode", driverController.getHand() == Hand.LEFT ? "Left Handed" : "Right Handed");
