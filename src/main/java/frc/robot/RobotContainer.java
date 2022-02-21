@@ -5,8 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
@@ -22,7 +22,8 @@ public class RobotContainer {
   private final BetterXboxController driverController = new BetterXboxController(0, BetterXboxController.Hand.LEFT, BetterXboxController.Humans.DRIVER);
   private final BetterXboxController operatorController = new BetterXboxController(1, BetterXboxController.Humans.OPERATOR);
 
-  private final SendableChooser<Command> commandChooser = new SendableChooser<>();
+  private final SendableChooser<Command> firstAutoChooser = new SendableChooser<>();
+  private final SendableChooser<Command> secondAutoChooser = new SendableChooser<>();
 
   public RobotContainer() {
     configureButtonBindings();
@@ -31,11 +32,15 @@ public class RobotContainer {
     shooter.setDefaultCommand(new ShooterDefault());
 //    compressor.setDefaultCommand(new CompressorSmart());
 
-    commandChooser.setDefaultOption("2 Ball Low", new AutoBottomLow2());
-    commandChooser.addOption("3 Ball Low", new AutoBottomLow3());
-    commandChooser.addOption("5 Ball Low", new AutoBottomLow5());
+    firstAutoChooser.setDefaultOption("No auto", null);
+    firstAutoChooser.addOption("2 Ball Bottom Low", new AutoFirstBottomLow2());
+    firstAutoChooser.addOption("2 Ball Left Low", new AutoFirstLeftLow2());
 
-    SmartDashboard.putData("Auto Command", commandChooser);
+    secondAutoChooser.setDefaultOption("No auto", null);
+    secondAutoChooser.addOption("3 Ball Low", new AutoSecondLow3());
+    secondAutoChooser.addOption("5 Ball Low", new AutoSecondLow5());
+
+//    SmartDashboard.putData("Auto Command", commandChooser);
   }
 
   private void configureButtonBindings() {
@@ -53,6 +58,9 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return commandChooser.getSelected();
+    return new SequentialCommandGroup(
+      firstAutoChooser.getSelected(),
+      secondAutoChooser.getSelected()
+    );
   }
 }
