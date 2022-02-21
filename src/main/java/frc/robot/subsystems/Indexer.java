@@ -196,6 +196,22 @@ public class Indexer extends SubsystemBase {
         }
     }
 
+    public void setStateStopShoot() {
+        switch (state) {
+            case SHOOTING1INTAKE1:
+                state = State.ARMED1INTAKE1;
+                break;
+            case SHOOTING1:
+                state = State.ARMED1;
+                break;
+            case SHOOTING2:
+                state = State.ARMED2;
+                break;
+            default:
+                break;
+        }
+    }
+
     public void stomachMotorOn() {
         stomachMotor.set(Constants.INDEXER_STOMACH_SPEED);
     }

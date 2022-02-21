@@ -1,28 +1,28 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Shooter;
 
 
-public class HoodDefault extends CommandBase {
-    private final Hood hood = Hood.getInstance();
+public class ShooterZero extends CommandBase {
+    private final Shooter shooter = Shooter.getInstance();
 
-    public HoodDefault() {
-        addRequirements(this.hood);
+    public ShooterZero() {
+        addRequirements(this.shooter);
     }
 
     @Override
     public void initialize() {
-        hood.setPosition(0);
     }
 
     @Override
     public void execute() {
+        shooter.setShooterSpeed(0);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override

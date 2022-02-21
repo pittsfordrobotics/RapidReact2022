@@ -35,6 +35,7 @@ public class Drive extends SubsystemBase {
     private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
 
     private double throttle;
+    private double tempThrottle;
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
@@ -101,6 +102,15 @@ public class Drive extends SubsystemBase {
     public void setThrottle(double throttle) {
         differentialDrive.setMaxOutput(throttle);
         this.throttle = throttle;
+    }
+
+    public void setTempThrottle(double throttle) {
+        tempThrottle = this.throttle;
+        setThrottle(throttle);
+    }
+
+    public void setThrottleWithTemp() {
+        setThrottle(tempThrottle);
     }
 
     public double getThrottle() {

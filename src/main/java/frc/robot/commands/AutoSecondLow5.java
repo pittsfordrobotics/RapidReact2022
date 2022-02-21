@@ -8,7 +8,6 @@ import frc.robot.Constants;
 public class AutoSecondLow5 extends SequentialCommandGroup {
     public AutoSecondLow5() {
         super(
-            new AutoBack180Turn(),
             new IntakeDown(),
             new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_BALL5_LOW3),
             new WaitCommand(2),

@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
@@ -19,7 +18,6 @@ public class AutoTurn extends CommandBase {
 
   public AutoTurn(double angle) {
     this.angle = angle;
-    pidController.setTolerance(1);
     addRequirements(this.drive);
   }
 
@@ -27,9 +25,9 @@ public class AutoTurn extends CommandBase {
   @Override
   public void initialize() {
 //    pidController.setP(SmartDashboard.getNumber("PID TURN", 0));
-    throttle = drive.getThrottle();
-    drive.setThrottle(0.6);
+    drive.setTempThrottle(0.6);
     pidController.setSetpoint(drive.getAngle() + angle);
+    pidController.setTolerance(1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +40,7 @@ public class AutoTurn extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.setThrottle(throttle);
+    drive.setThrottleWithTemp();
   }
 
   // Returns true when the command should end.

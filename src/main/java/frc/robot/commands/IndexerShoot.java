@@ -13,11 +13,11 @@ public class IndexerShoot extends CommandBase {
 
     @Override
     public void initialize() {
-        indexer.setStateShoot();
     }
 
     @Override
     public void execute() {
+        indexer.setStateShoot();
     }
 
     @Override

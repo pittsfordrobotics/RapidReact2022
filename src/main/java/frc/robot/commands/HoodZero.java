@@ -1,15 +1,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Hood;
 
 
-public class ShooterLow extends CommandBase {
-    private final Shooter shooter = Shooter.getInstance();
+public class HoodZero extends CommandBase {
+    private final Hood hood = Hood.getInstance();
 
-    public ShooterLow() {
-        addRequirements(this.shooter);
+    public HoodZero() {
+        addRequirements(this.hood);
     }
 
     @Override
@@ -18,7 +17,7 @@ public class ShooterLow extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setShooterSpeed(Constants.SHOOTER_LOW_SPEED);
+        hood.zero();
     }
 
     @Override

@@ -202,9 +202,9 @@ public final class Constants {
             TRAJECTORY_CONFIG_REVERSED
     );
 
-    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_LOW1 = PathPlanner.loadPath("LeftBall2Low1", 10, 3);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_ALL1 = PathPlanner.loadPath("LeftBall2All1", 10, 3);
     public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_LOW2 = PathPlanner.loadPath("LeftBall2Low2", 10, 3);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW1 = PathPlanner.loadPath("BottomBall2Low1", 10, 3);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_ALL1 = PathPlanner.loadPath("BottomBall2All1", 10, 3);
     public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low2", 10, 3);
     public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_LOW3 = PathPlanner.loadPath("Ball3Low3", 10, 3);
     public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_LOW4 = PathPlanner.loadPath("Ball3Low4", 10, 3);
@@ -212,10 +212,10 @@ public final class Constants {
     public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_LOW4 = PathPlanner.loadPath("Ball5Low4", 10, 3);
 
 //    TODO: make these exist
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW1 = PathPlanner.loadPath("BottomBall2Low1", 10, 3);
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low2", 10, 3);
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW3 = PathPlanner.loadPath("BottomBall3Low3", 10, 3);
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW4 = PathPlanner.loadPath("BottomBall3Low4", 10, 3);
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL5_LOW3 = PathPlanner.loadPath("BottomBall5Low3", 10, 3);
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL5_LOW4 = PathPlanner.loadPath("BottomBall5Low4", 10, 3);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_HIGH2 = PathPlanner.loadPath("LeftBall2High2", 10, 3);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_HIGH2 = PathPlanner.loadPath("BottomBall2High2", 10, 3);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH3 = PathPlanner.loadPath("Ball3High3", 10, 3);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH4 = PathPlanner.loadPath("Ball3High4", 10, 3);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH3 = PathPlanner.loadPath("Ball5High3", 10, 3);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH4 = PathPlanner.loadPath("Ball5High4", 10, 3);
 }

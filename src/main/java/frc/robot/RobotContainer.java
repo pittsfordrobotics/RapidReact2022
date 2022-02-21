@@ -29,16 +29,19 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(new DriveXbox());
-    shooter.setDefaultCommand(new ShooterDefault());
 //    compressor.setDefaultCommand(new CompressorSmart());
 
     firstAutoChooser.setDefaultOption("No auto", null);
     firstAutoChooser.addOption("2 Ball Bottom Low", new AutoFirstBottomLow2());
     firstAutoChooser.addOption("2 Ball Left Low", new AutoFirstLeftLow2());
+    firstAutoChooser.addOption("2 Ball Bottom High", new AutoFirstBottomHigh2());
+    firstAutoChooser.addOption("2 Ball Left High", new AutoFirstLeftHigh2());
 
     secondAutoChooser.setDefaultOption("No auto", null);
     secondAutoChooser.addOption("3 Ball Low", new AutoSecondLow3());
     secondAutoChooser.addOption("5 Ball Low", new AutoSecondLow5());
+//    secondAutoChooser.addOption("3 Ball High", new AutoSecondHigh3());
+//    secondAutoChooser.addOption("5 Ball High", new AutoSecondHigh5());
 
 //    SmartDashboard.putData("Auto Command", commandChooser);
   }
