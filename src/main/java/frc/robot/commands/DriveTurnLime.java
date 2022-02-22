@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
@@ -28,7 +29,7 @@ public class DriveTurnLime extends CommandBase {
     @Override
     public void execute() {
         pidTuner.setP();
-        drive.driveArcade(0, pidController.calculate(limelight.getHorizontal()), false);
+        drive.driveArcade(0, MathUtil.clamp(pidController.calculate(limelight.getHorizontal()) + limelight.getHorizontal() > 0 ? 0.1 : -0.1, -0.5, 0.5), false);
     }
 
     @Override

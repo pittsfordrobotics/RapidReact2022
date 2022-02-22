@@ -4,6 +4,8 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,6 +14,7 @@ import frc.robot.util.LazySparkMax;
 
 public class Hood extends SubsystemBase {
     private LazySparkMax hoodMotor = new LazySparkMax(Constants.HOOD_CAN_MAIN, IdleMode.kBrake, 40);
+    private SparkMaxLimitSwitch limitReverse = hoodMotor.getForwardLimitSwitch(Type.kNormallyOpen);
     private RelativeEncoder hoodEncoder = hoodMotor.getEncoder();
     private SparkMaxPIDController hoodPID = hoodMotor.getPIDController();
 
@@ -27,8 +30,8 @@ public class Hood extends SubsystemBase {
         hoodMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, Constants.HOOD_POSITION_MAX);
 
         hoodPID.setP(Constants.HOOD_POSITION_GAIN);
-        hoodPID.setI(Constants.HOOD_INTEGRAL_GAIN);
-        hoodPID.setD(Constants.HOOD_DERIVATIVE_GAIN);
+//        hoodPID.setI(Constants.HOOD_INTEGRAL_GAIN);
+//        hoodPID.setD(Constants.HOOD_DERIVATIVE_GAIN);
 
         hoodEncoder.setPositionConversionFactor(Constants.HOOD_ROTATIONS_TO_DEGREES);
     }

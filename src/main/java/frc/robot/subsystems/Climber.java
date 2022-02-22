@@ -1,10 +1,5 @@
 package frc.robot.subsystems;
 
-/* 
-* i hate paras
-* he sucks
-*/
-
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
@@ -15,8 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
-;
-
+// TODO: add trajectory for auto climb and also line follower sensors
 public class Climber extends SubsystemBase {
     private final LazySparkMax leftClimber = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kBrake, 50);
     private final LazySparkMax rightClimber = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kBrake, 50);
@@ -26,6 +20,7 @@ public class Climber extends SubsystemBase {
     private final SparkMaxLimitSwitch rightForwardSwitch = rightClimber.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     private final SparkMaxLimitSwitch rightReverseSwitch = rightClimber.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
+//    TODO: remove PID for just constant speed
     private final SparkMaxPIDController leftController = leftClimber.getPIDController();
     private final SparkMaxPIDController rightController = rightClimber.getPIDController();
 

@@ -2,8 +2,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ColorSensorV3;
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
@@ -16,16 +17,19 @@ public class Indexer extends SubsystemBase {
     private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake, 50);
 
     private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
-    private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
-    private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
+//    private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
+//    private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
+    private final AnalogInput input = new AnalogInput(0);
+    private final AnalogInput input2 = new AnalogInput(1);
 
+    private boolean shooting = false;
     private boolean ballStillAtIntake = false;
-    private boolean ballStillAtShooter = false;
+    private boolean ballStillAtTower = false;
 
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private enum State {
-        FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, TOWER2, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1TOWER1, SHOOTING1, SHOOTING2
+        FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2
     }
     private State state = State.FIELD2;
 
@@ -102,31 +106,32 @@ public class Indexer extends SubsystemBase {
                     state = State.TOWER1INTAKE1;
                 }
                 break;
-            case TOWER2:
-                stomachMotorOff();
-                towerMotorOn();
-                if (getBallAtShooter()) {
-                    advanceToShooter();
-                    state = State.ARMED2;
-                }
-                break;
             case ARMED1INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
-                if (getBallAtShooter() && getBallAtTower()) {
+                if (getBallAtShooter() && getBallAtTower() && shooting) {
+                    advanceToTower();
+                    state = State.SHOOTING2;
+                }
+                else if (shooting) {
+                    state = State.SHOOTING1INTAKE1;
+                }
+                else if (getBallAtShooter() && getBallAtTower()) {
                     advanceToTower();
                     state = State.ARMED2;
-                }
-                if (!getBallAtShooter() && getBallAtTower()) {
-                    shootBall();
-                    advanceToTower();
-                    state = State.TOWER2;
                 }
                 break;
             case ARMED1:
                 stomachMotorOff();
                 towerMotorOff();
-                if (getBallAtShooter() && getBallAtIntake()) {
+                if (getBallAtShooter() && getBallAtIntake() && shooting) {
+                    intakeBall();
+                    state = State.SHOOTING1INTAKE1;
+                }
+                else if (shooting) {
+                    state = State.SHOOTING1;
+                }
+                else if (getBallAtShooter() && getBallAtIntake()) {
                     intakeBall();
                     state = State.ARMED1INTAKE1;
                 }
@@ -134,6 +139,9 @@ public class Indexer extends SubsystemBase {
             case ARMED2:
                 stomachMotorOff();
                 towerMotorOff();
+                if (shooting) {
+                    state = State.SHOOTING2;
+                }
                 break;
             case SHOOTING1INTAKE1:
                 stomachMotorOn();
@@ -143,16 +151,23 @@ public class Indexer extends SubsystemBase {
                     state = State.INTAKE1;
                 }
                 else if (!getBallAtShooter() && getBallAtTower()) {
-                    state = State.SHOOTING1;
+                    advanceToTower();
+                    state = State.TOWER1;
+                }
+                else if (getBallAtShooter() && getBallAtTower() && shooting) {
+                    advanceToTower();
+                    state = State.SHOOTING2;
                 }
                 else if (getBallAtShooter() && getBallAtTower()) {
-                    state = State.SHOOTING2;
+                    advanceToTower();
+                    state = State.ARMED2;
                 }
                 break;
             case SHOOTING1:
                 stomachMotorOff();
                 towerMotorOn();
                 if (!getBallAtShooter() && getBallAtIntake()) {
+                    intakeBall();
                     shootBall();
                     state = State.INTAKE1;
                 }
@@ -166,7 +181,7 @@ public class Indexer extends SubsystemBase {
                 towerMotorOn();
                 if (!getBallAtShooter()) {
                     shootBall();
-                    state = State.SHOOTING1;
+                    state = State.TOWER1;
                 }
                 break;
             default:
@@ -174,42 +189,26 @@ public class Indexer extends SubsystemBase {
                 towerMotorOff();
         }
         SmartDashboard.putString("Indexer state", state.toString());
-        SmartDashboard.putString("Ball 1", balls[0].getColor().toString());
-        SmartDashboard.putString("Ball 2", balls[1].getColor().toString());
-        SmartDashboard.putBoolean("Ball at color", getBallAtIntake());
-        SmartDashboard.putBoolean("Ball at Tower", getBallAtTower());
+        SmartDashboard.putString("Ball 1 Color", balls[0].getColor().toString());
+        SmartDashboard.putString("Ball 2 Color", balls[1].getColor().toString());
+        SmartDashboard.putString("Ball 1 Location", balls[0].getLocation().toString());
+        SmartDashboard.putString("Ball 2 Location", balls[1].getLocation().toString());
+        SmartDashboard.putNumber("tower", input.getValue());
+        SmartDashboard.putData("Reset", new InstantCommand(() -> setState(State.FIELD2)));
+        SmartDashboard.putData("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
+        SmartDashboard.putBoolean("Shooting?", shooting);
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public void setStateShoot() {
-        switch (state) {
-            case ARMED1INTAKE1:
-                state = State.SHOOTING1INTAKE1;
-                break;
-            case ARMED1:
-                state = State.SHOOTING1;
-                break;
-            case ARMED2:
-                state = State.SHOOTING2;
-                break;
-            default:
-                break;
-        }
+        shooting = true;
     }
 
     public void setStateStopShoot() {
-        switch (state) {
-            case SHOOTING1INTAKE1:
-                state = State.ARMED1INTAKE1;
-                break;
-            case SHOOTING1:
-                state = State.ARMED1;
-                break;
-            case SHOOTING2:
-                state = State.ARMED2;
-                break;
-            default:
-                break;
-        }
+        shooting = false;
     }
 
     public void stomachMotorOn() {
@@ -263,11 +262,21 @@ public class Indexer extends SubsystemBase {
 
     public boolean getBallAtTower() {
         boolean ballAtTower = false;
-        return !sensorTower.get();
+        if (ballStillAtTower) {
+//            ballStillAtTower = !sensorTower.get();
+            ballStillAtTower = input.getValue() < 1700;
+        }
+        else {
+//            ballAtTower = !sensorTower.get();
+            ballAtTower =  input.getValue() < 1700;
+            ballStillAtTower = ballAtTower;
+        }
+        return ballAtTower;
     }
 
     public boolean getBallAtShooter() {
-        return !sensorShooter.get();
+//        return !sensorShooter.get();
+        return input2.getValue() < 2000;
     }
 
     public void intakeBall() {

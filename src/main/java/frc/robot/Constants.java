@@ -45,16 +45,16 @@ public final class Constants {
     public static final double DRIVE_GEAR_RATIO = 6.818;
     public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
 
-    public static final double DRIVE_POSITION_GAIN = Double.NaN;
-    public static final double DRIVE_INTEGRAL_GAIN = Double.NaN;
-    public static final double DRIVE_DERIVATIVE_GAIN = Double.NaN;
+    public static final double DRIVE_POSITION_GAIN = 1;
+    public static final double DRIVE_INTEGRAL_GAIN = 1;
+    public static final double DRIVE_DERIVATIVE_GAIN = 1;
 
-    public static final double DRIVE_STATIC_GAIN = Double.NaN;
-    public static final double DRIVE_VELOCITY_GAIN = Double.NaN;
-    public static final double DRIVE_ACCELERATION_GAIN = Double.NaN;
+    public static final double DRIVE_STATIC_GAIN = 1;
+    public static final double DRIVE_VELOCITY_GAIN = 1;
+    public static final double DRIVE_ACCELERATION_GAIN = 1;
 
-    public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = Double.NaN;
-    public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = Double.NaN;
+    public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = 1;
+    public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
 
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
 
@@ -80,10 +80,10 @@ public final class Constants {
  */
     public static final int HOOD_CAN_MAIN = 6;
 
-    public static final double HOOD_POSITION_GAIN = Double.NaN;
-    public static final double HOOD_INTEGRAL_GAIN = Double.NaN;
-    public static final double HOOD_DERIVATIVE_GAIN = Double.NaN;
-    public static final double HOOD_ROTATIONS_TO_DEGREES = Double.NaN;
+    public static final double HOOD_POSITION_GAIN = 1;
+    public static final double HOOD_INTEGRAL_GAIN = 1;
+    public static final double HOOD_DERIVATIVE_GAIN = 1;
+    public static final double HOOD_ROTATIONS_TO_DEGREES = 1;
 
     public static final float HOOD_POSITION_MAX = Float.NaN;
     public static final float HOOD_POSITION_LOW = Float.NaN;
@@ -105,7 +105,7 @@ public final class Constants {
     public static final double INDEXER_STOMACH_SPEED = 0.6;
     public static final double INDEXER_TOWER_SPEED = 0.6;
 
-    public static final I2C.Port INDEXER_COLOR = I2C.Port.kOnboard;
+    public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
     public static final int INDEXER_COLOR_PROXIMITY = 500; // from 0 to 2047
 
     public static final int INDEXER_SENSOR_TOWER = 0;
@@ -118,11 +118,11 @@ public final class Constants {
  */
     public static final int SHOOTER_CAN_MAIN = 9;
 
-    public static final double SHOOTER_STATIC_GAIN = Double.NaN;
-    public static final double SHOOTER_VELOCITY_GAIN = Double.NaN;
-    public static final double SHOOTER_ACCELERATION_GAIN = Double.NaN;
+    public static final double SHOOTER_STATIC_GAIN = 1;
+    public static final double SHOOTER_VELOCITY_GAIN = 1;
+    public static final double SHOOTER_ACCELERATION_GAIN = 1;
 
-    public static final double SHOOTER_LOW_SPEED = Double.NaN;
+    public static final double SHOOTER_LOW_SPEED = 1;
 
     public static final LookupTable SHOOTER_TABLE = new LookupTable();
 
@@ -141,8 +141,8 @@ public final class Constants {
 //    middle is 102.8125 inches from field
     public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.8125;
 
-    public static final double LIMELIGHT_MOUNTING_HEIGHT = Double.NaN;
-    public static final double LIMELIGHT_ANGLE = Double.NaN;
+    public static final double LIMELIGHT_MOUNTING_HEIGHT = 1;
+    public static final double LIMELIGHT_ANGLE = 1;
 
 /**
  *
@@ -152,9 +152,9 @@ public final class Constants {
     public static final int CLIMBER_CAN_LEFT = 10;
     public static final int CLIMBER_CAN_RIGHT = 11;
 
-    public static final double CLIMBER_SPEED = Double.NaN;
+    public static final double CLIMBER_SPEED = 1;
     public static final double CLIMBER_GEAR_RATIO = 125;
-    public static final double CLIMBER_ROTATIONS_FRONT_TO_CENTER = Double.NaN;
+    public static final double CLIMBER_ROTATIONS_FRONT_TO_CENTER = 1;
 
 /**
  *
@@ -213,8 +213,8 @@ public final class Constants {
 //    TODO: make these exist
     public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_HIGH2 = PathPlanner.loadPath("LeftBall2High2", 10, 3);
     public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_HIGH2 = PathPlanner.loadPath("BottomBall2High2", 10, 3);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH3 = PathPlanner.loadPath("Ball3High3", 10, 3);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH4 = PathPlanner.loadPath("Ball3High4", 10, 3);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH3 = PathPlanner.loadPath("Ball5High3", 10, 3);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH4 = PathPlanner.loadPath("Ball5High4", 10, 3);
+//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH3 = PathPlanner.loadPath("Ball3High3", 10, 3);
+//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH4 = PathPlanner.loadPath("Ball3High4", 10, 3);
+//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH3 = PathPlanner.loadPath("Ball5High3", 10, 3);
+//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH4 = PathPlanner.loadPath("Ball5High4", 10, 3);
 }
