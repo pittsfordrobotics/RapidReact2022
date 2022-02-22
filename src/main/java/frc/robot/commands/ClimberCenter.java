@@ -22,7 +22,7 @@ public class ClimberCenter extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return climber.hasBeenZeroed();
+        return climber.hasBeenCentered();
     }
 
     @Override

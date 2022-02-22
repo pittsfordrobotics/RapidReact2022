@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
-import frc.robot.random.Constants;
+import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 public class Indexer extends SubsystemBase {

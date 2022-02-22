@@ -19,7 +19,6 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.util.LookupTable;
-
 import java.util.List;
 
 public final class Constants {
@@ -147,7 +146,7 @@ public final class Constants {
 /**
  *
  * CLIMBER
- * 
+ *
  */
     public static final int CLIMBER_CAN_LEFT = 10;
     public static final int CLIMBER_CAN_RIGHT = 11;
@@ -157,7 +156,7 @@ public final class Constants {
 
     public static final double CLIMBER_SPEED = 1;
     public static final double CLIMBER_GEAR_RATIO = 125;
-    public static final double CLIMBER_ROTATIONS_FRONT_TO_CENTER = 1;
+    public static final double CLIMBER_ROTATIONS_FRONT_TO_CENTER = -0.65;
 
 /**
  *

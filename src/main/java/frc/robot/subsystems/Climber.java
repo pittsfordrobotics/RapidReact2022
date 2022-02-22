@@ -3,11 +3,10 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.random.Constants;
+import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 // TODO: add trajectory for auto climb and also line follower sensors
@@ -65,8 +64,8 @@ public class Climber extends SubsystemBase {
         rightEncoder.setPosition(0);
     }
 
-    public boolean hasBeenZeroed() {
-        return MathUtil.applyDeadband(leftEncoder.getPosition() - Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER, 0.2) == 0 || MathUtil.applyDeadband(rightEncoder.getPosition() - Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER, 1) == 0;
+    public boolean hasBeenCentered() {
+        return Math.abs(leftEncoder.getPosition() - Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER) < 0.02;
     }
 
     public boolean forwardAtLimit() {

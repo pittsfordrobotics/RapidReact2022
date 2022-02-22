@@ -6,6 +6,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.pathplanner.lib.PathPlanner;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -28,6 +29,7 @@ public final class Constants {
      * DRIVE
      *
      */
+    public static final int DRIVE_CAN_PIGEON = 0;
     public static final int DRIVE_CAN_RIGHT_LEADER = 13;
     public static final int DRIVE_CAN_RIGHT_FOLLOWER = 14;
     public static final int DRIVE_CAN_LEFT_LEADER = 11;
@@ -39,16 +41,24 @@ public final class Constants {
 
     public static final SPI.Port DRIVE_NAVX = SPI.Port.kMXP;
 
+    public static final Pigeon2Configuration DRIVE_PIGEON_CONFIG = new Pigeon2Configuration();
+
+    static {
+        DRIVE_PIGEON_CONFIG.EnableCompass = false;
+    }
+
     public static final double DRIVE_STATIC_GAIN = 0.191;
     public static final double DRIVE_VELOCITY_GAIN = 2.72;
     public static final double DRIVE_ACCELERATION_GAIN = 0.492;
 
-    public static final double DRIVE_MAX_VELOCITY = 1.5;
-    public static final double DRIVE_MAX_ACCELERATION = 1;
+    public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = 1.5;
+    public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
 
     public static final double DRIVE_GEAR_RATIO = 10.71;
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
     public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
+
+    public static final double DRIVE_RATE_LIMIT = 1;
 
 /**
  *
@@ -144,8 +154,12 @@ public final class Constants {
     public static final int CLIMBER_CAN_LEFT = 33;
     public static final int CLIMBER_CAN_RIGHT = 51;
 
+    public static final int CLIMBER_SENSOR_LEFT = 2;
+    public static final int CLIMBER_SENSOR_RIGHT = 3;
+
     public static final double CLIMBER_SPEED = 0.1;
     public static final double CLIMBER_GEAR_RATIO = 125;
+    public static final double CLIMBER_ROTATIONS_FRONT_TO_CENTER = -0.65;
 
 /**
  *
@@ -167,7 +181,7 @@ public final class Constants {
  * ALL IN METERS
  *
  */
-    private static final TrajectoryConfig TRAJECTORY_CONFIG = new TrajectoryConfig(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION)
+    private static final TrajectoryConfig TRAJECTORY_CONFIG = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
             .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS))
             .addConstraint(
                     new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_STATIC_GAIN, DRIVE_VELOCITY_GAIN, DRIVE_ACCELERATION_GAIN),
@@ -175,7 +189,7 @@ public final class Constants {
                             10)
             );
 
-    private static final TrajectoryConfig TRAJECTORY_CONFIG_REVERSED = new TrajectoryConfig(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION)
+    private static final TrajectoryConfig TRAJECTORY_CONFIG_REVERSED = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
             .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS))
             .setReversed(true)
             .addConstraint(
@@ -191,8 +205,7 @@ public final class Constants {
             ),
             TRAJECTORY_CONFIG
     );
-
-    public static final Trajectory TRAJECTORY_BACKWARD = TrajectoryGenerator.generateTrajectory(
+    public static final Trajectory TRAJECTORY_ONE_METER_BACKWARD = TrajectoryGenerator.generateTrajectory(
             List.of(
                     new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
                     new Pose2d(-1, 0, Rotation2d.fromDegrees(0))
@@ -200,8 +213,35 @@ public final class Constants {
             TRAJECTORY_CONFIG_REVERSED
     );
 
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW1 = PathPlanner.loadPath("BottomBall2Low1", 10, 2, false);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low2", 10, 2, false);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW3 = PathPlanner.loadPath("BottomBall3Low3", 10, 2, false);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL3_LOW4 = PathPlanner.loadPath("BottomBall3Low4", 10, 2, false);
+    public static final Trajectory TRAJECTORY_CLIMBER_BACKWARD = TrajectoryGenerator.generateTrajectory(
+            List.of(
+                    new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                    new Pose2d(-1, 0, Rotation2d.fromDegrees(0))
+            ),
+            TRAJECTORY_CONFIG_REVERSED
+    );
+
+    public static final Trajectory TRAJECTORY_CLIMBER_FORWARD = TrajectoryGenerator.generateTrajectory(
+            List.of(
+                    new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                    new Pose2d(0.5, 0, Rotation2d.fromDegrees(0))
+            ),
+            TRAJECTORY_CONFIG
+    );
+
+    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_ALL1 = PathPlanner.loadPath("LeftBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_LOW2 = PathPlanner.loadPath("LeftBall2Low2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_ALL1 = PathPlanner.loadPath("BottomBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_LOW3 = PathPlanner.loadPath("Ball3Low3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_LOW4 = PathPlanner.loadPath("Ball3Low4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_LOW3 = PathPlanner.loadPath("Ball5Low3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_LOW4 = PathPlanner.loadPath("Ball5Low4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+
+    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_HIGH2 = PathPlanner.loadPath("LeftBall2High2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_HIGH2 = PathPlanner.loadPath("BottomBall2High2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH3 = PathPlanner.loadPath("Ball3High3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH4 = PathPlanner.loadPath("Ball3High4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH3 = PathPlanner.loadPath("Ball5High3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH4 = PathPlanner.loadPath("Ball5High4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
 }

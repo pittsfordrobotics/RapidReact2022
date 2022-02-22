@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.random.Constants;
+import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 //TODO: RE-ENABLE solenoids after they are wired

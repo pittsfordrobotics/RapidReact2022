@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.random.Constants;
+import frc.robot.Constants;
 
 public class AutoFirstBottomLow2 extends SequentialCommandGroup {
     public AutoFirstBottomLow2() {

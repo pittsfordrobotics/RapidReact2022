@@ -3,7 +3,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.random.Constants;
+import frc.robot.Constants;
 
 public class AutoSecondLow5 extends SequentialCommandGroup {
     public AutoSecondLow5() {
