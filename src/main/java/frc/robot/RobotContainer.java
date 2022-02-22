@@ -15,6 +15,7 @@ public class RobotContainer {
   private final Drive drive = Drive.getInstance();
   private final Shooter shooter = Shooter.getInstance();
   private final Hood hood = Hood.getInstance();
+  private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
 //  private final Compressor7 compressor = Compressor7.getInstance();
@@ -29,6 +30,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(new DriveXbox());
+//    climber.setDefaultCommand(new );
 //    compressor.setDefaultCommand(new CompressorSmart());
 
     firstAutoChooser.setDefaultOption("No auto", null);

@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
+import frc.robot.random.Constants;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Limelight;
 

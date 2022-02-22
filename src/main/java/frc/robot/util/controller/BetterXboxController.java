@@ -61,6 +61,14 @@ public class BetterXboxController extends XboxController {
         return controllers.get(humans);
     }
 
+    public double getBetterLeftY() {
+        return -getLeftY();
+    }
+
+    public double getBetterRightY() {
+        return -getRightY();
+    }
+
     public Hand getHand() {
         return hand;
     }
