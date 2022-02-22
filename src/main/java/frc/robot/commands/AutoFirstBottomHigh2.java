@@ -8,12 +8,12 @@ public class AutoFirstBottomHigh2 extends SequentialCommandGroup {
     public AutoFirstBottomHigh2() {
         super(
                 new IntakeDown(),
-                new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_ALL1),
+                new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_ALL1),
                 new IntakeUp(),
-                new AutoTurn(180),
-                new AutoPathing(Constants.TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_HIGH2),
+                new DriveTurn(180),
+                new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_HIGH2),
                 new CG_HighShot(),
-                new AutoBack180Turn()
+                new CG_DriveBack180Turn()
         );
     }
 }

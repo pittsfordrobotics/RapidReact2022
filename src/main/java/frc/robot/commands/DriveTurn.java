@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
 // TODO: TUNE P CONTROLLER WITH FINISHED CHASSIS
-public class AutoTurn extends CommandBase {
+public class DriveTurn extends CommandBase {
   private final double angle;
   private final Drive drive = Drive.getInstance();
   private final PIDController pidController = new PIDController(0.01,0, 0);
   private double throttle;
 
-  public AutoTurn(double angle) {
+  public DriveTurn(double angle) {
     this.angle = angle;
     addRequirements(this.drive);
   }

@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
-import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -12,20 +10,16 @@ import frc.robot.util.LazySparkMax;
 
 // TODO: add trajectory for auto climb and also line follower sensors
 public class Climber extends SubsystemBase {
-    private final LazySparkMax leftClimber = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kBrake, 50);
-    private final LazySparkMax rightClimber = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kBrake, 50);
+    private final LazySparkMax leftMotor = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kBrake, 50);
+    private final LazySparkMax rightMotor = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kBrake, 50);
 
-    private final SparkMaxLimitSwitch leftForwardSwitch = leftClimber.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    private final SparkMaxLimitSwitch leftReverseSwitch = leftClimber.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    private final SparkMaxLimitSwitch rightForwardSwitch = rightClimber.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    private final SparkMaxLimitSwitch rightReverseSwitch = rightClimber.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    private final SparkMaxLimitSwitch leftForwardSwitch = leftMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    private final SparkMaxLimitSwitch leftReverseSwitch = leftMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    private final SparkMaxLimitSwitch rightForwardSwitch = rightMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    private final SparkMaxLimitSwitch rightReverseSwitch = rightMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
-//    TODO: remove PID for just constant speed
-    private final SparkMaxPIDController leftController = leftClimber.getPIDController();
-    private final SparkMaxPIDController rightController = rightClimber.getPIDController();
-
-    private final RelativeEncoder leftEncoder = leftClimber.getEncoder();
-    private final RelativeEncoder rightEncoder = rightClimber.getEncoder();
+    private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
+    private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
 
     private final static Climber INSTANCE = new Climber();
     public static Climber getInstance() {
@@ -40,9 +34,6 @@ public class Climber extends SubsystemBase {
         rightForwardSwitch.enableLimitSwitch(true);
         rightReverseSwitch.enableLimitSwitch(true);
 
-//        leftController.setP(0.1);
-//        rightController.setP(0.1);
-
         leftEncoder.setPositionConversionFactor(1/Constants.CLIMBER_GEAR_RATIO);
         rightEncoder.setPositionConversionFactor(1/Constants.CLIMBER_GEAR_RATIO);
     }
@@ -52,46 +43,31 @@ public class Climber extends SubsystemBase {
         rightEncoder.setPosition(0);
     }
 
-    public void zero() {
-        resetEncoders();
-        leftController.setReference(Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER, ControlType.kPosition);
-        rightController.setReference(Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER, ControlType.kPosition);
-    }
-
     public boolean hasBeenZeroed() {
-        return MathUtil.applyDeadband(leftEncoder.getPosition() - Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER, 1) == 0 && MathUtil.applyDeadband(rightEncoder.getPosition() - Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER, 1) == 0;
-    }
-
-    public void resetPID() {
-        leftController.setReference(0, ControlType.kPosition);
-        rightController.setReference(0, ControlType.kPosition);
+        return MathUtil.applyDeadband(leftEncoder.getPosition() - Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER, 1) == 0 || MathUtil.applyDeadband(rightEncoder.getPosition() - Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER, 1) == 0;
     }
 
     public boolean forwardAtLimit() {
         return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
     }
 
+    public boolean reverseAtLimit() {
+        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
+    }
+
     public void climbFront() {
-        leftClimber.set(Constants.CLIMBER_SPEED);
-        rightClimber.set(Constants.CLIMBER_SPEED);
+        leftMotor.set(Constants.CLIMBER_SPEED);
+        rightMotor.set(Constants.CLIMBER_SPEED);
     }
 
     public void climbBack() {
-        leftClimber.set(-Constants.CLIMBER_SPEED);
-        rightClimber.set(-Constants.CLIMBER_SPEED);
+        leftMotor.set(-Constants.CLIMBER_SPEED);
+        rightMotor.set(-Constants.CLIMBER_SPEED);
     }
 
     public void stopAll() {
-        leftClimber.stopMotor();
-        rightClimber.stopMotor();
-    }
-
-    public void stopRight() {
-        rightClimber.stopMotor();
-    }
-
-    public void stopLeft() {
-        leftClimber.stopMotor();
+        leftMotor.stopMotor();
+        rightMotor.stopMotor();
     }
 
 }

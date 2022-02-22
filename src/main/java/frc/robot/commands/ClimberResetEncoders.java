@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 
-public class ClimberZero extends CommandBase {
+public class ClimberResetEncoders extends CommandBase {
     private final Climber climber = Climber.getInstance();
 
-    public ClimberZero() {
+    public ClimberResetEncoders() {
         addRequirements(this.climber);
     }
 
@@ -17,7 +17,7 @@ public class ClimberZero extends CommandBase {
 
     @Override
     public void execute() {
-        climber.zero();
+        climber.resetEncoders();
     }
 
     @Override
@@ -27,6 +27,5 @@ public class ClimberZero extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
     }
 }

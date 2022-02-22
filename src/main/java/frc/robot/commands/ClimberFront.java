@@ -29,6 +29,6 @@ public class ClimberFront extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return climber.forwardAtLimit();
   }
 }

@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 
-public class ClimberHasBeenZeroed extends CommandBase {
+public class ClimberCenter extends CommandBase {
     private final Climber climber = Climber.getInstance();
 
-    public ClimberHasBeenZeroed() {
+    public ClimberCenter() {
         addRequirements(this.climber);
     }
 
@@ -17,6 +17,7 @@ public class ClimberHasBeenZeroed extends CommandBase {
 
     @Override
     public void execute() {
+        climber.climbBack();
     }
 
     @Override
@@ -26,5 +27,6 @@ public class ClimberHasBeenZeroed extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        climber.stopAll();
     }
 }
