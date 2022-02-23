@@ -3,7 +3,8 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
@@ -32,6 +33,8 @@ public class Indexer extends SubsystemBase {
         FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2
     }
     private State state = State.FIELD2;
+
+    private final ShuffleboardTab indexerTab = Shuffleboard.getTab("Indexer");
 
     private final static Indexer INSTANCE = new Indexer();
     public static Indexer getInstance() {
@@ -188,15 +191,15 @@ public class Indexer extends SubsystemBase {
                 stomachMotorOff();
                 towerMotorOff();
         }
-        SmartDashboard.putString("Indexer state", state.toString());
-        SmartDashboard.putString("Ball 1 Color", balls[0].getColor().toString());
-        SmartDashboard.putString("Ball 2 Color", balls[1].getColor().toString());
-        SmartDashboard.putString("Ball 1 Location", balls[0].getLocation().toString());
-        SmartDashboard.putString("Ball 2 Location", balls[1].getLocation().toString());
-        SmartDashboard.putNumber("tower", input.getValue());
-        SmartDashboard.putData("Reset", new InstantCommand(() -> setState(State.FIELD2)));
-        SmartDashboard.putData("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
-        SmartDashboard.putBoolean("Shooting?", shooting);
+        indexerTab.add("Indexer state", state.toString());
+        indexerTab.add("Ball 1 Color", balls[0].getColor().toString());
+        indexerTab.add("Ball 2 Color", balls[1].getColor().toString());
+        indexerTab.add("Ball 1 Location", balls[0].getLocation().toString());
+        indexerTab.add("Ball 2 Location", balls[1].getLocation().toString());
+        indexerTab.add("tower", input.getValue());
+        indexerTab.add("Reset", new InstantCommand(() -> setState(State.FIELD2)));
+        indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
+        indexerTab.add("Shooting?", shooting);
     }
 
     public void setState(State state) {

@@ -4,12 +4,13 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
-// TODO: add trajectory for auto climb and also line follower sensors
+// TODO: make this into cursed state machine
 public class Climber extends SubsystemBase {
     private final LazySparkMax leftMotor = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kBrake, 50, true);
     private final LazySparkMax rightMotor = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kBrake, 50);
@@ -19,11 +20,13 @@ public class Climber extends SubsystemBase {
     private final SparkMaxLimitSwitch rightForwardSwitch = rightMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     private final SparkMaxLimitSwitch rightReverseSwitch = rightMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
-    private final DigitalInput leftSwitch = new DigitalInput(Constants.CLIMBER_SENSOR_LEFT);
-    private final DigitalInput rightSwitch = new DigitalInput(Constants.CLIMBER_SENSOR_RIGHT);
+    private final DigitalInput leftSensor = new DigitalInput(Constants.CLIMBER_SENSOR_LEFT);
+    private final DigitalInput rightSensor = new DigitalInput(Constants.CLIMBER_SENSOR_RIGHT);
 
     private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
     private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
+
+    private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
 
     private final static Climber INSTANCE = new Climber();
     public static Climber getInstance() {
@@ -44,10 +47,18 @@ public class Climber extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("right forward", rightForwardSwitch.isPressed());
-        SmartDashboard.putBoolean("right reversed", rightReverseSwitch.isPressed());
-        SmartDashboard.putBoolean("left forward", leftForwardSwitch.isPressed());
-        SmartDashboard.putBoolean("left reversed", leftReverseSwitch.isPressed());
+        climberTab.add("Right Front Limit Switch", rightForwardSwitch.isPressed());
+        climberTab.add("Right Reverse Limit Switch", rightReverseSwitch.isPressed());
+        climberTab.add("Left Front Limit Switch", leftForwardSwitch.isPressed());
+        climberTab.add("Left Reverse Limit Switch", leftReverseSwitch.isPressed());
+    }
+
+    public boolean getRightSensor() {
+        return !rightSensor.get();
+    }
+
+    public boolean getLeftSensor() {
+        return !leftSensor.get();
     }
 
     public void setSpeed(double speed) {

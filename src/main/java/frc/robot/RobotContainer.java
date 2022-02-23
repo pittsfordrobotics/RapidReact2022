@@ -30,7 +30,6 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(new DriveXbox());
-//    climber.setDefaultCommand(new );
 //    compressor.setDefaultCommand(new CompressorSmart());
 
     firstAutoChooser.setDefaultOption("No auto", null);
@@ -51,7 +50,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
 //    driverController.A.whenActive(new CG_LowShot());
 //    driverController.B.whenPressed(new IntakeSmart());
-    driverController.Y.whenPressed(new DriveTurn(180));
+//    driverController.Y.whenPressed(new DriveTurn(180));
+    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));

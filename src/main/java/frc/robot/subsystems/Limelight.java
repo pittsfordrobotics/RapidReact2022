@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.jetbrains.annotations.NotNull;
@@ -9,8 +11,10 @@ import org.jetbrains.annotations.NotNull;
 public class Limelight extends SubsystemBase {
     private final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
+    private final ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
+
     public enum Pipelines {
-        ;
+        PRACTICE(0);
 
         private int num;
         Pipelines(int num) {
@@ -58,6 +62,13 @@ public class Limelight extends SubsystemBase {
     private Limelight() {
         setLED(LED.OFF);
         setCamMode(CameraMode.DRIVER_CAMERA);
+    }
+
+    @Override
+    public void periodic() {
+        limelightTab.add("Has Target", hasTarget());
+        limelightTab.add("Horizontal", getHorizontal());
+        limelightTab.add("Vertical", getVertical());
     }
 
     public boolean hasTarget() {

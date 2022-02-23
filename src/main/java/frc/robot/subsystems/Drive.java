@@ -18,6 +18,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -42,8 +44,8 @@ public class Drive extends SubsystemBase {
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
 
     private SlewRateLimiter rateLimit = new SlewRateLimiter(Constants.DRIVE_RATE_LIMIT);
-    private boolean decelerate = false;
-    private double pastInput = 0;
+
+    private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 
     private static final Drive INSTANCE = new Drive();
     public static Drive getInstance() {
@@ -74,8 +76,7 @@ public class Drive extends SubsystemBase {
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
 
         SmartDashboard.putNumber("Throttle", throttle);
-        SmartDashboard.putBoolean("Decelerating", decelerate);
-        SmartDashboard.putNumber("Pigeon", getAngle());
+        driveTab.add("Pigeon", getAngle());
     }
 
     public void driveArcade(double speed, double rotation, boolean squared) {

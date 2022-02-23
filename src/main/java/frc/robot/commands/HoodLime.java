@@ -16,6 +16,8 @@ public class HoodLime extends CommandBase {
 
     @Override
     public void initialize() {
+        limelight.setPipeline(Limelight.Pipelines.PRACTICE);
+        limelight.enable();
     }
 
     @Override
@@ -30,6 +32,6 @@ public class HoodLime extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        limelight.disable();
     }
 }
