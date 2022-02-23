@@ -7,13 +7,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
 
 public class Robot extends TimedRobot {
   private final Drive drive = Drive.getInstance();
   private final Limelight limelight = Limelight.getInstance();
+  private final Shooter shooter = Shooter.getInstance();
+  private final Hood hood = Hood.getInstance();
+  private final Climber climber = Climber.getInstance();
+  private final Intake intake = Intake.getInstance();
+  private final Indexer indexer = Indexer.getInstance();
+//  private final Compressor7 compressor = Compressor7.getInstance();
 
   private Command autonomousCommand;
 

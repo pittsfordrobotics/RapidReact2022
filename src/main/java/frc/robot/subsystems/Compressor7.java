@@ -1,5 +1,5 @@
-//TODO: RE-ENABLE solenoids after they are wired
-
+////TODO: RE-ENABLE solenoids after they are wired
+//
 //package frc.robot.subsystems;
 //
 //import edu.wpi.first.wpilibj.Compressor;
@@ -15,6 +15,10 @@
 //    }
 //
 //    private Compressor7(){}
+//
+//    public double getPressure() {
+//        return compressor.getPressure();
+//    }
 //
 //    public void enable() {
 //        compressor.enableDigital();

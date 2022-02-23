@@ -21,6 +21,8 @@ public class DriveTurnLime extends CommandBase {
 
     @Override
     public void initialize() {
+        limelight.setPipeline(Limelight.Pipelines.PRACTICE);
+        limelight.enable();
         drive.setTempThrottle(0.6);
         pidController.setSetpoint(0);
         pidController.setTolerance(1);
@@ -40,5 +42,6 @@ public class DriveTurnLime extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         drive.setThrottleWithTemp();
+        limelight.disable();
     }
 }

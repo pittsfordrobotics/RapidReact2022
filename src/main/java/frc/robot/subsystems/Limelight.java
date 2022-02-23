@@ -10,7 +10,7 @@ public class Limelight extends SubsystemBase {
     private final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
     public enum Pipelines {
-        ;
+        PRACTICE(0);
 
         private int num;
         Pipelines(int num) {
