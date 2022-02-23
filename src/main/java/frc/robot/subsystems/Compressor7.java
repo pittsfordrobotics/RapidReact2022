@@ -16,10 +16,6 @@
 //
 //    private Compressor7(){}
 //
-//    public double getPressure() {
-//        return compressor.getPressure();
-//    }
-//
 //    public void enable() {
 //        compressor.enableDigital();
 //    }
