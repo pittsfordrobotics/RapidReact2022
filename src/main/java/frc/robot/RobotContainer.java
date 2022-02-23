@@ -30,7 +30,6 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(new DriveXbox());
-    climber.setDefaultCommand(new ClimberSpeed());
 //    compressor.setDefaultCommand(new CompressorSmart());
 
     firstAutoChooser.setDefaultOption("No auto", null);
