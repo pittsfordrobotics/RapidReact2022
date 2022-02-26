@@ -7,9 +7,9 @@ public class CG_LowShot extends SequentialCommandGroup {
     public CG_LowShot() {
         super(
                 new ShooterLow(),
-                new CG_ReadyToShoot(),
+                new ShooterPrimed(),
                 new IndexerShoot(),
-                new CG_ShooterDefault()
+                new ShooterZero()
         );
     }
 }

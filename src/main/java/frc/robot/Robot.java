@@ -12,9 +12,7 @@ import frc.robot.util.controller.BetterXboxController;
 
 public class Robot extends TimedRobot {
   private final Drive drive = Drive.getInstance();
-  private final Limelight limelight = Limelight.getInstance();
   private final Shooter shooter = Shooter.getInstance();
-  private final Hood hood = Hood.getInstance();
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
@@ -42,7 +40,6 @@ public class Robot extends TimedRobot {
     if (drive.getAverageVelocity() == 0) {
       drive.coastMode();
     }
-    limelight.disable();
   }
 
   @Override
