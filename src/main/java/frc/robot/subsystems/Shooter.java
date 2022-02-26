@@ -27,13 +27,14 @@ public class Shooter extends SubsystemBase {
         return INSTANCE;
     }
 
-    private Shooter() {}
+    private Shooter() {
+        shooterTab.addNumber("Shooter Target RPM", () -> speed);
+        shooterTab.addNumber("Shooter Actual", shooterEncoder::getVelocity);
+        shooterTab.addBoolean("Shooter up to Speed", this::isAtSpeed);
+    }
 
     @Override
     public void periodic() {
-//        shooterTab.add("Shooter Target RPM", speed).getEntry().setDouble(speed);
-//        shooterTab.add("Shooter Actual", shooterEncoder.getVelocity()).getEntry().setDouble(shooterEncoder.getVelocity());
-//        shooterTab.add("Shooter up to Speed", isAtSpeed()).getEntry().setBoolean(isAtSpeed());
     }
 
     public void setShooterSpeed(double speed) {

@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
@@ -34,8 +34,8 @@ public class Drive extends SubsystemBase {
     private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
-//    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
-    private final AHRS pigeon = new AHRS(Constants.DRIVE_NAVX);
+    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
+//    private final AHRS pigeon = new AHRS(Constants.DRIVE_NAVX);
 
     private double throttle;
     private double tempThrottle;
@@ -56,7 +56,7 @@ public class Drive extends SubsystemBase {
     private Drive() {
         differentialDrive.setDeadband(0.2);
 
-//        pigeon.configAllSettings(Constants.DRIVE_PIGEON_CONFIG);
+        pigeon.configAllSettings(Constants.DRIVE_PIGEON_CONFIG);
         pigeon.reset();
 
         leftEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
@@ -65,6 +65,8 @@ public class Drive extends SubsystemBase {
         rightEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO / 60);
 
         setThrottle(0.7);
+
+        driveTab.addNumber("Pigeon", pigeon::getAngle);
     }
 
     @Override
@@ -77,7 +79,6 @@ public class Drive extends SubsystemBase {
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
 
         SmartDashboard.putNumber("Throttle", throttle);
-//        driveTab.add("Pigeon", getAngle());
     }
 
     public void driveArcade(double speed, double rotation, boolean squared) {

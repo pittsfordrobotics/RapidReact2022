@@ -5,6 +5,7 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
@@ -40,7 +41,17 @@ public class Indexer extends SubsystemBase {
         return INSTANCE;
     }
 
-    private Indexer() {}
+    private Indexer() {
+        indexerTab.addString("Indexer state", state::toString);
+        indexerTab.addString("Ball 1 Color", balls[0].getColor()::toString);
+        indexerTab.addString("Ball 2 Color", balls[1].getColor()::toString);
+        indexerTab.addString("Ball 1 Location", balls[0].getLocation()::toString);
+        indexerTab.addString("Ball 2 Location", balls[1].getLocation()::toString);
+        indexerTab.addNumber("tower", input::getValue);
+        indexerTab.add("Reset", new InstantCommand(() -> setState(State.FIELD2)));
+        indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
+        indexerTab.addBoolean("Shooting?", () -> shooting);
+    }
 
     @Override
     public void periodic() {
@@ -190,15 +201,6 @@ public class Indexer extends SubsystemBase {
                 stomachMotorOff();
                 towerMotorOff();
         }
-//        indexerTab.add("Indexer state", state.toString());
-//        indexerTab.add("Ball 1 Color", balls[0].getColor().toString());
-//        indexerTab.add("Ball 2 Color", balls[1].getColor().toString());
-//        indexerTab.add("Ball 1 Location", balls[0].getLocation().toString());
-//        indexerTab.add("Ball 2 Location", balls[1].getLocation().toString());
-//        indexerTab.add("tower", input.getValue());
-//        indexerTab.add("Reset", new InstantCommand(() -> setState(State.FIELD2)));
-//        indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
-//        indexerTab.add("Shooting?", shooting);
     }
 
     public void setState(State state) {
