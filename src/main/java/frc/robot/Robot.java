@@ -18,7 +18,7 @@ public class Robot extends TimedRobot {
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
-//  private final Compressor7 compressor = Compressor7.getInstance();
+  private final Compressor7 compressor = Compressor7.getInstance();
 
   private Command autonomousCommand;
 
