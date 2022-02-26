@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
@@ -25,6 +26,8 @@ public class Climber extends SubsystemBase {
     private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
     private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
 
+    private double halfway = 0;
+
     private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
 
     private final static Climber INSTANCE = new Climber();
@@ -40,16 +43,16 @@ public class Climber extends SubsystemBase {
         rightForwardSwitch.enableLimitSwitch(true);
         rightReverseSwitch.enableLimitSwitch(true);
 
-        leftEncoder.setPositionConversionFactor(1/Constants.CLIMBER_GEAR_RATIO);
-        rightEncoder.setPositionConversionFactor(1/Constants.CLIMBER_GEAR_RATIO);
-    }
+        rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
+        rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
+        leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
+        leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
 
-    @Override
-    public void periodic() {
-        climberTab.add("Right Front Limit Switch", rightForwardSwitch.isPressed());
-        climberTab.add("Right Reverse Limit Switch", rightReverseSwitch.isPressed());
-        climberTab.add("Left Front Limit Switch", leftForwardSwitch.isPressed());
-        climberTab.add("Left Reverse Limit Switch", leftReverseSwitch.isPressed());
+        climberTab.addNumber("Right Encoder", rightEncoder::getPosition);
+        climberTab.addBoolean("Right Front Limit Switch", rightForwardSwitch::isPressed);
+        climberTab.addBoolean("Right Reverse Limit Switch", rightReverseSwitch::isPressed);
+        climberTab.addBoolean("Left Front Limit Switch", leftForwardSwitch::isPressed);
+        climberTab.addBoolean("Left Reverse Limit Switch", leftReverseSwitch::isPressed);
     }
 
     public boolean getRightSensor() {
@@ -74,16 +77,33 @@ public class Climber extends SubsystemBase {
         rightEncoder.setPosition(0);
     }
 
+    public void enableSoftLimit() {
+        rightMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        rightMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        leftMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        leftMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    }
+
+    public double getEncoder() {
+        return rightEncoder.getPosition();
+    }
+
+    public void saveHalfway() {
+        halfway = rightEncoder.getPosition()/2;
+    }
+
     public boolean hasBeenCentered() {
-        return Math.abs(leftEncoder.getPosition() - Constants.CLIMBER_ROTATIONS_FRONT_TO_CENTER) < 0.02;
+        return rightEncoder.getPosition() >= halfway;
     }
 
     public boolean forwardAtLimit() {
-        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
+//        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
+        return rightForwardSwitch.isPressed();
     }
 
     public boolean reverseAtLimit() {
-        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
+//        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
+        return rightReverseSwitch.isPressed();
     }
 
     public void climbFront() {

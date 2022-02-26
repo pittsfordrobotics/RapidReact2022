@@ -17,7 +17,7 @@ public class RobotContainer {
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
-  private final Compressor7 compressor = Compressor7.getInstance();
+//  private final Compressor7 compressor = Compressor7.getInstance();
 
   private final BetterXboxController driverController = new BetterXboxController(0, BetterXboxController.Hand.LEFT, BetterXboxController.Humans.DRIVER);
   private final BetterXboxController operatorController = new BetterXboxController(1, BetterXboxController.Humans.OPERATOR);
@@ -29,7 +29,8 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(new DriveXbox());
-    compressor.setDefaultCommand(new CompressorSmart());
+    climber.setDefaultCommand(new ClimberSpeed());
+//    compressor.setDefaultCommand(new CompressorSmart());
 
     firstAutoChooser.setDefaultOption("No auto", null);
     firstAutoChooser.addOption("2 Ball Bottom Low", new AutoFirstBottomLow2());
@@ -44,15 +45,18 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 //    driverController.A.whenActive(new CG_LowShot());
-    driverController.B.whenPressed(new IntakeSmart());
+//    driverController.B.whenPressed(new IntakeSmart());
 //    driverController.Y.whenPressed(new DriveTurn(180));
-    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
+//    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
+    operatorController.A.whenActive(new CG_ClimberCalibrate());
+    operatorController.X.whenActive(new ClimberFrontSmart());
+    operatorController.Y.whenActive(new ClimberReverseSmart());
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
     driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
     driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
-    
+
 //    operatorController.RT.and(operatorController.LB.negate()).whileActiveContinuous(new ClimberFront());
 //    operatorController.RT.and(operatorController.LB).whileActiveContinuous(new ClimberReverse());
   }

@@ -31,9 +31,9 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        shooterTab.add("Shooter Target RPM", speed);
-        shooterTab.add("Shooter Actual", shooterEncoder.getVelocity());
-        shooterTab.add("Shooter up to Speed", isAtSpeed());
+//        shooterTab.add("Shooter Target RPM", speed).getEntry().setDouble(speed);
+//        shooterTab.add("Shooter Actual", shooterEncoder.getVelocity()).getEntry().setDouble(shooterEncoder.getVelocity());
+//        shooterTab.add("Shooter up to Speed", isAtSpeed()).getEntry().setBoolean(isAtSpeed());
     }
 
     public void setShooterSpeed(double speed) {

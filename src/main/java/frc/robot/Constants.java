@@ -1,6 +1,6 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+//// Copyright (c) FIRST and other WPILib contributors.
+//// Open Source Software; you can modify and/or share it under the terms of
+//// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
 
@@ -164,7 +164,7 @@ public final class Constants {
     public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_LOW4 = PathPlanner.loadPath("Ball5Low4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
 }
 
-// OLD ROBOT
+//// OLD ROBOT
 //public final class Constants {
 //    /**
 //     *
@@ -219,27 +219,6 @@ public final class Constants {
 //
 ///**
 // *
-// * HOOD
-// *
-// */
-//    public static final int HOOD_CAN_MAIN = 2;
-//
-//    public static final double HOOD_POSITION_GAIN = Double.NaN;
-//    public static final double HOOD_INTEGRAL_GAIN = Double.NaN;
-//    public static final double HOOD_DERIVATIVE_GAIN = Double.NaN;
-//    public static final double HOOD_ROTATIONS_TO_DEGREES = Double.NaN;
-//
-//    public static final float HOOD_POSITION_MAX = Float.NaN;
-//    public static final float HOOD_POSITION_LOW = Float.NaN;
-//
-//    public static final LookupTable HOOD_TABLE = new LookupTable();
-//
-//    static {
-//        HOOD_TABLE.put(0, 0);
-//    }
-//
-///**
-// *
 // * INDEXER
 // *
 // */
@@ -268,12 +247,6 @@ public final class Constants {
 //
 //    public static final double SHOOTER_LOW_SPEED = Double.NaN;
 //
-//    public static final LookupTable SHOOTER_TABLE = new LookupTable();
-//
-//    static {
-//        SHOOTER_TABLE.put(0,3000);
-//    }
-//
 ///**
 // *
 // * LIMELIGHT
@@ -299,9 +272,7 @@ public final class Constants {
 //    public static final int CLIMBER_SENSOR_LEFT = 2;
 //    public static final int CLIMBER_SENSOR_RIGHT = 3;
 //
-//    public static final double CLIMBER_SPEED = 0.1;
-//    public static final double CLIMBER_GEAR_RATIO = 125;
-//    public static final double CLIMBER_ROTATIONS_FRONT_TO_CENTER = -0.65;
+//    public static final double CLIMBER_SPEED = 0.3;
 //
 ///**
 // *
@@ -382,8 +353,8 @@ public final class Constants {
 //
 //    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_HIGH2 = PathPlanner.loadPath("LeftBall2High2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
 //    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_HIGH2 = PathPlanner.loadPath("BottomBall2High2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH3 = PathPlanner.loadPath("Ball3High3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH4 = PathPlanner.loadPath("Ball3High4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH3 = PathPlanner.loadPath("Ball5High3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-//    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH4 = PathPlanner.loadPath("Ball5High4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+////    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH3 = PathPlanner.loadPath("Ball3High3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+////    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_HIGH4 = PathPlanner.loadPath("Ball3High4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+////    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH3 = PathPlanner.loadPath("Ball5High3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+////    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_HIGH4 = PathPlanner.loadPath("Ball5High4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
 //}

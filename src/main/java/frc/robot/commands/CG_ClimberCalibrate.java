@@ -8,6 +8,7 @@ public class CG_ClimberCalibrate extends SequentialCommandGroup {
         super(
                 new ClimberFront(),
                 new ClimberResetEncoders(),
+                new ClimberReverse(),
                 new ClimberCenter(),
                 new ClimberResetEncoders()
         );

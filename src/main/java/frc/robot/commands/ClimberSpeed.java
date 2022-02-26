@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 import frc.robot.util.controller.BetterXboxController;
@@ -19,7 +21,7 @@ public class ClimberSpeed extends CommandBase {
 
     @Override
     public void execute() {
-        climber.setSpeed(operatorController.getBetterLeftY()*0.1);
+        climber.setSpeed(MathUtil.applyDeadband(operatorController.getBetterLeftY(),0.2));
     }
 
     @Override
