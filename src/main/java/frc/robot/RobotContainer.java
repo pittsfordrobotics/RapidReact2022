@@ -38,7 +38,7 @@ public class RobotContainer {
 
     secondAutoChooser.setDefaultOption("No auto", null);
     secondAutoChooser.addOption("3 Ball Low", new AutoSecondLow3());
-    secondAutoChooser.addOption("5 Ball Low", new AutoSecondLow5());
+    secondAutoChooser.addOption("4 Ball Low", new AutoSecondLow4());
 
 //    SmartDashboard.putData("Auto Command", commandChooser);
   }

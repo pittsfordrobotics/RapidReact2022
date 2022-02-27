@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 
-public class AutoSecondLow5 extends SequentialCommandGroup {
-    public AutoSecondLow5() {
+public class AutoSecondLow4 extends SequentialCommandGroup {
+    public AutoSecondLow4() {
         super(
             new IntakeDown(),
             new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_BALL5_LOW3),
