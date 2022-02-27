@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -16,7 +17,9 @@ public class Robot extends TimedRobot {
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
-//  private final Compressor7 compressor = Compressor7.getInstance();
+  private final Compressor7 compressor = Compressor7.getInstance();
+
+  private final PowerDistribution revPDH = new PowerDistribution();
 
   private Command autonomousCommand;
 
@@ -25,6 +28,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
+    revPDH.setSwitchableChannel(true);
     drive.coastMode();
   }
 

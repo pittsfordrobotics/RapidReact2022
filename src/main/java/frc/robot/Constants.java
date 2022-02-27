@@ -59,7 +59,7 @@ public final class Constants {
      */
     public static final int INTAKE_CAN_MAIN = 5;
 
-    public static final double INTAKE_MAIN_SPEED = 1; // figure out speed
+    public static final double INTAKE_MAIN_SPEED = 0.4; // figure out speed
 
     public static final int INTAKE_PNEUMATIC_LEFT_FORWARD = 0;
     public static final int INTAKE_PNEUMATIC_LEFT_REVERSE = 1;
@@ -70,14 +70,14 @@ public final class Constants {
     /**
      * INDEXER
      */
-    public static final int INDEXER_CAN_STOMACH = 7;
-    public static final int INDEXER_CAN_TOWER = 8;
+    public static final int INDEXER_CAN_STOMACH = 6;
+    public static final int INDEXER_CAN_TOWER = 7;
 
     public static final double INDEXER_STOMACH_SPEED = 0.6;
     public static final double INDEXER_TOWER_SPEED = 0.6;
 
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
-    public static final int INDEXER_COLOR_PROXIMITY = 500; // from 0 to 2047
+    public static final int INDEXER_COLOR_PROXIMITY = 500;
 
     public static final int INDEXER_SENSOR_TOWER = 0;
     public static final int INDEXER_SENSOR_SHOOTER = 1;
@@ -85,7 +85,7 @@ public final class Constants {
     /**
      * SHOOTER
      */
-    public static final int SHOOTER_CAN_MAIN = 9;
+    public static final int SHOOTER_CAN_MAIN = 8;
 
     public static final double SHOOTER_STATIC_GAIN = 1;
     public static final double SHOOTER_VELOCITY_GAIN = 1;
@@ -96,15 +96,13 @@ public final class Constants {
     /**
      * CLIMBER
      */
-    public static final int CLIMBER_CAN_LEFT = 10;
-    public static final int CLIMBER_CAN_RIGHT = 11;
+    public static final int CLIMBER_CAN_LEFT = 9;
+    public static final int CLIMBER_CAN_RIGHT = 10;
 
     public static final int CLIMBER_SENSOR_LEFT = 2;
     public static final int CLIMBER_SENSOR_RIGHT = 3;
 
     public static final double CLIMBER_SPEED = 1;
-    public static final double CLIMBER_GEAR_RATIO = 125;
-    public static final double CLIMBER_ROTATIONS_FRONT_TO_CENTER = -0.65;
 
     /**
      * TRAJECTORY:

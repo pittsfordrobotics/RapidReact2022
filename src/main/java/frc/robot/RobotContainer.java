@@ -17,7 +17,7 @@ public class RobotContainer {
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
-//  private final Compressor7 compressor = Compressor7.getInstance();
+  private final Compressor7 compressor = Compressor7.getInstance();
 
   private final BetterXboxController driverController = new BetterXboxController(0, BetterXboxController.Hand.LEFT, BetterXboxController.Humans.DRIVER);
   private final BetterXboxController operatorController = new BetterXboxController(1, BetterXboxController.Humans.OPERATOR);
@@ -30,7 +30,7 @@ public class RobotContainer {
 
     drive.setDefaultCommand(new DriveXbox());
     climber.setDefaultCommand(new ClimberSpeed());
-//    compressor.setDefaultCommand(new CompressorSmart());
+    compressor.setDefaultCommand(new CompressorSmart());
 
     firstAutoChooser.setDefaultOption("No auto", null);
     firstAutoChooser.addOption("2 Ball Bottom Low", new AutoFirstBottomLow2());
@@ -46,11 +46,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
 //    driverController.A.whenActive(new CG_LowShot());
 //    driverController.B.whenPressed(new IntakeSmart());
-//    driverController.Y.whenPressed(new DriveTurn(180));
+    driverController.X.whenPressed(new IntakeSmart());
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
     operatorController.A.whenActive(new CG_ClimberCalibrate());
-    operatorController.X.whenActive(new ClimberFrontSmart());
-    operatorController.Y.whenActive(new ClimberReverseSmart());
+//    operatorController.X.whenActive(new ClimberFrontSmart());
+//    operatorController.Y.whenActive(new ClimberReverseSmart());
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
