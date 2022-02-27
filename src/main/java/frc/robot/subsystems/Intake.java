@@ -14,7 +14,7 @@ public class Intake extends SubsystemBase {
     private final DoubleSolenoid solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_PNEUMATIC_RIGHT_FORWARD, Constants.INTAKE_PNEUMATIC_RIGHT_REVERSE);
     private final LazySparkMax motor = new LazySparkMax(Constants.INTAKE_CAN_MAIN, IdleMode.kBrake, 50);
 
-    private DoubleSolenoid.Value state = DoubleSolenoid.Value.kReverse;
+    private boolean isExtended = false;
 
     private final static Intake INSTANCE = new Intake();
     public static Intake getInstance() {
@@ -23,6 +23,7 @@ public class Intake extends SubsystemBase {
 
     private Intake() {
         retract();
+        SmartDashboard.putNumber("Intake Speed", 0.6);
     }
 
     @Override
@@ -31,13 +32,21 @@ public class Intake extends SubsystemBase {
     }
 
     public void extend() {
+        isExtended = true;
         solenoidLeft.set(DoubleSolenoid.Value.kForward);
         solenoidRight.set(DoubleSolenoid.Value.kForward);
     }
 
     public void retract() {
+        isExtended = false;
         solenoidLeft.set(DoubleSolenoid.Value.kReverse);
         solenoidRight.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void toggleSolenoid() {
+        isExtended = !isExtended;
+        solenoidLeft.toggle();
+        solenoidRight.toggle();
     }
 
     public void motorOn() {
@@ -53,11 +62,6 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean isExtended() {
-        return solenoidLeft.get() == DoubleSolenoid.Value.kForward;
-    }
-
-    public void toggleSolenoid() {
-        solenoidLeft.toggle();
-        solenoidRight.toggle();
+        return isExtended;
     }
 }

@@ -59,7 +59,7 @@ public final class Constants {
      */
     public static final int INTAKE_CAN_MAIN = 5;
 
-    public static final double INTAKE_MAIN_SPEED = 0.4; // figure out speed
+    public static final double INTAKE_MAIN_SPEED = 0.6;
 
     public static final int INTAKE_PNEUMATIC_LEFT_FORWARD = 0;
     public static final int INTAKE_PNEUMATIC_LEFT_REVERSE = 1;

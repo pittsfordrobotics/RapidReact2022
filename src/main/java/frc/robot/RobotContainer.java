@@ -44,9 +44,10 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-//    driverController.A.whenActive(new CG_LowShot());
-//    driverController.B.whenPressed(new IntakeSmart());
-    driverController.X.whenPressed(new IntakeSmart());
+//    driverController.X.whenActive(new CG_LowShot());
+    driverController.Y.whenPressed(new IntakeDown());
+    driverController.X.whenPressed(new IntakeUp());
+    driverController.A.whenPressed(new IntakeSmart());
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
     operatorController.A.whenActive(new CG_ClimberCalibrate());
 //    operatorController.X.whenActive(new ClimberFrontSmart());
