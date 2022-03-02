@@ -97,13 +97,11 @@ public class Climber extends SubsystemBase {
     }
 
     public boolean forwardAtLimit() {
-//        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
-        return rightForwardSwitch.isPressed();
+        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
     }
 
     public boolean reverseAtLimit() {
-//        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
-        return rightReverseSwitch.isPressed();
+        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
     }
 
     public void climbFront() {
