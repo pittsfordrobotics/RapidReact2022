@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
     revPDH.setSwitchableChannel(true);
     drive.coastMode();
+    intake.retract();
   }
 
   @Override

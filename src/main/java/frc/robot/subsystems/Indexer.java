@@ -42,24 +42,30 @@ public class Indexer extends SubsystemBase {
     }
 
     private Indexer() {
-        indexerTab.addString("Indexer state", state::toString);
-        indexerTab.addString("Ball 1 Color", balls[0].getColor()::toString);
-        indexerTab.addString("Ball 2 Color", balls[1].getColor()::toString);
-        indexerTab.addString("Ball 1 Location", balls[0].getLocation()::toString);
-        indexerTab.addString("Ball 2 Location", balls[1].getLocation()::toString);
-        indexerTab.addNumber("tower", input::getValue);
-        indexerTab.add("Reset", new InstantCommand(() -> setState(State.FIELD2)));
+        indexerTab.addString("Indexer state", () -> state.toString());
+        indexerTab.addString("Ball 1 Color", () -> balls[0].getColor().toString());
+        indexerTab.addString("Ball 2 Color", () -> balls[1].getColor().toString());
+        indexerTab.addString("Ball 1 Location", () -> balls[0].getLocation().toString());
+        indexerTab.addString("Ball 2 Location", () -> balls[1].getLocation().toString());
+        indexerTab.addBoolean("Intake boolean", this::getBallAtIntake);
+        indexerTab.addNumber("Intake proximity", colorSensorIntake::getProximity);
+        indexerTab.addBoolean("Tower boolean", this::getBallAtTower);
+        indexerTab.addBoolean("Shooter boolean", this::getBallAtShooter);
+        indexerTab.add("Reset", new InstantCommand(() -> resetThings()));
         indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
         indexerTab.addBoolean("Shooting?", () -> shooting);
     }
 
     @Override
     public void periodic() {
+        boolean ballCurrentlyAtIntake = getBallAtIntake();
+        boolean ballCurrentlyAtTower = getBallAtTower();
+        boolean ballCurrentlyAtShooter = getBallAtShooter();
         switch (state) {
             case FIELD2:
                 stomachMotorOff();
                 towerMotorOff();
-                if (getBallAtIntake()) {
+                if (ballCurrentlyAtIntake) {
                     intakeBall();
                     state = State.INTAKE1;
                 }
@@ -67,24 +73,27 @@ public class Indexer extends SubsystemBase {
             case INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
-                if (getBallAtTower() && !getBallAtIntake()) {
+                if (ballCurrentlyAtTower && !ballCurrentlyAtIntake) {
                     advanceToTower();
                     state = State.TOWER1;
+                    break;
                 }
-                else if (getBallAtTower() && getBallAtIntake()) {
+                if (ballCurrentlyAtTower && ballCurrentlyAtIntake) {
                     advanceToTower();
                     intakeBall();
                     state = State.TOWER1INTAKE1;
+                    break;
                 }
-                else if (!getBallAtTower() && getBallAtIntake()) {
+                if (!ballCurrentlyAtTower && ballCurrentlyAtIntake) {
                     intakeBall();
                     state = State.INTAKE2;
+                    break;
                 }
                 break;
             case INTAKE2:
                 stomachMotorOn();
                 towerMotorOff();
-                if (getBallAtTower()) {
+                if (ballCurrentlyAtTower) {
                     advanceToTower();
                     state = State.TOWER1INTAKE1;
                 }
@@ -92,44 +101,49 @@ public class Indexer extends SubsystemBase {
             case TOWER1INTAKE1:
                 stomachMotorOn();
                 towerMotorOn();
-                if (getBallAtShooter() && !getBallAtTower()) {
+                if (ballCurrentlyAtShooter && !ballCurrentlyAtTower) {
                     advanceToShooter();
                     state = State.ARMED1INTAKE1;
+                    break;
                 }
-                else if (getBallAtShooter() && getBallAtTower()) {
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
                     advanceToShooter();
                     advanceToTower();
                     state = State.ARMED2;
+                    break;
                 }
                 break;
             case TOWER1:
                 stomachMotorOff();
                 towerMotorOn();
-                if (getBallAtShooter() && !getBallAtIntake()) {
+                if (ballCurrentlyAtShooter && !ballCurrentlyAtIntake) {
                     advanceToShooter();
                     state = State.ARMED1;
+                    break;
                 }
-                else if (getBallAtShooter() && getBallAtIntake()) {
+                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     advanceToShooter();
                     intakeBall();
                     state = State.ARMED1INTAKE1;
+                    break;
                 }
-                else if (!getBallAtShooter() && getBallAtIntake()) {
+                if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     intakeBall();
                     state = State.TOWER1INTAKE1;
+                    break;
                 }
                 break;
             case ARMED1INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
-                if (getBallAtShooter() && getBallAtTower() && shooting) {
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && shooting) {
                     advanceToTower();
                     state = State.SHOOTING2;
                 }
                 else if (shooting) {
                     state = State.SHOOTING1INTAKE1;
                 }
-                else if (getBallAtShooter() && getBallAtTower()) {
+                else if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
                     advanceToTower();
                     state = State.ARMED2;
                 }
@@ -137,14 +151,15 @@ public class Indexer extends SubsystemBase {
             case ARMED1:
                 stomachMotorOff();
                 towerMotorOff();
-                if (getBallAtShooter() && getBallAtIntake() && shooting) {
+
+                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && shooting) {
                     intakeBall();
                     state = State.SHOOTING1INTAKE1;
                 }
                 else if (shooting) {
                     state = State.SHOOTING1;
                 }
-                else if (getBallAtShooter() && getBallAtIntake()) {
+                else if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     intakeBall();
                     state = State.ARMED1INTAKE1;
                 }
@@ -159,40 +174,46 @@ public class Indexer extends SubsystemBase {
             case SHOOTING1INTAKE1:
                 stomachMotorOn();
                 towerMotorOn();
-                if (!getBallAtShooter() && !getBallAtTower()) {
+                if (!ballCurrentlyAtShooter && !ballCurrentlyAtTower) {
                     shootBall();
                     state = State.INTAKE1;
+                    break;
                 }
-                else if (!getBallAtShooter() && getBallAtTower()) {
-                    advanceToTower();
-                    state = State.TOWER1;
-                }
-                else if (getBallAtShooter() && getBallAtTower() && shooting) {
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && shooting) {
                     advanceToTower();
                     state = State.SHOOTING2;
+                    break;
                 }
-                else if (getBallAtShooter() && getBallAtTower()) {
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
                     advanceToTower();
                     state = State.ARMED2;
+                    break;
+                }
+                if (!ballCurrentlyAtShooter && ballCurrentlyAtTower) {
+                    advanceToTower();
+                    state = State.TOWER1;
+                    break;
                 }
                 break;
             case SHOOTING1:
                 stomachMotorOff();
                 towerMotorOn();
-                if (!getBallAtShooter() && getBallAtIntake()) {
+                if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     intakeBall();
                     shootBall();
                     state = State.INTAKE1;
+                    break;
                 }
-                else if (!getBallAtShooter()) {
+                if (!ballCurrentlyAtShooter) {
                     shootBall();
                     state = State.FIELD2;
+                    break;
                 }
                 break;
             case SHOOTING2:
                 stomachMotorOn();
                 towerMotorOn();
-                if (!getBallAtShooter()) {
+                if (!ballCurrentlyAtShooter) {
                     shootBall();
                     state = State.TOWER1;
                 }
@@ -201,6 +222,11 @@ public class Indexer extends SubsystemBase {
                 stomachMotorOff();
                 towerMotorOff();
         }
+    }
+
+    public void resetThings() {
+        state = State.FIELD2;
+        resetBalls();
     }
 
     public void setState(State state) {
@@ -280,7 +306,7 @@ public class Indexer extends SubsystemBase {
 
     public boolean getBallAtShooter() {
 //        return !sensorShooter.get();
-        return input2.getValue() < 2000;
+        return input2.getValue() < 1700;
     }
 
     public void intakeBall() {
