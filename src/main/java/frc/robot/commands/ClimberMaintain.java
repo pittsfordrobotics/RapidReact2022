@@ -13,11 +13,12 @@ public class ClimberMaintain extends CommandBase {
 
     @Override
     public void initialize() {
+        climber.enableSoftLimit();
     }
 
     @Override
     public void execute() {
-        climber.climbFront();
+        climber.front();
     }
 
     @Override

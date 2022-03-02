@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 
-public class ClimberFrontSmart extends CommandBase {
+public class ClimberForward extends CommandBase {
     private final Climber climber = Climber.getInstance();
 
-    public ClimberFrontSmart() {
+    public ClimberForward() {
         addRequirements(this.climber);
     }
 
@@ -18,21 +18,16 @@ public class ClimberFrontSmart extends CommandBase {
 
     @Override
     public void execute() {
-        if (climber.getEncoder() < 75) {
-            climber.setSpeed(1);
-        }
-        else {
-            climber.setSpeed(0.6);
-        }
+        climber.front();
     }
 
     @Override
     public boolean isFinished() {
-        return climber.forwardAtLimit();
+        return climber.forwardAtHardLimit() || climber.forwardAtSoftLimit();
     }
 
     @Override
     public void end(boolean interrupted) {
-
+        climber.stopAll();
     }
 }

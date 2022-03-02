@@ -11,11 +11,11 @@ public class CG_ClimberAuto extends SequentialCommandGroup {
             new ClimberAlign(),
             new DrivePathing(Constants.TRAJECTORY_CLIMBER_BACKWARD),
             new ParallelCommandGroup(
-                new ClimberFront(),
+                new ClimberForward(),
                 new DrivePathing(Constants.TRAJECTORY_CLIMBER_FORWARD)
             ),
             new ClimberReverse(),
-            new ClimberFront(),
+            new ClimberForward(),
             new ClimberMaintain()
         );
     }

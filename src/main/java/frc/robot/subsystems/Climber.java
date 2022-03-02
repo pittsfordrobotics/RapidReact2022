@@ -12,6 +12,7 @@ import frc.robot.Constants;
 import frc.robot.commands.CG_ClimberCalibrate;
 import frc.robot.util.LazySparkMax;
 
+// TODO: retest climber code
 public class Climber extends SubsystemBase {
     private final LazySparkMax leftMotor = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kBrake, 50, true);
     private final LazySparkMax rightMotor = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kBrake, 50);
@@ -30,6 +31,10 @@ public class Climber extends SubsystemBase {
     private double halfway = 0;
 
     private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
+
+    public enum Position {
+        FRONT, BACK
+    }
 
     private final static Climber INSTANCE = new Climber();
     public static Climber getInstance() {
@@ -97,22 +102,46 @@ public class Climber extends SubsystemBase {
         return rightEncoder.getPosition() >= halfway;
     }
 
-    public boolean forwardAtLimit() {
-        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
+    public boolean forwardAtHardLimit() {
+        return rightForwardSwitch.isPressed() || leftForwardSwitch.isPressed();
     }
 
-    public boolean reverseAtLimit() {
-        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
+    public boolean reverseAtHardLimit() {
+        return rightForwardSwitch.isPressed() || leftForwardSwitch.isPressed();
     }
 
-    public void climbFront() {
-        leftMotor.set(Constants.CLIMBER_SPEED);
-        rightMotor.set(Constants.CLIMBER_SPEED);
+    public boolean forwardAtSoftLimit() {
+        return getEncoder() > 90;
     }
 
-    public void climbBack() {
-        leftMotor.set(-Constants.CLIMBER_SPEED);
-        rightMotor.set(-Constants.CLIMBER_SPEED);
+    public boolean reverseAtSoftLimit() {
+        return getEncoder() < -90;
+    }
+
+    public void front() {
+        if (getEncoder() < 75) {
+            setSpeed(1);
+        }
+        else {
+            setSpeed(0.6);
+        }
+    }
+
+    public void reverse() {
+        if (getEncoder() > -75) {
+            setSpeed(-1);
+        }
+        else {
+            setSpeed(-0.6);
+        }
+    }
+
+    public void calibrateFront() {
+        setSpeed(0.3);
+    }
+
+    public void calibrateReverse() {
+        setSpeed(-0.3);
     }
 
     public void stopAll() {

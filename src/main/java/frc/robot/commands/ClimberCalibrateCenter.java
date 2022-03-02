@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 
-public class ClimberCenter extends CommandBase {
+public class ClimberCalibrateCenter extends CommandBase {
     private final Climber climber = Climber.getInstance();
 
-    public ClimberCenter() {
+    public ClimberCalibrateCenter() {
         addRequirements(this.climber);
     }
 
@@ -18,7 +18,7 @@ public class ClimberCenter extends CommandBase {
 
     @Override
     public void execute() {
-        climber.climbFront();
+        climber.calibrateFront();
     }
 
     @Override

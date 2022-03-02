@@ -1,16 +1,13 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
-import frc.robot.util.controller.BetterXboxController;
 
-// TODO: maybe remove
-public class ClimberSpeed extends CommandBase {
+
+public class ClimberCalibrateForward extends CommandBase {
     private final Climber climber = Climber.getInstance();
-    private final BetterXboxController operatorController = BetterXboxController.getController(BetterXboxController.Humans.OPERATOR);
 
-    public ClimberSpeed() {
+    public ClimberCalibrateForward() {
         addRequirements(this.climber);
     }
 
@@ -20,16 +17,16 @@ public class ClimberSpeed extends CommandBase {
 
     @Override
     public void execute() {
-        climber.setSpeed(MathUtil.applyDeadband(operatorController.getBetterLeftY(),0.2));
+        climber.calibrateFront();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return climber.forwardAtHardLimit();
     }
 
     @Override
     public void end(boolean interrupted) {
-
+        climber.stopAll();
     }
 }

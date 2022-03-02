@@ -1,34 +1,33 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
+
 public class ClimberReverse extends CommandBase {
-  private final Climber climber = Climber.getInstance();
+    private final Climber climber = Climber.getInstance();
 
-  public ClimberReverse() {
-    addRequirements(this.climber);
-  }
+    public ClimberReverse() {
+        addRequirements(this.climber);
+    }
 
-  @Override
-  public void initialize() {}
+    @Override
+    public void initialize() {
+        climber.enableSoftLimit();
+    }
 
-  @Override
-  public void execute() {
-    climber.climbBack();
-  }
+    @Override
+    public void execute() {
+        climber.reverse();
+    }
 
-  @Override
-  public void end(boolean interrupted) {
-    climber.stopAll();
-  }
+    @Override
+    public boolean isFinished() {
+        return climber.reverseAtHardLimit() || climber.reverseAtSoftLimit();
+    }
 
-  @Override
-  public boolean isFinished() {
-    return climber.reverseAtLimit();
-  }
+    @Override
+    public void end(boolean interrupted) {
+        climber.stopAll();
+    }
 }

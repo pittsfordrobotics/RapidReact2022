@@ -50,15 +50,15 @@ public class RobotContainer {
     driverController.A.whenPressed(new IntakeSmart());
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
 //    operatorController.A.whenActive(new CG_ClimberCalibrate());
-//    operatorController.X.whenActive(new ClimberFrontSmart());
-//    operatorController.Y.whenActive(new ClimberReverseSmart());
+//    operatorController.X.whenActive(new ClimberForward());
+//    operatorController.Y.whenActive(new ClimberReverse());
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
     driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
     driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
 
-//    operatorController.RT.and(operatorController.LB.negate()).whileActiveContinuous(new ClimberFront());
+//    operatorController.RT.and(operatorController.LB.negate()).whileActiveContinuous(new ClimberForward());
 //    operatorController.RT.and(operatorController.LB).whileActiveContinuous(new ClimberReverse());
   }
 
