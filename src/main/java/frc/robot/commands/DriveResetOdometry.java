@@ -7,7 +7,7 @@ import frc.robot.subsystems.Drive;
 
 public class DriveResetOdometry extends CommandBase {
     private final Drive drive = Drive.getInstance();
-    private Trajectory trajectory;
+    private final Trajectory trajectory;
 
     public DriveResetOdometry(Trajectory trajectory) {
         this.trajectory = trajectory;

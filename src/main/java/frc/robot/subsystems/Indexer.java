@@ -51,13 +51,14 @@ public class Indexer extends SubsystemBase {
         indexerTab.addNumber("Intake proximity", colorSensorIntake::getProximity);
         indexerTab.addBoolean("Tower boolean", this::getBallAtTower);
         indexerTab.addBoolean("Shooter boolean", this::getBallAtShooter);
-        indexerTab.add("Reset", new InstantCommand(() -> resetThings()));
+        indexerTab.add("Reset", new InstantCommand(this::resetThings));
         indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
         indexerTab.addBoolean("Shooting?", () -> shooting);
     }
 
     @Override
     public void periodic() {
+//        TODO: recheck this statemachine because intelj is mad at me
         boolean ballCurrentlyAtIntake = getBallAtIntake();
         boolean ballCurrentlyAtTower = getBallAtTower();
         boolean ballCurrentlyAtShooter = getBallAtShooter();

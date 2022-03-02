@@ -16,13 +16,17 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
+import frc.robot.subsystems.Limelight.Pipelines;
+import frc.robot.util.InterpolatingTreeMap;
 
 import java.util.List;
 
-// TODO: NEW ROBOT
+// NEW ROBOT
 public final class Constants {
     /**
+     *
      * DRIVE
+     *
      */
     public static final int DRIVE_CAN_PIGEON = 0;
     public static final int DRIVE_CAN_RIGHT_LEADER = 1;
@@ -55,7 +59,9 @@ public final class Constants {
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
 
     /**
+     *
      * INTAKE
+     *
      */
     public static final int INTAKE_CAN_MAIN = 5;
 
@@ -68,7 +74,9 @@ public final class Constants {
     public static final int INTAKE_PNEUMATIC_RIGHT_REVERSE = 3;
 
     /**
+     *
      * INDEXER
+     *
      */
     public static final int INDEXER_CAN_STOMACH = 6;
     public static final int INDEXER_CAN_TOWER = 7;
@@ -83,7 +91,9 @@ public final class Constants {
     public static final int INDEXER_SENSOR_SHOOTER = 1;
 
     /**
+     *
      * SHOOTER
+     *
      */
     public static final int SHOOTER_CAN_MAIN = 8;
 
@@ -93,8 +103,32 @@ public final class Constants {
 
     public static final double SHOOTER_LOW_SPEED = 1;
 
+    public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
+
+    static {
+        SHOOTER_SPEED_MAP.put(0, 3000);
+    }
+
     /**
+     *
+     * LIMELIGHT
+     * all distances measured in inches
+     *
+     **/
+//    104 inches to top of goal
+//    101.625 inches to bottom of vision target
+//    middle is 102.8125 inches from field
+    public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.8125;
+    public static final double LIMELIGHT_MOUNTING_HEIGHT = 1;
+    public static final double LIMELIGHT_ANGLE = 40;
+
+    public static final Pipelines LIMELIGHT_PIPELINE = Pipelines.PRACTICE;
+
+
+    /**
+     *
      * CLIMBER
+     *
      */
     public static final int CLIMBER_CAN_LEFT = 9;
     public static final int CLIMBER_CAN_RIGHT = 10;
@@ -105,11 +139,12 @@ public final class Constants {
     public static final double CLIMBER_SPEED = 1;
 
     /**
+     *
      * TRAJECTORY:
      * x represents forward backward
      * y represents right left
-     * <p>
      * ALL IN METERS
+     *
      */
     private static final TrajectoryConfig TRAJECTORY_CONFIG = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
             .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS))
@@ -152,6 +187,7 @@ public final class Constants {
             TRAJECTORY_CONFIG
     );
 
+//    TODO: rework this mess and also do high trajectories
     public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_ALL1 = PathPlanner.loadPath("LeftBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_LOW2 = PathPlanner.loadPath("LeftBall2Low2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_ALL1 = PathPlanner.loadPath("BottomBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);

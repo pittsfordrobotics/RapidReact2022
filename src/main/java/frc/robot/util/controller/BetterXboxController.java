@@ -23,7 +23,7 @@ public class BetterXboxController extends XboxController {
     public final JoystickButton Start;
     public final JoystickButton Back;
 
-    private static HashMap<Humans, BetterXboxController> controllers = new HashMap<>();
+    private static final HashMap<Humans, BetterXboxController> controllers = new HashMap<>();
 
     public enum Hand {
         RIGHT, LEFT

@@ -44,7 +44,7 @@ public class Drive extends SubsystemBase {
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
 
-    private SlewRateLimiter rateLimit = new SlewRateLimiter(Constants.DRIVE_RATE_LIMIT);
+    private final SlewRateLimiter rateLimit = new SlewRateLimiter(Constants.DRIVE_RATE_LIMIT);
 
     private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 

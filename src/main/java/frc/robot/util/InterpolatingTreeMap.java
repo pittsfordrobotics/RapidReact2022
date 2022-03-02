@@ -2,10 +2,10 @@ package frc.robot.util;
 
 import java.util.TreeMap;
 
-public class LookupTable {
+public class InterpolatingTreeMap {
     private final TreeMap<InterpolatingDouble, InterpolatingDouble> treeMap;
 
-    public LookupTable() {
+    public InterpolatingTreeMap() {
         this.treeMap = new TreeMap<>();
     }
 
