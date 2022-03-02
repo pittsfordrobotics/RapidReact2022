@@ -21,7 +21,6 @@ public class DriveTurn extends CommandBase {
     addRequirements(this.drive);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
 //    pidController.setP(SmartDashboard.getNumber("PID TURN", 0));
@@ -30,20 +29,17 @@ public class DriveTurn extends CommandBase {
     pidController.setTolerance(1);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     drive.driveArcade(0, MathUtil.clamp(pidController.calculate(drive.getAngle()) + angle < 0 ? -0.1 : 0.1, -0.5, 0.5), false);
 //    SmartDashboard.putNumber("PID OUT", Math.min(pidController.calculate(drive.getAngle()),0.7));
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     drive.setThrottleWithTemp();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
    return pidController.atSetpoint();

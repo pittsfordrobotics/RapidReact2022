@@ -27,5 +27,6 @@ public class IndexerShoot extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        indexer.setStateStopShoot();
     }
 }

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.CG_ClimberCalibrate;
 import frc.robot.util.LazySparkMax;
 
 public class Climber extends SubsystemBase {
@@ -36,8 +37,6 @@ public class Climber extends SubsystemBase {
     }
 
     private Climber() {
-        resetEncoders();
-
         leftForwardSwitch.enableLimitSwitch(true);
         leftReverseSwitch.enableLimitSwitch(true);
         rightForwardSwitch.enableLimitSwitch(true);
@@ -48,6 +47,8 @@ public class Climber extends SubsystemBase {
         leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
         leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
 
+        climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
+        climberTab.addNumber("Left Encoder", leftEncoder::getPosition);
         climberTab.addNumber("Right Encoder", rightEncoder::getPosition);
         climberTab.addBoolean("Right Front Limit Switch", rightForwardSwitch::isPressed);
         climberTab.addBoolean("Right Reverse Limit Switch", rightReverseSwitch::isPressed);

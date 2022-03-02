@@ -17,7 +17,7 @@ public class ShooterZero extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setShooterSpeed(0);
+        shooter.motorOff();
     }
 
     @Override

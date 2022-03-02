@@ -23,4 +23,8 @@ public class DriveResetOdometry extends CommandBase {
     public boolean isFinished() {
         return true;
     }
+
+    @Override
+    public void end(boolean interrupted) {
+    }
 }

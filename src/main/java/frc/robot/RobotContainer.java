@@ -49,7 +49,7 @@ public class RobotContainer {
     driverController.X.whenPressed(new IntakeUp());
     driverController.A.whenPressed(new IntakeSmart());
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
-    operatorController.A.whenActive(new CG_ClimberCalibrate());
+//    operatorController.A.whenActive(new CG_ClimberCalibrate());
 //    operatorController.X.whenActive(new ClimberFrontSmart());
 //    operatorController.Y.whenActive(new ClimberReverseSmart());
 

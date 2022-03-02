@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
 
@@ -18,7 +17,7 @@ public class ShooterLow extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setShooterSpeed(Constants.SHOOTER_LOW_SPEED);
+        shooter.shootLow();
     }
 
     @Override

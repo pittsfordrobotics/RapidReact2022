@@ -37,17 +37,17 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
     }
 
-    public void setShooterSpeed(double speed) {
+    public void setSpeed(double speed) {
         shooterMotor.set(bangBangController.calculate(shooterEncoder.getVelocity(), speed) + 0.9 * shooterFeedforward.calculate(speed));
         this.speed = speed;
     }
 
     public void shootLow() {
-        setShooterSpeed(Constants.SHOOTER_LOW_SPEED);
+        setSpeed(Constants.SHOOTER_LOW_SPEED);
         this.speed = Constants.SHOOTER_LOW_SPEED;
     }
 
-    public void shooterOff() {
+    public void motorOff() {
         shooterMotor.set(bangBangController.calculate(shooterEncoder.getVelocity(), 0));
         this.speed = 0;
     }

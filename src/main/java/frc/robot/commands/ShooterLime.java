@@ -22,7 +22,7 @@ public class ShooterLime extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setShooterSpeed(Constants.SHOOTER_SPEED_MAP.lookup(limelight.getDistance()));
+        shooter.setSpeed(Constants.SHOOTER_SPEED_MAP.lookup(limelight.getDistance()));
     }
 
     @Override
