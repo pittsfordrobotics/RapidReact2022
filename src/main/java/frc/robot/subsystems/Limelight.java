@@ -15,7 +15,7 @@ public class Limelight extends SubsystemBase {
     private final ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
 
     public enum Pipelines {
-        PRACTICE(0), COMPETITION(1);
+        BASE(0), PRACTICE(1), COMPETITION(2);
 
         private final int num;
         Pipelines(int num) {
