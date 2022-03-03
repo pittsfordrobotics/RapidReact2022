@@ -6,8 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.CG_ClimberCalibrate;
 import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
 
@@ -18,6 +21,8 @@ public class Robot extends TimedRobot {
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
   private final Compressor7 compressor = Compressor7.getInstance();
+
+  private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
 
   private final PowerDistribution revPDH = new PowerDistribution();
 
@@ -65,6 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
     drive.brakeMode();
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
