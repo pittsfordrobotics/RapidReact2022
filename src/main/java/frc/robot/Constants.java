@@ -101,7 +101,8 @@ public final class Constants {
     public static final double SHOOTER_VELOCITY_GAIN = 1;
     public static final double SHOOTER_ACCELERATION_GAIN = 1;
 
-    public static final double SHOOTER_LOW_SPEED = 1;
+    public static final double SHOOTER_LOW_SPEED = 3000;
+    public static final double SHOOTER_HIGH_FENDER_SPEED = 5000;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
 
@@ -119,8 +120,8 @@ public final class Constants {
 //    101.625 inches to bottom of vision target
 //    middle is 102.8125 inches from field
     public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.8125;
-    public static final double LIMELIGHT_MOUNTING_HEIGHT = 1;
-    public static final double LIMELIGHT_ANGLE = 40;
+    public static final double LIMELIGHT_MOUNTING_HEIGHT = 24;
+    public static final double LIMELIGHT_ANGLE = 54;
 
     public static final Pipelines LIMELIGHT_PIPELINE = Pipelines.PRACTICE;
 
@@ -135,8 +136,6 @@ public final class Constants {
 
     public static final int CLIMBER_SENSOR_LEFT = 2;
     public static final int CLIMBER_SENSOR_RIGHT = 3;
-
-    public static final double CLIMBER_SPEED = 1;
 
     /**
      *

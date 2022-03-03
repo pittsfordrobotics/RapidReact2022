@@ -4,11 +4,11 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: more limelight testing
 public class Limelight extends SubsystemBase {
     private final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -63,13 +63,14 @@ public class Limelight extends SubsystemBase {
     private Limelight() {
         setLED(LED.OFF);
         setCamMode(CameraMode.DRIVER_CAMERA);
-    }
 
-    @Override
-    public void periodic() {
-        limelightTab.add("Has Target", hasTarget());
-        limelightTab.add("Horizontal", getHorizontal());
-        limelightTab.add("Vertical", getVertical());
+        limelightTab.add("Enable", new InstantCommand(this::enable));
+        limelightTab.add("Disable", new InstantCommand(this::disable));
+        limelightTab.addNumber("Distance", this::getDistance);
+        limelightTab.addBoolean("Has Target", this::hasTarget);
+        limelightTab.addNumber("Pipeline", this::getPipeline);
+        limelightTab.addNumber("Horizontal", this::getHorizontal);
+        limelightTab.addNumber("Vertical", this::getVertical);
     }
 
     public boolean hasTarget() {
@@ -86,6 +87,10 @@ public class Limelight extends SubsystemBase {
 
     public double getArea() {
         return limelight.getEntry("ta").getDouble(0.0);
+    }
+
+    public int getPipeline() {
+        return limelight.getEntry("pipeline").getNumber(0).intValue();
     }
 
     public void setPipeline(Pipelines pipeline) {

@@ -5,6 +5,7 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
@@ -30,7 +31,7 @@ public class Indexer extends SubsystemBase {
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private enum State {
-        FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2
+        FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, PURGE
     }
     private State state = State.FIELD2;
 
@@ -51,7 +52,7 @@ public class Indexer extends SubsystemBase {
         indexerTab.addNumber("Intake proximity", colorSensorIntake::getProximity);
         indexerTab.addBoolean("Tower boolean", this::getBallAtTower);
         indexerTab.addBoolean("Shooter boolean", this::getBallAtShooter);
-        indexerTab.add("Reset", new InstantCommand(this::resetThings));
+        indexerTab.add("Reset", new InstantCommand(this::resetEverything));
         indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
         indexerTab.addBoolean("Shooting?", () -> shooting);
     }
@@ -223,11 +224,18 @@ public class Indexer extends SubsystemBase {
                 stomachMotorOff();
                 towerMotorOff();
         }
+        SmartDashboard.putBoolean("Fully Loaded", fullyLoaded());
     }
 
-    public void resetThings() {
+    public void resetEverything() {
         state = State.FIELD2;
         resetBalls();
+    }
+
+    public void purge() {
+        state = State.PURGE;
+        stomachMotor.set(-Constants.INDEXER_STOMACH_SPEED);
+        towerMotor.set(-Constants.INDEXER_TOWER_SPEED);
     }
 
     public void setState(State state) {

@@ -26,7 +26,8 @@ public class RobotContainer {
   private final SendableChooser<Command> secondAutoChooser = new SendableChooser<>();
 
   public RobotContainer() {
-    configureButtonBindings();
+//    configureButtonBindings();
+    testButtons();
 
     drive.setDefaultCommand(new DriveXbox());
     climber.setDefaultCommand(new ClimberSpeed());
@@ -43,11 +44,11 @@ public class RobotContainer {
 //    SmartDashboard.putData("Auto Command", commandChooser);
   }
 
-  private void configureButtonBindings() {
-//    driverController.X.whenActive(new CG_LowShot());
+  private void testButtons() {
+    //    driverController.X.whenActive(new CG_LowShot());
     driverController.Y.whenPressed(new IntakeDown());
     driverController.X.whenPressed(new IntakeUp());
-    driverController.A.whenPressed(new IntakeSmart());
+    driverController.A.whenPressed(new IntakeToggle());
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
 //    operatorController.A.whenActive(new CG_ClimberCalibrate());
 //    operatorController.X.whenActive(new ClimberForward());
@@ -57,9 +58,26 @@ public class RobotContainer {
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
     driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
     driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
+  }
 
-//    operatorController.RT.and(operatorController.LB.negate()).whileActiveContinuous(new ClimberForward());
-//    operatorController.RT.and(operatorController.LB).whileActiveContinuous(new ClimberReverse());
+  private void configureButtonBindings() {
+    driverController.A.whenPressed(new IntakeToggle());
+    driverController.B.whenHeld(new CG_LowShot());
+    driverController.X.whenHeld(new CG_LimeShot());
+    driverController.Y.whenHeld(new CG_HighFenderShot());
+    driverController.LB.and(driverController.RB).whileActiveContinuous(new IndexerPurge());
+    driverController.DUp.whenPressed(new DriveSetThrottle(1));
+    driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
+    driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
+    driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
+
+    operatorController.A.whenPressed(new IntakeToggle());
+    operatorController.B.whenHeld(new CG_LowShot());
+    operatorController.X.whenHeld(new CG_LimeShot());
+    operatorController.Y.whenHeld(new CG_HighFenderShot());
+    operatorController.LB.and(operatorController.RB).whileActiveOnce(new IndexerPurge());
+
+    driverController.Start.and(operatorController.Start).whileActiveOnce(new CG_ClimberAuto());
   }
 
   public Command getAutonomousCommand() {

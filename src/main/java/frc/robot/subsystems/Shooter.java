@@ -47,6 +47,11 @@ public class Shooter extends SubsystemBase {
         this.speed = Constants.SHOOTER_LOW_SPEED;
     }
 
+    public void shootHighFender() {
+        setSpeed(Constants.SHOOTER_LOW_SPEED);
+        this.speed = Constants.SHOOTER_LOW_SPEED;
+    }
+
     public void motorOff() {
         shooterMotor.set(bangBangController.calculate(shooterEncoder.getVelocity(), 0));
         this.speed = 0;

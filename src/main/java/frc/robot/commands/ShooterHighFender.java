@@ -1,29 +1,28 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Shooter;
 
 
-public class ClimberMaintain extends CommandBase {
-    private final Climber climber = Climber.getInstance();
+public class ShooterHighFender extends CommandBase {
+    private Shooter shooter = Shooter.getInstance();
 
-    public ClimberMaintain() {
-        addRequirements(this.climber);
+    public ShooterHighFender() {
+        addRequirements(this.shooter);
     }
 
     @Override
     public void initialize() {
-        climber.enableSoftLimit();
     }
 
     @Override
     public void execute() {
-        climber.front();
+        shooter.shootHighFender();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override
