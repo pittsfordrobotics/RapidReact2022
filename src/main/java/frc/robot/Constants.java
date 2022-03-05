@@ -29,10 +29,10 @@ public final class Constants {
      *
      */
     public static final int DRIVE_CAN_PIGEON = 0;
-    public static final int DRIVE_CAN_RIGHT_LEADER = 1;
-    public static final int DRIVE_CAN_RIGHT_FOLLOWER = 2;
-    public static final int DRIVE_CAN_LEFT_LEADER = 3;
-    public static final int DRIVE_CAN_LEFT_FOLLOWER = 4;
+    public static final int DRIVE_CAN_RIGHT_LEADER = 3;
+    public static final int DRIVE_CAN_RIGHT_FOLLOWER = 4;
+    public static final int DRIVE_CAN_LEFT_LEADER = 1;
+    public static final int DRIVE_CAN_LEFT_FOLLOWER = 2;
 
     public static final double DRIVE_RATE_LIMIT = 1;
 
@@ -63,7 +63,7 @@ public final class Constants {
      * INTAKE
      *
      */
-    public static final int INTAKE_CAN_MAIN = 5;
+    public static final int INTAKE_CAN_MAIN = 10;
 
     public static final double INTAKE_MAIN_SPEED = 0.6;
 
@@ -78,8 +78,9 @@ public final class Constants {
      * INDEXER
      *
      */
-    public static final int INDEXER_CAN_STOMACH = 6;
-    public static final int INDEXER_CAN_TOWER = 7;
+    public static final int INDEXER_CAN_STOMACH_LEFT = 7; // conveyor
+    public static final int INDEXER_CAN_STOMACH_RIGHT = 8;
+    public static final int INDEXER_CAN_TOWER = 9; // elevator
 
     public static final double INDEXER_STOMACH_SPEED = 0.6;
     public static final double INDEXER_TOWER_SPEED = 0.6;
@@ -95,7 +96,8 @@ public final class Constants {
      * SHOOTER
      *
      */
-    public static final int SHOOTER_CAN_MAIN = 8;
+    public static final int SHOOTER_CAN_LEFT = 11;
+    public static final int SHOOTER_CAN_RIGHT = 12;
 
     public static final double SHOOTER_STATIC_GAIN = 1;
     public static final double SHOOTER_VELOCITY_GAIN = 1;
@@ -131,8 +133,8 @@ public final class Constants {
      * CLIMBER
      *
      */
-    public static final int CLIMBER_CAN_LEFT = 9;
-    public static final int CLIMBER_CAN_RIGHT = 10;
+    public static final int CLIMBER_CAN_LEFT = 5;
+    public static final int CLIMBER_CAN_RIGHT = 6;
 
     public static final int CLIMBER_SENSOR_LEFT = 2;
     public static final int CLIMBER_SENSOR_RIGHT = 3;
