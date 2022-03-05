@@ -15,8 +15,9 @@ import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 public class Indexer extends SubsystemBase {
-    private final LazySparkMax stomachMotor = new LazySparkMax(Constants.INDEXER_CAN_STOMACH, IdleMode.kBrake, 50);
-    private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake, 50);
+    private final LazySparkMax motorLeft = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_LEFT, IdleMode.kBrake, 30);
+    private final LazySparkMax motorRight = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_RIGHT, IdleMode.kBrake, 30, motorLeft);
+    private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake, 30);
 
     private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
 //    private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
@@ -234,7 +235,7 @@ public class Indexer extends SubsystemBase {
 
     public void purge() {
         state = State.PURGE;
-        stomachMotor.set(-Constants.INDEXER_STOMACH_SPEED);
+        motorLeft.set(-Constants.INDEXER_STOMACH_SPEED);
         towerMotor.set(-Constants.INDEXER_TOWER_SPEED);
     }
 
@@ -251,15 +252,15 @@ public class Indexer extends SubsystemBase {
     }
 
     public void stomachMotorOn() {
-        stomachMotor.set(Constants.INDEXER_STOMACH_SPEED);
+        motorLeft.set(Constants.INDEXER_STOMACH_SPEED);
     }
 
     public void stomachMotorOff() {
-        stomachMotor.stopMotor();
+        motorLeft.stopMotor();
     }
 
     public void towerMotorOn() {
-        stomachMotor.set(Constants.INDEXER_TOWER_SPEED);
+        motorLeft.set(Constants.INDEXER_TOWER_SPEED);
     }
 
     public void towerMotorOff() {
