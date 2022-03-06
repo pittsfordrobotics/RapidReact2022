@@ -54,7 +54,9 @@ public class RobotContainer {
 //    driverController.X.whenPressed(new IntakeUp());
 //    WHY IS THIS BROKEN
     driverController.Y.whenActive(new IntakeToggle());
-    driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
+//    TODO: test holding intake
+//    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
+    driverController.X.whileActiveContinuous(new ShooterDumb()).whenInactive(new ShooterZero());
 //    driverController.X.whenPressed(new IndexerShoot());
     driverController.A.whenActive(new InstantCommand(indexer::stomachMotorOn)).whenInactive(new InstantCommand(indexer::stomachMotorOff));
     driverController.B.whenActive(new InstantCommand(indexer::towerMotorOn)).whenInactive(new InstantCommand(indexer::towerMotorOff));
@@ -72,7 +74,6 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     driverController.A.whenPressed(new IntakeToggle());
-    driverController.B.whenHeld(new CG_SmartDashboardShoot()).whenInactive(new ShooterZero());
     driverController.B.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
     driverController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
     driverController.LB.and(driverController.RB).whileActiveContinuous(new IndexerPurge());
