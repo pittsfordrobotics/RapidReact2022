@@ -5,7 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -41,18 +43,21 @@ public class RobotContainer {
     secondAutoChooser.addOption("3 Ball Low", new AutoSecondLow3());
     secondAutoChooser.addOption("4 Ball Low", new AutoSecondLow4());
 
-//    SmartDashboard.putData("Auto Command", commandChooser);
+    //TODO: redo autos
+    SmartDashboard.putData("First Auto Command", firstAutoChooser);
+    SmartDashboard.putData("Second Auto Command", secondAutoChooser);
   }
 
   private void testButtons() {
 //        driverController.X.whenActive(new CG_LowShot());
 //    driverController.Y.whenPressed(new IntakeDown());
 //    driverController.X.whenPressed(new IntakeUp());
-//    driverController.A.whenPressed(new IntakeToggle());
+//    WHY IS THIS BROKEN
+    driverController.Y.whenActive(new IntakeToggle());
     driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
 //    driverController.X.whenPressed(new IndexerShoot());
-    driverController.A.whenHeld(new IndexerBoth()).whenInactive(indexer::stomachMotorOff);
-    driverController.B.whenHeld(new IndexerTowerAll()).whenInactive(indexer::towerMotorOff);
+    driverController.A.whenActive(new InstantCommand(indexer::stomachMotorOn)).whenInactive(new InstantCommand(indexer::stomachMotorOff));
+    driverController.B.whenActive(new InstantCommand(indexer::towerMotorOn)).whenInactive(new InstantCommand(indexer::towerMotorOff));
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
 //    operatorController.A.whenActive(new CG_ClimberCalibrate());
 //    operatorController.X.whenActive(new ClimberForward());
@@ -62,6 +67,7 @@ public class RobotContainer {
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
     driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
     driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
+
   }
 
   private void configureButtonBindings() {

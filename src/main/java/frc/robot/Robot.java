@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
     robotContainer = new RobotContainer();
     revPDH.setSwitchableChannel(true);
     drive.coastMode();
@@ -70,7 +71,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
     drive.brakeMode();
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
