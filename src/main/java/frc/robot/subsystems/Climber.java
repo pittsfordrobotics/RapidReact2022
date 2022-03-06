@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,10 +21,8 @@ public class Climber extends SubsystemBase {
     private final SparkMaxLimitSwitch rightForwardSwitch = rightMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     private final SparkMaxLimitSwitch rightReverseSwitch = rightMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
-//    private final DigitalInput leftSensor = new DigitalInput(Constants.CLIMBER_SENSOR_LEFT);
-//    private final DigitalInput rightSensor = new DigitalInput(Constants.CLIMBER_SENSOR_RIGHT);
-    private final AnalogInput leftSensor = new AnalogInput(Constants.CLIMBER_SENSOR_LEFT);
-    private final AnalogInput rightSensor = new AnalogInput(Constants.CLIMBER_SENSOR_RIGHT);
+    private final DigitalInput leftSensor = new DigitalInput(Constants.CLIMBER_SENSOR_LEFT);
+    private final DigitalInput rightSensor = new DigitalInput(Constants.CLIMBER_SENSOR_RIGHT);
 
     private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
     private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
@@ -52,9 +50,6 @@ public class Climber extends SubsystemBase {
         climberTab.addNumber("Left Encoder", leftEncoder::getPosition);
         climberTab.addNumber("Right Encoder", rightEncoder::getPosition);
 
-        climberTab.addNumber("Right Sensor Number", rightSensor::getValue);
-        climberTab.addNumber("Left Sensor Number", leftSensor::getValue);
-
         climberTab.addBoolean("Right Sensor", this::getRightSensor);
         climberTab.addBoolean("Left Sensor", this::getLeftSensor);
         climberTab.addBoolean("Right Front Limit Switch", rightForwardSwitch::isPressed);
@@ -64,13 +59,11 @@ public class Climber extends SubsystemBase {
     }
 
     public boolean getRightSensor() {
-        return rightSensor.getValue() > 1700;
-//        return rightSensor.get();
+        return !rightSensor.get();
     }
 
     public boolean getLeftSensor() {
-        return leftSensor.getValue() > 1700;
-//        return leftSensor.get();
+        return !leftSensor.get();
     }
 
     public void setSpeed(double speed) {

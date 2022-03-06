@@ -2,8 +2,18 @@ package frc.robot.util;
 
 import com.revrobotics.CANSparkMax;
 
+/**
+ * This is a thick wrapper for CANSparkMax because I am lazy, that reduces code
+ */
 public class LazySparkMax extends CANSparkMax {
 
+    /**
+     * Lazy Spark Max
+     * @param port port of CAN ID of CANSparkMax
+     * @param mode Brake or Coast
+     * @param currentLimit Something less than 80 Amps
+     * @param inverted Inverted?
+     */
     public LazySparkMax(int port, IdleMode mode, int currentLimit, boolean inverted) {
         super(port, MotorType.kBrushless);
         restoreFactoryDefaults();
@@ -21,7 +31,6 @@ public class LazySparkMax extends CANSparkMax {
     public LazySparkMax(int port, IdleMode mode, int currentLimit, boolean inverted, CANSparkMax leader) {
         super(port, MotorType.kBrushless);
         restoreFactoryDefaults();
-        setInverted(inverted);
         setIdleMode(mode);
         getEncoder().setPosition(0);
         setSmartCurrentLimit(currentLimit);

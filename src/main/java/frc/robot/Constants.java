@@ -67,11 +67,11 @@ public final class Constants {
 
     public static final double INTAKE_MAIN_SPEED = 0.6;
 
-    public static final int INTAKE_PNEUMATIC_LEFT_FORWARD = 0;
-    public static final int INTAKE_PNEUMATIC_LEFT_REVERSE = 1;
+    public static final int INTAKE_PNEUMATIC_LEFT_FORWARD = 2;
+    public static final int INTAKE_PNEUMATIC_LEFT_REVERSE = 3;
 
-    public static final int INTAKE_PNEUMATIC_RIGHT_FORWARD = 2;
-    public static final int INTAKE_PNEUMATIC_RIGHT_REVERSE = 3;
+    public static final int INTAKE_PNEUMATIC_RIGHT_FORWARD = 0;
+    public static final int INTAKE_PNEUMATIC_RIGHT_REVERSE = 1;
 
     /**
      *
@@ -104,7 +104,6 @@ public final class Constants {
     public static final double SHOOTER_ACCELERATION_GAIN = 1;
 
     public static final double SHOOTER_LOW_SPEED = 3000;
-    public static final double SHOOTER_HIGH_FENDER_SPEED = 5000;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
 

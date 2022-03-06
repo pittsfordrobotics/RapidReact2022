@@ -7,13 +7,14 @@ import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 public class Shooter extends SubsystemBase {
     private final LazySparkMax motorLeft = new LazySparkMax(Constants.SHOOTER_CAN_LEFT, IdleMode.kCoast, 60, false);
-    private final LazySparkMax motorRight = new LazySparkMax(Constants.SHOOTER_CAN_RIGHT, IdleMode.kCoast, 60, false, motorLeft);
+    private final LazySparkMax motorRight = new LazySparkMax(Constants.SHOOTER_CAN_RIGHT, IdleMode.kCoast, 60, true, motorLeft);
     private final RelativeEncoder shooterEncoder = motorLeft.getEncoder();
 
     private final SimpleMotorFeedforward shooterFeedforward = new SimpleMotorFeedforward(Constants.SHOOTER_STATIC_GAIN, Constants.SHOOTER_VELOCITY_GAIN, Constants.SHOOTER_ACCELERATION_GAIN);
@@ -29,6 +30,7 @@ public class Shooter extends SubsystemBase {
     }
 
     private Shooter() {
+        SmartDashboard.putNumber("Shooter Guess Speed", 0);
         shooterTab.addNumber("Shooter Target RPM", () -> speed);
         shooterTab.addNumber("Shooter Actual", shooterEncoder::getVelocity);
         shooterTab.addBoolean("Shooter up to Speed", this::isAtSpeed);
@@ -36,6 +38,20 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+    }
+
+    public void setSmartDashboard() {
+        this.speed = SmartDashboard.getNumber("Shooter Guess Speed", 0);
+        setSpeed(speed);
+    }
+
+    public void setDumbSpeed() {
+        this.speed = 0.4;
+        motorLeft.set(speed);
+    }
+
+    public void dumbOff() {
+        motorLeft.stopMotor();
     }
 
     public void setSpeed(double speed) {
@@ -53,7 +69,7 @@ public class Shooter extends SubsystemBase {
         this.speed = Constants.SHOOTER_LOW_SPEED;
     }
 
-    public void motorOff() {
+    public void shootStop() {
         motorLeft.set(bangBangController.calculate(shooterEncoder.getVelocity(), 0));
         this.speed = 0;
     }

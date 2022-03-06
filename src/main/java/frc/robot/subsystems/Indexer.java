@@ -2,7 +2,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ColorSensorV3;
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,15 +16,13 @@ import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 public class Indexer extends SubsystemBase {
-    private final LazySparkMax motorLeft = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_LEFT, IdleMode.kBrake, 30);
-    private final LazySparkMax motorRight = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_RIGHT, IdleMode.kBrake, 30, motorLeft);
-    private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake, 30);
+    private final LazySparkMax motorLeft = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_LEFT, IdleMode.kBrake, 30, true);
+    private final LazySparkMax motorRight = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_RIGHT, IdleMode.kBrake, 30, false, motorLeft);
+    private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake, 30, true);
 
     private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
-//    private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
-//    private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
-    private final AnalogInput input = new AnalogInput(0);
-    private final AnalogInput input2 = new AnalogInput(1);
+    private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
+    private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
 
     private boolean shooting = false;
     private boolean ballStillAtIntake = false;
@@ -36,6 +35,8 @@ public class Indexer extends SubsystemBase {
     }
     private State state = State.FIELD2;
 
+    private COLOR allianceColor = COLOR.UNKNOWN;
+
     private final ShuffleboardTab indexerTab = Shuffleboard.getTab("Indexer");
 
     private final static Indexer INSTANCE = new Indexer();
@@ -44,6 +45,9 @@ public class Indexer extends SubsystemBase {
     }
 
     private Indexer() {
+        indexerTab.add("Reset", new InstantCommand(this::resetEverything));
+        indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
+        indexerTab.addString("Alliance Color", () -> allianceColor.toString());
         indexerTab.addString("Indexer state", () -> state.toString());
         indexerTab.addString("Ball 1 Color", () -> balls[0].getColor().toString());
         indexerTab.addString("Ball 2 Color", () -> balls[1].getColor().toString());
@@ -51,16 +55,14 @@ public class Indexer extends SubsystemBase {
         indexerTab.addString("Ball 2 Location", () -> balls[1].getLocation().toString());
         indexerTab.addBoolean("Intake boolean", this::getBallAtIntake);
         indexerTab.addNumber("Intake proximity", colorSensorIntake::getProximity);
+        indexerTab.addBoolean("sensor 1", () -> !sensorTower.get());
         indexerTab.addBoolean("Tower boolean", this::getBallAtTower);
         indexerTab.addBoolean("Shooter boolean", this::getBallAtShooter);
-        indexerTab.add("Reset", new InstantCommand(this::resetEverything));
-        indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
         indexerTab.addBoolean("Shooting?", () -> shooting);
     }
 
     @Override
     public void periodic() {
-//        TODO: recheck this statemachine because intelj is mad at me
         boolean ballCurrentlyAtIntake = getBallAtIntake();
         boolean ballCurrentlyAtTower = getBallAtTower();
         boolean ballCurrentlyAtShooter = getBallAtShooter();
@@ -226,6 +228,24 @@ public class Indexer extends SubsystemBase {
                 towerMotorOff();
         }
         SmartDashboard.putBoolean("Fully Loaded", fullyLoaded());
+        getAllianceColor();
+    }
+
+    public void getAllianceColor() {
+        if (allianceColor == COLOR.UNKNOWN) {
+            switch (DriverStation.getAlliance()){
+                case Red:
+                    allianceColor = COLOR.RED;
+                    break;
+                case Blue:
+                    allianceColor = COLOR.BLUE;
+                    break;
+                case Invalid:
+                default:
+                    allianceColor = COLOR.UNKNOWN;
+                    break;
+            }
+        }
     }
 
     public void resetEverything() {
@@ -260,7 +280,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public void towerMotorOn() {
-        motorLeft.set(Constants.INDEXER_TOWER_SPEED);
+        towerMotor.set(Constants.INDEXER_TOWER_SPEED);
     }
 
     public void towerMotorOff() {
@@ -303,20 +323,17 @@ public class Indexer extends SubsystemBase {
     public boolean getBallAtTower() {
         boolean ballAtTower = false;
         if (ballStillAtTower) {
-//            ballStillAtTower = !sensorTower.get();
-            ballStillAtTower = input.getValue() < 1700;
+            ballStillAtTower = sensorTower.get();
         }
         else {
-//            ballAtTower = !sensorTower.get();
-            ballAtTower =  input.getValue() < 1700;
+            ballAtTower = sensorTower.get();
             ballStillAtTower = ballAtTower;
         }
         return ballAtTower;
     }
 
     public boolean getBallAtShooter() {
-//        return !sensorShooter.get();
-        return input2.getValue() < 1700;
+        return sensorShooter.get();
     }
 
     public void intakeBall() {
@@ -355,4 +372,11 @@ public class Indexer extends SubsystemBase {
         return state == State.ARMED2;
     }
 
+    public boolean isRightColorBall() {
+        return balls[0].getColor() == allianceColor;
+    }
+
+    public boolean allianceIsUnknown() {
+        return allianceColor == COLOR.UNKNOWN;
+    }
 }

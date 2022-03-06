@@ -20,7 +20,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
@@ -67,6 +66,7 @@ public class Drive extends SubsystemBase {
         setThrottle(0.7);
 
         driveTab.addNumber("Pigeon", pigeon::getAngle);
+        driveTab.addNumber("Throttle", this::getThrottle);
     }
 
     @Override
@@ -77,8 +77,6 @@ public class Drive extends SubsystemBase {
                 rightEncoder.getPosition());
 
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
-
-        SmartDashboard.putNumber("Throttle", throttle);
     }
 
     public void driveArcade(double speed, double rotation, boolean squared) {

@@ -45,10 +45,14 @@ public class RobotContainer {
   }
 
   private void testButtons() {
-    //    driverController.X.whenActive(new CG_LowShot());
-    driverController.Y.whenPressed(new IntakeDown());
-    driverController.X.whenPressed(new IntakeUp());
-    driverController.A.whenPressed(new IntakeToggle());
+//        driverController.X.whenActive(new CG_LowShot());
+//    driverController.Y.whenPressed(new IntakeDown());
+//    driverController.X.whenPressed(new IntakeUp());
+//    driverController.A.whenPressed(new IntakeToggle());
+    driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
+//    driverController.X.whenPressed(new IndexerShoot());
+    driverController.A.whenHeld(new IndexerBoth()).whenInactive(indexer::stomachMotorOff);
+    driverController.B.whenHeld(new IndexerTowerAll()).whenInactive(indexer::towerMotorOff);
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
 //    operatorController.A.whenActive(new CG_ClimberCalibrate());
 //    operatorController.X.whenActive(new ClimberForward());
@@ -62,9 +66,9 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     driverController.A.whenPressed(new IntakeToggle());
+    driverController.B.whenHeld(new CG_SmartDashboardShoot()).whenInactive(new ShooterZero());
     driverController.B.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
     driverController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
-    driverController.Y.whenHeld(new CG_HighFenderShot()).whenInactive(new ShooterZero());
     driverController.LB.and(driverController.RB).whileActiveContinuous(new IndexerPurge());
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
@@ -74,7 +78,6 @@ public class RobotContainer {
     operatorController.A.whenPressed(new IntakeToggle());
     operatorController.B.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
     operatorController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
-    operatorController.Y.whenHeld(new CG_HighFenderShot()).whenInactive(new ShooterZero());
     operatorController.LB.and(operatorController.RB).whileActiveOnce(new IndexerPurge());
 
     driverController.Start.and(operatorController.Start).whileActiveOnce(new CG_ClimberAuto());

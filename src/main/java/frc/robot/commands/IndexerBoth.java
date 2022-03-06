@@ -2,15 +2,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Shooter;
 
 
-public class ShooterZero extends CommandBase {
-    private final Shooter shooter = Shooter.getInstance();
+public class IndexerBoth extends CommandBase {
     private final Indexer indexer = Indexer.getInstance();
 
-    public ShooterZero() {
-        addRequirements(this.shooter, this.indexer);
+    public IndexerBoth() {
+        addRequirements(this.indexer);
     }
 
     @Override
@@ -19,16 +17,16 @@ public class ShooterZero extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.shootStop();
-        indexer.setStateStopShoot();
+        indexer.stomachMotorOn();
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
+        indexer.stomachMotorOff();
     }
 }
