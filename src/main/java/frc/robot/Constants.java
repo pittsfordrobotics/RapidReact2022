@@ -171,22 +171,6 @@ public final class Constants {
             TRAJECTORY_CONFIG_REVERSED
     );
 
-    public static final Trajectory TRAJECTORY_CLIMBER_BACKWARD = TrajectoryGenerator.generateTrajectory(
-            List.of(
-                    new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                    new Pose2d(-1, 0, Rotation2d.fromDegrees(0))
-            ),
-            TRAJECTORY_CONFIG_REVERSED
-    );
-
-    public static final Trajectory TRAJECTORY_CLIMBER_FORWARD = TrajectoryGenerator.generateTrajectory(
-            List.of(
-                    new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                    new Pose2d(0.5, 0, Rotation2d.fromDegrees(0))
-            ),
-            TRAJECTORY_CONFIG
-    );
-
     //    TODO: rework this mess and also do high trajectories
     public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_ALL1 = PathPlanner.loadPath("LeftBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_LOW2 = PathPlanner.loadPath("LeftBall2Low2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
