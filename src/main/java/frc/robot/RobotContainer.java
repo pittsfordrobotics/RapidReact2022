@@ -75,16 +75,17 @@ public class RobotContainer {
     driverController.A.whenPressed(new IntakeToggle());
     driverController.B.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
     driverController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
-    driverController.LB.and(driverController.RB).whileActiveContinuous(new IndexerPurge());
+    driverController.LB.and(driverController.RB).whileActiveContinuous(new IndexerOverride());
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
     driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
     driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
 
     operatorController.A.whenPressed(new IntakeToggle());
+    operatorController.Y.whenHeld(new IndexerOverride());
     operatorController.B.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
     operatorController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
-    operatorController.LB.and(operatorController.RB).whileActiveOnce(new IndexerPurge());
+    operatorController.LB.and(operatorController.RB).whileActiveOnce(new IndexerOverride());
 
     driverController.Start.and(operatorController.Start).whileActiveOnce(new CG_ClimberAuto());
   }

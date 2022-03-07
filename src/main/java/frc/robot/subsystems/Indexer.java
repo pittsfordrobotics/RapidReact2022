@@ -31,7 +31,7 @@ public class Indexer extends SubsystemBase {
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private enum State {
-        FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, PURGE
+        FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
     }
     private State state = State.FIELD2;
 
@@ -68,167 +68,170 @@ public class Indexer extends SubsystemBase {
         boolean ballCurrentlyAtIntake = false;
         boolean ballCurrentlyAtTower = getBallAtTower();
         boolean ballCurrentlyAtShooter = getBallAtShooter();
-//        switch (state) {
-//            case FIELD2:
-//                stomachMotorOff();
-//                towerMotorOff();
-//                if (ballCurrentlyAtIntake) {
-//                    intakeBall();
-//                    state = State.INTAKE1;
-//                }
-//                break;
-//            case INTAKE1:
-//                stomachMotorOn();
-//                towerMotorOff();
-//                if (ballCurrentlyAtTower && !ballCurrentlyAtIntake) {
-//                    advanceToTower();
-//                    state = State.TOWER1;
-//                    break;
-//                }
-//                if (ballCurrentlyAtTower && ballCurrentlyAtIntake) {
-//                    advanceToTower();
-//                    intakeBall();
-//                    state = State.TOWER1INTAKE1;
-//                    break;
-//                }
-//                if (!ballCurrentlyAtTower && ballCurrentlyAtIntake) {
-//                    intakeBall();
-//                    state = State.INTAKE2;
-//                    break;
-//                }
-//                break;
-//            case INTAKE2:
-//                stomachMotorOn();
-//                towerMotorOff();
-//                if (ballCurrentlyAtTower) {
-//                    advanceToTower();
-//                    state = State.TOWER1INTAKE1;
-//                }
-//                break;
-//            case TOWER1INTAKE1:
-//                stomachMotorOn();
-//                towerMotorOn();
-//                if (ballCurrentlyAtShooter && !ballCurrentlyAtTower) {
-//                    advanceToShooter();
-//                    state = State.ARMED1INTAKE1;
-//                    break;
-//                }
-//                if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
-//                    advanceToShooter();
-//                    advanceToTower();
-//                    state = State.ARMED2;
-//                    break;
-//                }
-//                break;
-//            case TOWER1:
-//                stomachMotorOff();
-//                towerMotorOn();
-//                if (ballCurrentlyAtShooter && !ballCurrentlyAtIntake) {
-//                    advanceToShooter();
-//                    state = State.ARMED1;
-//                    break;
-//                }
-//                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
-//                    advanceToShooter();
-//                    intakeBall();
-//                    state = State.ARMED1INTAKE1;
-//                    break;
-//                }
-//                if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
-//                    intakeBall();
-//                    state = State.TOWER1INTAKE1;
-//                    break;
-//                }
-//                break;
-//            case ARMED1INTAKE1:
-//                stomachMotorOn();
-//                towerMotorOff();
-//                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && shooting) {
-//                    advanceToTower();
-//                    state = State.SHOOTING2;
-//                }
-//                else if (shooting) {
-//                    state = State.SHOOTING1INTAKE1;
-//                }
-//                else if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
-//                    advanceToTower();
-//                    state = State.ARMED2;
-//                }
-//                break;
-//            case ARMED1:
-//                stomachMotorOff();
-//                towerMotorOff();
-//
-//                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && shooting) {
-//                    intakeBall();
-//                    state = State.SHOOTING1INTAKE1;
-//                }
-//                else if (shooting) {
-//                    state = State.SHOOTING1;
-//                }
-//                else if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
-//                    intakeBall();
-//                    state = State.ARMED1INTAKE1;
-//                }
-//                break;
-//            case ARMED2:
-//                stomachMotorOff();
-//                towerMotorOff();
-//                if (shooting) {
-//                    state = State.SHOOTING2;
-//                }
-//                break;
-//            case SHOOTING1INTAKE1:
-//                stomachMotorOn();
-//                towerMotorOn();
-//                if (!ballCurrentlyAtShooter && !ballCurrentlyAtTower) {
-//                    shootBall();
-//                    state = State.INTAKE1;
-//                    break;
-//                }
-//                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && shooting) {
-//                    advanceToTower();
-//                    state = State.SHOOTING2;
-//                    break;
-//                }
-//                if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
-//                    advanceToTower();
-//                    state = State.ARMED2;
-//                    break;
-//                }
-//                if (!ballCurrentlyAtShooter && ballCurrentlyAtTower) {
-//                    advanceToTower();
-//                    state = State.TOWER1;
-//                    break;
-//                }
-//                break;
-//            case SHOOTING1:
-//                stomachMotorOff();
-//                towerMotorOn();
-//                if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
-//                    intakeBall();
-//                    shootBall();
-//                    state = State.INTAKE1;
-//                    break;
-//                }
-//                if (!ballCurrentlyAtShooter) {
-//                    shootBall();
-//                    state = State.FIELD2;
-//                    break;
-//                }
-//                break;
-//            case SHOOTING2:
-//                stomachMotorOn();
-//                towerMotorOn();
-//                if (!ballCurrentlyAtShooter) {
-//                    shootBall();
-//                    state = State.TOWER1;
-//                }
-//                break;
-//            default:
-//                stomachMotorOff();
-//                towerMotorOff();
-//        }
+        switch (state) {
+            case FIELD2:
+                stomachMotorOff();
+                towerMotorOff();
+                if (ballCurrentlyAtIntake) {
+                    intakeBall();
+                    state = State.INTAKE1;
+                }
+                break;
+            case INTAKE1:
+                stomachMotorOn();
+                towerMotorOff();
+                if (ballCurrentlyAtTower && !ballCurrentlyAtIntake) {
+                    advanceToTower();
+                    state = State.TOWER1;
+                    break;
+                }
+                if (ballCurrentlyAtTower && ballCurrentlyAtIntake) {
+                    advanceToTower();
+                    intakeBall();
+                    state = State.TOWER1INTAKE1;
+                    break;
+                }
+                if (!ballCurrentlyAtTower && ballCurrentlyAtIntake) {
+                    intakeBall();
+                    state = State.INTAKE2;
+                    break;
+                }
+                break;
+            case INTAKE2:
+                stomachMotorOn();
+                towerMotorOff();
+                if (ballCurrentlyAtTower) {
+                    advanceToTower();
+                    state = State.TOWER1INTAKE1;
+                }
+                break;
+            case TOWER1INTAKE1:
+                stomachMotorOn();
+                towerMotorOn();
+                if (ballCurrentlyAtShooter && !ballCurrentlyAtTower) {
+                    advanceToShooter();
+                    state = State.ARMED1INTAKE1;
+                    break;
+                }
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
+                    advanceToShooter();
+                    advanceToTower();
+                    state = State.ARMED2;
+                    break;
+                }
+                break;
+            case TOWER1:
+                stomachMotorOff();
+                towerMotorOn();
+                if (ballCurrentlyAtShooter && !ballCurrentlyAtIntake) {
+                    advanceToShooter();
+                    state = State.ARMED1;
+                    break;
+                }
+                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
+                    advanceToShooter();
+                    intakeBall();
+                    state = State.ARMED1INTAKE1;
+                    break;
+                }
+                if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
+                    intakeBall();
+                    state = State.TOWER1INTAKE1;
+                    break;
+                }
+                break;
+            case ARMED1INTAKE1:
+                stomachMotorOn();
+                towerMotorOff();
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && shooting) {
+                    advanceToTower();
+                    state = State.SHOOTING2;
+                }
+                else if (shooting) {
+                    state = State.SHOOTING1INTAKE1;
+                }
+                else if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
+                    advanceToTower();
+                    state = State.ARMED2;
+                }
+                break;
+            case ARMED1:
+                stomachMotorOff();
+                towerMotorOff();
+
+                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && shooting) {
+                    intakeBall();
+                    state = State.SHOOTING1INTAKE1;
+                }
+                else if (shooting) {
+                    state = State.SHOOTING1;
+                }
+                else if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
+                    intakeBall();
+                    state = State.ARMED1INTAKE1;
+                }
+                break;
+            case ARMED2:
+                stomachMotorOff();
+                towerMotorOff();
+                if (shooting) {
+                    state = State.SHOOTING2;
+                }
+                break;
+            case SHOOTING1INTAKE1:
+                stomachMotorOn();
+                towerMotorOn();
+                if (!ballCurrentlyAtShooter && !ballCurrentlyAtTower) {
+                    shootBall();
+                    state = State.INTAKE1;
+                    break;
+                }
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && shooting) {
+                    advanceToTower();
+                    state = State.SHOOTING2;
+                    break;
+                }
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
+                    advanceToTower();
+                    state = State.ARMED2;
+                    break;
+                }
+                if (!ballCurrentlyAtShooter && ballCurrentlyAtTower) {
+                    advanceToTower();
+                    state = State.TOWER1;
+                    break;
+                }
+                break;
+            case SHOOTING1:
+                stomachMotorOff();
+                towerMotorOn();
+                if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
+                    intakeBall();
+                    shootBall();
+                    state = State.INTAKE1;
+                    break;
+                }
+                if (!ballCurrentlyAtShooter) {
+                    shootBall();
+                    state = State.FIELD2;
+                    break;
+                }
+                break;
+            case SHOOTING2:
+                stomachMotorOn();
+                towerMotorOn();
+                if (!ballCurrentlyAtShooter) {
+                    shootBall();
+                    state = State.TOWER1;
+                }
+                break;
+            case OVERRIDE:
+                stomachMotorOn();
+                towerMotorOn();
+            default:
+                stomachMotorOff();
+                towerMotorOff();
+        }
         SmartDashboard.putBoolean("Fully Loaded", fullyLoaded());
         getAllianceColor();
     }
@@ -255,10 +258,8 @@ public class Indexer extends SubsystemBase {
         resetBalls();
     }
 
-    public void purge() {
-        state = State.PURGE;
-        motorLeft.set(-Constants.INDEXER_STOMACH_SPEED);
-        towerMotor.set(-Constants.INDEXER_TOWER_SPEED);
+    public void override() {
+        state = State.OVERRIDE;
     }
 
     public void setState(State state) {
