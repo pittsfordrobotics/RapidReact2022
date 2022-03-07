@@ -146,7 +146,7 @@ public final class Constants {
      * ALL IN METERS
      *
      */
-    private static final TrajectoryConfig TRAJECTORY_CONFIG = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
+    private static final TrajectoryConfig TRAJECTORY_CONFIG_FORWARD = new TrajectoryConfig(DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
             .setKinematics(new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS))
             .addConstraint(
                     new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(DRIVE_STATIC_GAIN, DRIVE_VELOCITY_GAIN, DRIVE_ACCELERATION_GAIN),
@@ -171,7 +171,14 @@ public final class Constants {
             TRAJECTORY_CONFIG_REVERSED
     );
 
-    //    TODO: rework this mess and also do high trajectories
+    public static final Trajectory TRAJECTORY_EXIT_TARMAC = TrajectoryGenerator.generateTrajectory(
+            List.of(
+                    new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                    new Pose2d(Units.inchesToMeters(90), 0, Rotation2d.fromDegrees(0))
+            ),
+            TRAJECTORY_CONFIG_FORWARD
+    );
+
     public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_ALL1 = PathPlanner.loadPath("LeftBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_LOW2 = PathPlanner.loadPath("LeftBall2Low2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_ALL1 = PathPlanner.loadPath("BottomBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);

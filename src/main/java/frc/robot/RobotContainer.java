@@ -36,6 +36,7 @@ public class RobotContainer {
     compressor.setDefaultCommand(new CompressorSmart());
 
     firstAutoChooser.setDefaultOption("No auto", null);
+    firstAutoChooser.setDefaultOption("Shoot and Run", new AutoShootAndRun());
     firstAutoChooser.addOption("2 Ball Bottom Low", new AutoFirstBottomLow2());
     firstAutoChooser.addOption("2 Ball Left Low", new AutoFirstLeftLow2());
 
