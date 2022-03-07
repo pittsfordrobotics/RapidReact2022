@@ -52,8 +52,7 @@ public class RobotContainer {
 //        driverController.X.whenActive(new CG_LowShot());
 //    driverController.Y.whenPressed(new IntakeDown());
 //    driverController.X.whenPressed(new IntakeUp());
-//    WHY IS THIS BROKEN
-    driverController.Y.whenActive(new IntakeToggle());
+    driverController.Y.whenActiveCancel(new IntakeToggle());
 //    TODO: test holding intake
 //    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.X.whileActiveContinuous(new ShooterDumb()).whenInactive(new ShooterZero());

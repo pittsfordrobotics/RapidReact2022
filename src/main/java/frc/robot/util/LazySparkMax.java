@@ -11,7 +11,7 @@ public class LazySparkMax extends CANSparkMax {
      * Lazy Spark Max
      * @param port port of CAN ID of CANSparkMax
      * @param mode Brake or Coast
-     * @param currentLimit Something less than 80 Amps
+     * @param currentLimit 0-30 for 550 / 0-80 for NEO
      * @param inverted Inverted?
      */
     public LazySparkMax(int port, IdleMode mode, int currentLimit, boolean inverted) {

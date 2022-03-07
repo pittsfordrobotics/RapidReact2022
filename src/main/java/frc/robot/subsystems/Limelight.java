@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import org.jetbrains.annotations.NotNull;
 
 public class Limelight extends SubsystemBase {
     private final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
@@ -97,7 +96,7 @@ public class Limelight extends SubsystemBase {
         limelight.getEntry("pipeline").setNumber(pipeline.getNum());
     }
 
-    public void setLED(@NotNull LED mode) {
+    public void setLED(LED mode) {
         limelight.getEntry("ledMode").setNumber(mode.getMode());
     }
 
