@@ -8,7 +8,7 @@ public class IndexerShoot extends CommandBase {
     private final Indexer indexer = Indexer.getInstance();
 
     public IndexerShoot() {
-        addRequirements(this.indexer);
+        addRequirements();
     }
 
     @Override

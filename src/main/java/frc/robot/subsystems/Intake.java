@@ -21,6 +21,7 @@ public class Intake extends SubsystemBase {
     }
 
     private Intake() {
+        retract();
         SmartDashboard.putNumber("Intake Speed", 0.6);
     }
 
@@ -45,6 +46,15 @@ public class Intake extends SubsystemBase {
         isExtended = !isExtended;
         solenoidLeft.toggle();
         solenoidRight.toggle();
+    }
+
+    public void toggleMotor() {
+        if (isExtended) {
+            motorOn();
+        }
+        else {
+            motorOff();
+        }
     }
 
     public void solenoidOff() {

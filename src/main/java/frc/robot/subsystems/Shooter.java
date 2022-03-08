@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setDumbSpeed() {
-        this.speed = 0.4;
+        this.speed = 0.8;
         motorLeft.set(speed);
     }
 

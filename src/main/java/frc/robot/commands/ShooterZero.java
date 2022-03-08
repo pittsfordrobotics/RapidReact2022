@@ -10,7 +10,7 @@ public class ShooterZero extends CommandBase {
     private final Indexer indexer = Indexer.getInstance();
 
     public ShooterZero() {
-        addRequirements(this.shooter, this.indexer);
+        addRequirements(this.shooter);
     }
 
     @Override

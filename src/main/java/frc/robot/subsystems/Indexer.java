@@ -31,9 +31,9 @@ public class Indexer extends SubsystemBase {
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private enum State {
-        FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
+        DISABLED, FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
     }
-    private State state = State.FIELD2;
+    private State state = State.DISABLED;
 
     private COLOR allianceColor = COLOR.UNKNOWN;
 
@@ -57,7 +57,7 @@ public class Indexer extends SubsystemBase {
         indexerTab.addNumber("Intake Red", colorSensorIntake::getRed);
         indexerTab.addNumber("Intake Blue", colorSensorIntake::getBlue);
         indexerTab.addNumber("Intake proximity", colorSensorIntake::getProximity);
-        indexerTab.addBoolean("sensor 1", () -> !sensorTower.get());
+        indexerTab.addBoolean("sensor 1", () -> sensorTower.get());
         indexerTab.addBoolean("Tower boolean", this::getBallAtTower);
         indexerTab.addBoolean("Shooter boolean", this::getBallAtShooter);
         indexerTab.addBoolean("Shooting?", () -> shooting);
@@ -158,7 +158,6 @@ public class Indexer extends SubsystemBase {
             case ARMED1:
                 stomachMotorOff();
                 towerMotorOff();
-
                 if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && shooting) {
                     intakeBall();
                     state = State.SHOOTING1INTAKE1;
@@ -228,6 +227,8 @@ public class Indexer extends SubsystemBase {
             case OVERRIDE:
                 stomachMotorOn();
                 towerMotorOn();
+                break;
+            case DISABLED:
             default:
                 stomachMotorOff();
                 towerMotorOff();
@@ -262,8 +263,8 @@ public class Indexer extends SubsystemBase {
         state = State.OVERRIDE;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void disable() {
+        this.state = State.DISABLED;
     }
 
     public void setStateShoot() {

@@ -6,9 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
@@ -53,11 +51,11 @@ public class RobotContainer {
 //        driverController.X.whenActive(new CG_LowShot());
 //    driverController.Y.whenPressed(new IntakeDown());
 //    driverController.X.whenPressed(new IntakeUp());
-    driverController.Y.whenActiveCancel(new IntakeToggle());
-    driverController.Y.whenHeld(new IntakeOff());
+    driverController.Y.whenActive(new IntakeToggle());
+    driverController.X.whenHeld(new IntakeOff());
 //    TODO: test holding intake
 //    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
-    driverController.X.whileActiveContinuous(new ShooterDumb()).whenInactive(new ShooterZero());
+    driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
 //    driverController.X.whenPressed(new IndexerShoot());
     driverController.A.whenActive(new InstantCommand(indexer::stomachMotorOn)).whenInactive(new InstantCommand(indexer::stomachMotorOff));
     driverController.B.whenActive(new InstantCommand(indexer::towerMotorOn)).whenInactive(new InstantCommand(indexer::towerMotorOff));
@@ -65,6 +63,8 @@ public class RobotContainer {
 //    operatorController.A.whenActive(new CG_ClimberCalibrate());
 //    operatorController.X.whenActive(new ClimberForward());
 //    operatorController.Y.whenActive(new ClimberReverse());
+
+    operatorController.Y.whenHeld(new IndexerOverride());
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
