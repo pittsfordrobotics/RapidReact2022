@@ -54,6 +54,7 @@ public class RobotContainer {
 //    driverController.Y.whenPressed(new IntakeDown());
 //    driverController.X.whenPressed(new IntakeUp());
     driverController.Y.whenActiveCancel(new IntakeToggle());
+    driverController.Y.whenHeld(new IntakeOff());
 //    TODO: test holding intake
 //    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.X.whileActiveContinuous(new ShooterDumb()).whenInactive(new ShooterZero());

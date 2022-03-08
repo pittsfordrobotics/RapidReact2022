@@ -47,6 +47,22 @@ public class Intake extends SubsystemBase {
         solenoidRight.toggle();
     }
 
+    public void solenoidOff() {
+        solenoidLeft.set(DoubleSolenoid.Value.kOff);
+        solenoidRight.set(DoubleSolenoid.Value.kOff);
+    }
+
+    public void reactivate() {
+        if (isExtended) {
+            solenoidLeft.set(DoubleSolenoid.Value.kForward);
+            solenoidRight.set(DoubleSolenoid.Value.kForward);
+        }
+        else {
+            solenoidLeft.set(DoubleSolenoid.Value.kReverse);
+            solenoidRight.set(DoubleSolenoid.Value.kReverse);
+        }
+    }
+
     public void motorOn() {
         motor.set(Constants.INTAKE_MAIN_SPEED);
     }

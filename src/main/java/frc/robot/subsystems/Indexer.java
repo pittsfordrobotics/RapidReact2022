@@ -65,7 +65,7 @@ public class Indexer extends SubsystemBase {
 
     @Override
     public void periodic() {
-        boolean ballCurrentlyAtIntake = false;
+        boolean ballCurrentlyAtIntake = getBallAtIntake();
         boolean ballCurrentlyAtTower = getBallAtTower();
         boolean ballCurrentlyAtShooter = getBallAtShooter();
         switch (state) {
