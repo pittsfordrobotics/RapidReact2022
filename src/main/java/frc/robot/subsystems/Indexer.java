@@ -26,6 +26,7 @@ public class Indexer extends SubsystemBase {
     private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
     private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
 
+    private boolean reverse = false;
     private boolean shooting = false;
     private boolean ballStillAtIntake = false;
     private boolean ballStillAtTower = false;
@@ -227,8 +228,14 @@ public class Indexer extends SubsystemBase {
                 }
                 break;
             case OVERRIDE:
-                stomachMotorOn();
-                towerMotorOn();
+                if (!reverse) {
+                    stomachMotorOn();
+                    towerMotorOn();
+                }
+                else {
+                    stomachMotorReverse();
+                    towerMotorReverse();
+                }
                 break;
             case DISABLED:
             default:
@@ -284,12 +291,20 @@ public class Indexer extends SubsystemBase {
         motorLeft.set(Constants.INDEXER_STOMACH_SPEED);
     }
 
+    public void stomachMotorReverse() {
+        motorLeft.set(-Constants.INDEXER_STOMACH_SPEED);
+    }
+
     public void stomachMotorOff() {
         motorLeft.stopMotor();
     }
 
     public void towerMotorOn() {
         towerMotor.set(Constants.INDEXER_TOWER_SPEED);
+    }
+
+    public void towerMotorReverse() {
+        towerMotor.set(-Constants.INDEXER_TOWER_SPEED);
     }
 
     public void towerMotorOff() {
@@ -371,6 +386,10 @@ public class Indexer extends SubsystemBase {
 
     public void advanceToShooter() {
         balls[0].setLocation(LOCATION.SHOOTER);
+    }
+
+    public void setReverse(boolean reverse) {
+        this.reverse = reverse;
     }
 
     public boolean ableToShoot() {

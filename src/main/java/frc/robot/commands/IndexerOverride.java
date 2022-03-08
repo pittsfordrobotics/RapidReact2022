@@ -5,9 +5,11 @@ import frc.robot.subsystems.Indexer;
 
 public class IndexerOverride extends CommandBase {
     private final Indexer indexer = Indexer.getInstance();
+    private final boolean reverse;
 
-    public IndexerOverride() {
+    public IndexerOverride(boolean reverse) {
         addRequirements(this.indexer);
+        this.reverse = reverse;
     }
 
     @Override
@@ -15,6 +17,7 @@ public class IndexerOverride extends CommandBase {
 
     @Override
     public void execute() {
+        indexer.setReverse(reverse);
         indexer.override();
     }
 

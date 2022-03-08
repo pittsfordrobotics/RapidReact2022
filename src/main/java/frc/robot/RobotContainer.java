@@ -56,16 +56,16 @@ public class RobotContainer {
 //    TODO: test holding intake
 //    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
-//    driverController.X.whenPressed(new IndexerShoot());
-    driverController.A.whenActive(new InstantCommand(indexer::stomachMotorOn)).whenInactive(new InstantCommand(indexer::stomachMotorOff));
-    driverController.B.whenActive(new InstantCommand(indexer::towerMotorOn)).whenInactive(new InstantCommand(indexer::towerMotorOff));
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
 //    operatorController.A.whenActive(new CG_ClimberCalibrate());
 //    operatorController.X.whenActive(new ClimberForward());
 //    operatorController.Y.whenActive(new ClimberReverse());
 
-    operatorController.Y.whenHeld(new IndexerOverride());
+    operatorController.Y.whenHeld(new IndexerOverride(false));
+    operatorController.Y.and(operatorController.LB).whileActiveOnce(new IndexerOverride(true));
 
+//    operatorController.A.whenActive(new InstantCommand(indexer::stomachMotorOn)).whenInactive(new InstantCommand(indexer::stomachMotorOff));
+//    operatorController.B.whenActive(new InstantCommand(indexer::towerMotorOn)).whenInactive(new InstantCommand(indexer::towerMotorOff));
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
     driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
@@ -77,17 +77,16 @@ public class RobotContainer {
     driverController.A.whenPressed(new IntakeToggle());
     driverController.B.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
     driverController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
-    driverController.LB.and(driverController.RB).whileActiveContinuous(new IndexerOverride());
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
     driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
     driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
 
     operatorController.A.whenPressed(new IntakeToggle());
-    operatorController.Y.whenHeld(new IndexerOverride());
+    operatorController.Y.whenHeld(new IndexerOverride(false));
+    operatorController.Y.and(operatorController.LB).whileActiveOnce(new IndexerOverride(true));
     operatorController.B.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
     operatorController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
-    operatorController.LB.and(operatorController.RB).whileActiveOnce(new IndexerOverride());
 
     driverController.Start.and(operatorController.Start).whileActiveOnce(new CG_ClimberAuto());
   }
