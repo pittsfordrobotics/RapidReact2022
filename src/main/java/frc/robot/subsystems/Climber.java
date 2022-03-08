@@ -29,8 +29,6 @@ public class Climber extends SubsystemBase {
 
     private double halfway = 0;
 
-    private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
-
     private final static Climber INSTANCE = new Climber();
     public static Climber getInstance() {
         return INSTANCE;
@@ -47,6 +45,7 @@ public class Climber extends SubsystemBase {
         leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
         leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
 
+        ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
         climberTab.addNumber("Left Encoder", leftEncoder::getPosition);
         climberTab.addNumber("Right Encoder", rightEncoder::getPosition);
 

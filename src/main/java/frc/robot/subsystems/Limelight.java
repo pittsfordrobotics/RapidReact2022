@@ -11,8 +11,6 @@ import frc.robot.Constants;
 public class Limelight extends SubsystemBase {
     private final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
-    private final ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
-
     public enum Pipelines {
         BASE(0), PRACTICE(1), COMPETITION(2);
 
@@ -63,6 +61,7 @@ public class Limelight extends SubsystemBase {
         setLED(LED.OFF);
         setCamMode(CameraMode.DRIVER_CAMERA);
 
+        ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
         limelightTab.add("Enable", new InstantCommand(this::enable));
         limelightTab.add("Disable", new InstantCommand(this::disable));
         limelightTab.addNumber("Distance", this::getDistance);

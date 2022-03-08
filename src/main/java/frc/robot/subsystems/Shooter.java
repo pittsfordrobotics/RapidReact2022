@@ -22,8 +22,6 @@ public class Shooter extends SubsystemBase {
 
     private double speed = 0;
 
-    private final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-
     private final static Shooter INSTANCE = new Shooter();
     public static Shooter getInstance() {
         return INSTANCE;
@@ -31,6 +29,7 @@ public class Shooter extends SubsystemBase {
 
     private Shooter() {
         SmartDashboard.putNumber("Shooter Guess Speed", 0);
+        ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
         shooterTab.addNumber("Shooter Target RPM", () -> speed);
         shooterTab.addNumber("Shooter Actual", shooterEncoder::getVelocity);
         shooterTab.addBoolean("Shooter up to Speed", this::isAtSpeed);

@@ -7,12 +7,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
+import frc.robot.commands.IntakeUpNoInterupt;
 import frc.robot.util.LazySparkMax;
 
 public class Indexer extends SubsystemBase {
@@ -37,14 +39,13 @@ public class Indexer extends SubsystemBase {
 
     private COLOR allianceColor = COLOR.UNKNOWN;
 
-    private final ShuffleboardTab indexerTab = Shuffleboard.getTab("Indexer");
-
     private final static Indexer INSTANCE = new Indexer();
     public static Indexer getInstance() {
         return INSTANCE;
     }
 
     private Indexer() {
+        ShuffleboardTab indexerTab = Shuffleboard.getTab("Indexer");
         indexerTab.add("Reset", new InstantCommand(this::resetEverything));
         indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
         indexerTab.addString("Alliance Color", () -> allianceColor.toString());
@@ -57,7 +58,8 @@ public class Indexer extends SubsystemBase {
         indexerTab.addNumber("Intake Red", colorSensorIntake::getRed);
         indexerTab.addNumber("Intake Blue", colorSensorIntake::getBlue);
         indexerTab.addNumber("Intake proximity", colorSensorIntake::getProximity);
-        indexerTab.addBoolean("sensor 1", () -> sensorTower.get());
+        indexerTab.addBoolean("sensor tower", sensorTower::get);
+        indexerTab.addBoolean("sensor shooter", sensorShooter::get);
         indexerTab.addBoolean("Tower boolean", this::getBallAtTower);
         indexerTab.addBoolean("Shooter boolean", this::getBallAtShooter);
         indexerTab.addBoolean("Shooting?", () -> shooting);
@@ -232,6 +234,9 @@ public class Indexer extends SubsystemBase {
             default:
                 stomachMotorOff();
                 towerMotorOff();
+        }
+        if (isFull()) {
+            CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterupt());
         }
         SmartDashboard.putBoolean("Fully Loaded", fullyLoaded());
         getAllianceColor();

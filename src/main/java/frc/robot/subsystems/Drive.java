@@ -45,8 +45,6 @@ public class Drive extends SubsystemBase {
 
     private final SlewRateLimiter rateLimit = new SlewRateLimiter(Constants.DRIVE_RATE_LIMIT);
 
-    private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
-
     private static final Drive INSTANCE = new Drive();
     public static Drive getInstance() {
         return INSTANCE;
@@ -65,6 +63,7 @@ public class Drive extends SubsystemBase {
 
         setThrottle(0.7);
 
+        ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
         driveTab.addNumber("Pigeon", pigeon::getAngle);
         driveTab.addNumber("Throttle", this::getThrottle);
     }
