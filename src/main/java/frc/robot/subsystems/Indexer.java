@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,7 +23,7 @@ public class Indexer extends SubsystemBase {
     private final LazySparkMax motorRight = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_RIGHT, IdleMode.kBrake, 30, true, motorLeft);
     private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake, 30, true);
 
-    private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
+    private ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
     private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
     private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
 
@@ -69,6 +70,9 @@ public class Indexer extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if((colorSensorIntake.getProximity() == 0 && colorSensorIntake.getBlue() == 0 && colorSensorIntake.getRed() == 0)){
+            colorSensorIntake = new ColorSensorV3(I2C.Port.kOnboard);
+        }
         boolean ballCurrentlyAtIntake = getBallAtIntake();
         boolean ballCurrentlyAtTower = getBallAtTower();
         boolean ballCurrentlyAtShooter = getBallAtShooter();
@@ -333,6 +337,9 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean getBallAtIntake() {
+        if (!colorSensorIntake.isConnected()) {
+            return true;
+        }
         boolean ballAtIntake = false;
         if (ballStillAtIntake) {
             ballStillAtIntake = colorSensorIntake.getProximity() > Constants.INDEXER_COLOR_PROXIMITY;
