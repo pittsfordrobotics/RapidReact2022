@@ -10,7 +10,7 @@ public class IntakeUpNoInterupt extends CommandBase {
     private final Intake intake = Intake.getInstance();
 
     public IntakeUpNoInterupt() {
-        addRequirements(this.indexer, this.intake);
+        addRequirements(this.intake);
     }
 
     @Override

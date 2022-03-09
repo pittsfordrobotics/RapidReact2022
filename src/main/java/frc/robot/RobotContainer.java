@@ -48,7 +48,7 @@ public class RobotContainer {
   }
 
   private void testButtons() {
-        driverController.A.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());;
+      driverController.A.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());;
 //    driverController.Y.whenPressed(new IntakeDown());
 //    driverController.X.whenPressed(new IntakeUp());
     driverController.Y.whenActive(new IntakeToggle());
