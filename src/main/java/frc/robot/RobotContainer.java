@@ -89,6 +89,9 @@ public class RobotContainer {
     operatorController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
 
     driverController.Start.and(operatorController.Start).whileActiveOnce(new CG_ClimberAuto());
+
+    operatorController.LB.and(operatorController.DUp).whileActiveOnce(new ClimberForward());
+    operatorController.LB.and(operatorController.DDown).whileActiveOnce(new ClimberReverse());
   }
 
   public Command getAutonomousCommand() {
