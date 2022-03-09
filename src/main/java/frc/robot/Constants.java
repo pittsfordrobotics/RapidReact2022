@@ -45,13 +45,13 @@ public final class Constants {
     public static final double DRIVE_GEAR_RATIO = 6.818;
     public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
 
-    public static final double DRIVE_POSITION_GAIN = 1;
-    public static final double DRIVE_INTEGRAL_GAIN = 1;
-    public static final double DRIVE_DERIVATIVE_GAIN = 1;
+    public static final double DRIVE_POSITION_GAIN = 2.3546;
+    public static final double DRIVE_INTEGRAL_GAIN = 0;
+    public static final double DRIVE_DERIVATIVE_GAIN = 0;
 
-    public static final double DRIVE_STATIC_GAIN = 1;
-    public static final double DRIVE_VELOCITY_GAIN = 1;
-    public static final double DRIVE_ACCELERATION_GAIN = 1;
+    public static final double DRIVE_STATIC_GAIN = 0.26981;
+    public static final double DRIVE_VELOCITY_GAIN = 0.046502;
+    public static final double DRIVE_ACCELERATION_GAIN = 0.0093369;
 
     public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = 10;
     public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
@@ -86,7 +86,7 @@ public final class Constants {
     public static final double INDEXER_TOWER_SPEED = 0.6;
 
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
-    public static final int INDEXER_COLOR_PROXIMITY = 500;
+    public static final int INDEXER_COLOR_PROXIMITY = 300;
 
     public static final int INDEXER_SENSOR_TOWER = 0;
     public static final int INDEXER_SENSOR_SHOOTER = 1;
@@ -99,9 +99,9 @@ public final class Constants {
     public static final int SHOOTER_CAN_LEFT = 11;
     public static final int SHOOTER_CAN_RIGHT = 12;
 
-    public static final double SHOOTER_STATIC_GAIN = 1;
-    public static final double SHOOTER_VELOCITY_GAIN = 1;
-    public static final double SHOOTER_ACCELERATION_GAIN = 1;
+    public static final double SHOOTER_STATIC_GAIN = 0.15345;
+    public static final double SHOOTER_VELOCITY_GAIN = 0.12404;
+    public static final double SHOOTER_ACCELERATION_GAIN = 0.0072228;
 
     public static final double SHOOTER_LOW_SPEED = 3000;
 

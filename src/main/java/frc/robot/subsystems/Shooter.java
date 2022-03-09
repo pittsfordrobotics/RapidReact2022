@@ -37,6 +37,8 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        motorLeft.set(bangBangController.calculate(shooterEncoder.getVelocity(), speed));
+//        motorLeft.set(bangBangController.calculate(shooterEncoder.getVelocity(), speed) + 0.9 * shooterFeedforward.calculate(speed));
     }
 
     public void setSmartDashboard() {
@@ -45,7 +47,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setDumbSpeed() {
-        this.speed = 0.8;
+        this.speed = 0.3;
         motorLeft.set(speed);
     }
 
@@ -54,27 +56,19 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
-        motorLeft.set(bangBangController.calculate(shooterEncoder.getVelocity(), speed) + 0.9 * shooterFeedforward.calculate(speed));
         this.speed = speed;
     }
 
     public void shootLow() {
-        setSpeed(Constants.SHOOTER_LOW_SPEED);
-        this.speed = Constants.SHOOTER_LOW_SPEED;
-    }
-
-    public void shootHighFender() {
-        setSpeed(Constants.SHOOTER_LOW_SPEED);
         this.speed = Constants.SHOOTER_LOW_SPEED;
     }
 
     public void shootStop() {
-        motorLeft.set(bangBangController.calculate(shooterEncoder.getVelocity(), 0));
         this.speed = 0;
     }
 
     public boolean isAtSpeed() {
-        return MathUtil.applyDeadband(shooterEncoder.getVelocity() - speed, 0.2) == 0;
+        return MathUtil.applyDeadband(shooterEncoder.getVelocity() - speed, 10) == 0;
     }
 
 }

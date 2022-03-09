@@ -48,14 +48,14 @@ public class RobotContainer {
   }
 
   private void testButtons() {
-//        driverController.X.whenActive(new CG_LowShot());
+        driverController.A.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());;
 //    driverController.Y.whenPressed(new IntakeDown());
 //    driverController.X.whenPressed(new IntakeUp());
     driverController.Y.whenActive(new IntakeToggle());
     driverController.X.whenHeld(new IntakeOff());
 //    TODO: test holding intake
 //    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
-    driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
+//    driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
 //    operatorController.A.whenActive(new CG_ClimberCalibrate());
 //    operatorController.X.whenActive(new ClimberForward());
