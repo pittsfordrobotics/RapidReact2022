@@ -4,25 +4,29 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
 
 
-public class IndexerShoot extends CommandBase {
+public class IndexerUnoShoot extends CommandBase {
     private final Indexer indexer = Indexer.getInstance();
+    private int ballCount;
 
-    public IndexerShoot() {
+    public IndexerUnoShoot() {
         addRequirements(this.indexer);
     }
 
     @Override
     public void initialize() {
+        ballCount = indexer.getBallCount();
     }
 
     @Override
     public void execute() {
-        indexer.setStateShoot();
+        if (indexer.isWrongColorBall()) {
+            indexer.setStateShoot();
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return indexer.isEmpty();
+        return !indexer.isWrongColorBall() || ballCount == 0 || indexer.getBallCount() == 0 || indexer.getBallCount() == ballCount - 1;
     }
 
     @Override

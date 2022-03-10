@@ -84,9 +84,9 @@ public class RobotContainer {
 //    operatorController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
     operatorController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
     operatorController.X.and(operatorController.RB).whileActiveOnce(new ShooterLow()).whenInactive(new ShooterZero());
+    operatorController.B.whenActive(new CG_UnoShot());
     operatorController.Y.whileActiveOnce(new IndexerOverride(false));
-    operatorController.B.whileActiveOnce(new IndexerOverride(true));
-
+    operatorController.Y.and(operatorController.RB).whileActiveOnce(new IndexerOverride(true));
     operatorController.LB.and(operatorController.Back).whileActiveOnce(new CG_ClimberAuto()).whenInactive(new ClimberStop());
     operatorController.LB.and(operatorController.DUp).whileActiveOnce(new ClimberForward());
     operatorController.LB.and(operatorController.DDown).whileActiveOnce(new ClimberReverse());

@@ -17,6 +17,7 @@ import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeUpNoInterupt;
 import frc.robot.util.LazySparkMax;
+import frc.robot.util.controller.BetterXboxController;
 
 public class Indexer extends SubsystemBase {
     private final LazySparkMax motorLeft = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_LEFT, IdleMode.kBrake, 30, true);
@@ -249,6 +250,12 @@ public class Indexer extends SubsystemBase {
         if (isFull()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterupt());
         }
+        if (isWrongColorBall()) {
+            BetterXboxController.getController(BetterXboxController.Humans.OPERATOR).rumbleOn();
+        }
+        else {
+            BetterXboxController.getController(BetterXboxController.Humans.OPERATOR).rumbleOff();
+        }
         SmartDashboard.putBoolean("Fully Loaded", fullyLoaded());
         getAllianceColor();
     }
@@ -332,7 +339,7 @@ public class Indexer extends SubsystemBase {
         return balls[0].getLocation() == LOCATION.FIELD && balls[1].getLocation() == LOCATION.FIELD;
     }
 
-    public int ballCount() {
+    public int getBallCount() {
         return (balls[0].getLocation() != LOCATION.FIELD ? 1 : 0) + (balls[1].getLocation() != LOCATION.FIELD ? 1 : 0);
     }
 
@@ -407,8 +414,8 @@ public class Indexer extends SubsystemBase {
         return state == State.ARMED2;
     }
 
-    public boolean isRightColorBall() {
-        return balls[0].getColor() == allianceColor;
+    public boolean isWrongColorBall() {
+        return balls[0].getColor() != allianceColor;
     }
 
     public boolean allianceIsUnknown() {
