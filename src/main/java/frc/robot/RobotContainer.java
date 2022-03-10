@@ -59,10 +59,8 @@ public class RobotContainer {
 //    operatorController.Y.whenActive(new ClimberReverse());
 
     operatorController.Y.whenHeld(new IndexerOverride(false));
-    operatorController.Y.and(operatorController.LB).whileActiveOnce(new IndexerOverride(true));
+    operatorController.B.whileActiveOnce(new IndexerOverride(true));
 
-//    operatorController.A.whenActive(new InstantCommand(indexer::stomachMotorOn)).whenInactive(new InstantCommand(indexer::stomachMotorOff));
-//    operatorController.B.whenActive(new InstantCommand(indexer::towerMotorOn)).whenInactive(new InstantCommand(indexer::towerMotorOff));
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
     driverController.DRight.whenPressed(new DriveSetThrottle(0.4));

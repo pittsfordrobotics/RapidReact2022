@@ -16,7 +16,6 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
-import frc.robot.subsystems.Limelight.Pipelines;
 import frc.robot.util.InterpolatingTreeMap;
 
 import java.util.List;
@@ -110,22 +109,6 @@ public final class Constants {
     static {
         SHOOTER_SPEED_MAP.put(0, 3000);
     }
-
-    /**
-     *
-     * LIMELIGHT
-     * all distances measured in inches
-     *
-     **/
-//    104 inches to top of goal
-//    101.625 inches to bottom of vision target
-//    middle is 102.8125 inches from field
-    public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.8125;
-    public static final double LIMELIGHT_MOUNTING_HEIGHT = 24;
-    public static final double LIMELIGHT_ANGLE = 54;
-
-    public static final Pipelines LIMELIGHT_PIPELINE = Pipelines.PRACTICE;
-
 
     /**
      *
