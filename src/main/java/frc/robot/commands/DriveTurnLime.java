@@ -23,7 +23,7 @@ public class DriveTurnLime extends CommandBase {
     public void initialize() {
         limelight.enable();
         limelight.setPipeline(Constants.LIMELIGHT_PIPELINE);
-        drive.setTempThrottle(0.6);
+        drive.setTempThrottle(0.7);
         pidController.setSetpoint(0);
         pidController.setTolerance(1);
     }

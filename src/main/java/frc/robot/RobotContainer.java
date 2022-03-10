@@ -30,7 +30,6 @@ public class RobotContainer {
     testButtons();
 
     drive.setDefaultCommand(new DriveXbox());
-    climber.setDefaultCommand(new ClimberSpeed());
     compressor.setDefaultCommand(new CompressorSmart());
 
     firstAutoChooser.setDefaultOption("No auto", null);
@@ -49,12 +48,10 @@ public class RobotContainer {
 
   private void testButtons() {
       driverController.A.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());;
-//    driverController.Y.whenPressed(new IntakeDown());
-//    driverController.X.whenPressed(new IntakeUp());
+    //    TODO: test holding intake
+    //    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.Y.whenActive(new IntakeToggle());
     driverController.X.whenHeld(new IntakeOff());
-//    TODO: test holding intake
-//    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
 //    driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
 //    operatorController.A.whenActive(new CG_ClimberCalibrate());
@@ -74,22 +71,25 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    driverController.A.whenPressed(new IntakeToggle());
-    driverController.B.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
-    driverController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
-    driverController.DUp.whenPressed(new DriveSetThrottle(1));
-    driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
-    driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
-    driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
+    driverController.A.whenActive(new IntakeToggle());
+//    intake held
+//    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
+    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
+    driverController.X.and(driverController.RB).whileActiveOnce(new ShooterLow()).whenInactive(new ShooterZero());
+    driverController.DUp.whenActive(new DriveSetThrottle(1));
+    driverController.DLeft.whenActive(new DriveSetThrottle(0.7));
+    driverController.DRight.whenActive(new DriveSetThrottle(0.4));
+    driverController.DDown.whenActive(new DriveSetThrottle(0.1));
 
-    operatorController.A.whenPressed(new IntakeToggle());
-    operatorController.Y.whenHeld(new IndexerOverride(false));
-    operatorController.Y.and(operatorController.LB).whileActiveOnce(new IndexerOverride(true));
-    operatorController.B.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
-    operatorController.X.whenHeld(new CG_LimeShot()).whenInactive(new ShooterZero());
+    operatorController.A.whenActive(new IntakeToggle());
+//    intake held
+//    operatorController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
+    operatorController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
+    operatorController.X.and(operatorController.RB).whileActiveOnce(new ShooterLow()).whenInactive(new ShooterZero());
+    operatorController.Y.whileActiveOnce(new IndexerOverride(false));
+    operatorController.B.whileActiveOnce(new IndexerOverride(true));
 
-    driverController.Start.and(operatorController.Start).whileActiveOnce(new CG_ClimberAuto());
-
+    operatorController.LB.and(operatorController.Back).whileActiveOnce(new CG_ClimberAuto()).whenInactive(new ClimberStop());
     operatorController.LB.and(operatorController.DUp).whileActiveOnce(new ClimberForward());
     operatorController.LB.and(operatorController.DDown).whileActiveOnce(new ClimberReverse());
   }

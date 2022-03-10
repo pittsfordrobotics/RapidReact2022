@@ -24,7 +24,7 @@ public class DriveTurn extends CommandBase {
   @Override
   public void initialize() {
 //    pidController.setP(SmartDashboard.getNumber("PID TURN", 0));
-    drive.setTempThrottle(0.6);
+    drive.setTempThrottle(0.7);
     pidController.setSetpoint(drive.getAngle() + angle);
     pidController.setTolerance(1);
   }
