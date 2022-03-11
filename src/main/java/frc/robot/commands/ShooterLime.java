@@ -1,31 +1,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Indexer;
+import frc.robot.Constants;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 
 
-public class ShooterDumb extends CommandBase {
+public class ShooterLime extends CommandBase {
     private final Shooter shooter = Shooter.getInstance();
-    private final Indexer indexer = Indexer.getInstance();
+    private final Limelight limelight = Limelight.getInstance();
 
-    public ShooterDumb() {
-        addRequirements(this.shooter);
+    public ShooterLime() {
+        addRequirements(this.limelight, this.shooter);
     }
 
     @Override
     public void initialize() {
-        indexer.setStateShoot();
     }
 
     @Override
     public void execute() {
-        shooter.setDumbSpeed();
+        shooter.setSpeed(Constants.SHOOTER_SPEED_MAP.lookup(limelight.getDistance()));
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return limelight.hasTarget();
     }
 
     @Override

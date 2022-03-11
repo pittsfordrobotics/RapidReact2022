@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.util.InterpolatingTreeMap;
+import frc.robot.subsystems.Limelight.Pipelines;
 
 import java.util.List;
 
@@ -52,8 +53,8 @@ public final class Constants {
     public static final double DRIVE_VELOCITY_GAIN = 0.046502;
     public static final double DRIVE_ACCELERATION_GAIN = 0.0093369;
 
-    public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = 10;
-    public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
+    public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = 5;
+    public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 4;
 
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
 
@@ -102,7 +103,9 @@ public final class Constants {
     public static final double SHOOTER_VELOCITY_GAIN = 0.12404;
     public static final double SHOOTER_ACCELERATION_GAIN = 0.0072228;
 
-    public static final double SHOOTER_LOW_SPEED = 1800;
+    public static final int SHOOTER_LOW_SPEED = 1800;
+    public static final int SHOOTER_TARMAC_SPEED = 3000;
+    public static final int SHOOTER_AUTO_5_SPEED = 3000;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
 
@@ -120,6 +123,23 @@ public final class Constants {
 
     public static final int CLIMBER_SENSOR_LEFT = 2;
     public static final int CLIMBER_SENSOR_RIGHT = 3;
+
+    /**
+     *
+     * LIMELIGHT
+     * all distances measured in inches
+     *
+     **/
+//    104 inches to top of goal
+//    101.625 inches to bottom of vision target
+//    middle is 102.8125 inches from field
+    public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.8125;
+    public static final double LIMELIGHT_MOUNTING_HEIGHT_INCHES = 24;
+    public static final double LIMELIGHT_ANGLE = 40;
+
+    public static final Pipelines LIMELIGHT_PIPELINE = Pipelines.COMPETITION;
+
+
 
     /**
      *
@@ -162,12 +182,16 @@ public final class Constants {
             TRAJECTORY_CONFIG_REVERSED
     );
 
-    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_ALL1 = PathPlanner.loadPath("LeftBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_LOW2 = PathPlanner.loadPath("LeftBall2Low2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_ALL1 = PathPlanner.loadPath("BottomBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_LOW2 = PathPlanner.loadPath("BottomBall2Low2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_LOW3 = PathPlanner.loadPath("Ball3Low3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_LOW4 = PathPlanner.loadPath("Ball3Low4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_LOW3 = PathPlanner.loadPath("Ball5Low3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_LOW4 = PathPlanner.loadPath("Ball5Low4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_TEST = PathPlanner.loadPath("TEST", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+
+    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_NUMBER1 = PathPlanner.loadPath("LeftBall2N1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_NUMBER2 = PathPlanner.loadPath("LeftBall2N2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED, true);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_NUMBER1 = PathPlanner.loadPath("BottomBall2N1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_NUMBER2 = PathPlanner.loadPath("BottomBall2N2", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED, true);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_NUMBER3 = PathPlanner.loadPath("Ball3N3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL3_NUMBER4 = PathPlanner.loadPath("Ball3N4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_NUMBER3 = PathPlanner.loadPath("Ball5N3", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_NUMBER4 = PathPlanner.loadPath("Ball5N4", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_NUMBER5 = PathPlanner.loadPath("Ball5N5", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    public static final Trajectory TRAJECTORY_PATHPLANNER_BALL5_NUMBER6 = PathPlanner.loadPath("Ball5N6", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
 }

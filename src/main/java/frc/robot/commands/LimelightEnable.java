@@ -1,14 +1,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 
 
-public class IntakeOff extends CommandBase {
-    private final Intake intake = Intake.getInstance();
+public class LimelightEnable extends CommandBase {
+    private final Limelight limelight = Limelight.getInstance();
 
-    public IntakeOff() {
-        addRequirements(this.intake);
+    public LimelightEnable() {
+        addRequirements(this.limelight);
     }
 
     @Override
@@ -17,16 +17,16 @@ public class IntakeOff extends CommandBase {
 
     @Override
     public void execute() {
-        intake.solenoidOff();
+        limelight.enable();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return limelight.hasTarget();
     }
 
     @Override
     public void end(boolean interrupted) {
-        intake.reactivate();
+
     }
 }

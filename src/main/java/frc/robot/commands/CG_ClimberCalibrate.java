@@ -15,7 +15,7 @@ public class CG_ClimberCalibrate extends SequentialCommandGroup {
                 new ClimberCalibrateReverse(),
                 new WaitCommand(1),
                 new ClimberCalibrateCenter(),
-                new WaitCommand(1),
+                new WaitCommand(2),
                 new ClimberResetEncoders()
         );
     }

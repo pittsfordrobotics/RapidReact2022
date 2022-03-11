@@ -10,16 +10,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
-// TODO: TUNE P CONTROLLER WITH FINISHED CHASSIS
 public class DriveTurn extends CommandBase {
   private final double angle;
   private final Drive drive = Drive.getInstance();
   private final PIDController pidController = new PIDController(0.01,0, 0);
-  private double throttle;
 
   public DriveTurn(double angle) {
     this.angle = angle;
-    SmartDashboard.putNumber("PID TURN", 0.06);
+    SmartDashboard.putNumber("PID TURN", 0.07);
     addRequirements(this.drive);
   }
 
@@ -33,8 +31,7 @@ public class DriveTurn extends CommandBase {
 
   @Override
   public void execute() {
-    drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + ((angle < 0) ? -0.1 : 0.1), -0.5, 0.5), false);
-//    SmartDashboard.putNumber("PID OUT", Math.min(pidController.calculate(drive.getAngle()),0.7));
+    drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + ((angle < 0) ? -0.2 : 0.2), -0.5, 0.5), false);
   }
 
   @Override

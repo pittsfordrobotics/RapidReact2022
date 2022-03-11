@@ -34,7 +34,6 @@ public class Drive extends SubsystemBase {
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
     private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
-//    private final AHRS pigeon = new AHRS(Constants.DRIVE_NAVX);
 
     private double throttle;
     private double tempThrottle;

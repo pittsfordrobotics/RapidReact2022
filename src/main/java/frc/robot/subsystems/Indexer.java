@@ -51,8 +51,8 @@ public class Indexer extends SubsystemBase {
         ShuffleboardTab indexerTab = Shuffleboard.getTab("Indexer");
         indexerTab.add("Reset", new InstantCommand(this::resetEverything));
         indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
-//        indexerTab.addString("Alliance Color", () -> allianceColor.toString());
-//        indexerTab.addString("Indexer state", () -> state.toString());
+        indexerTab.addString("Alliance Color", () -> allianceColor.toString());
+        indexerTab.addString("Indexer state", () -> state.toString());
 //        indexerTab.addString("Ball 1 Color", () -> balls[0].getColor().toString());
 //        indexerTab.addString("Ball 2 Color", () -> balls[1].getColor().toString());
 //        indexerTab.addString("Ball 1 Location", () -> balls[0].getLocation().toString());
@@ -61,13 +61,13 @@ public class Indexer extends SubsystemBase {
 //        indexerTab.addNumber("Intake Red", colorSensorIntake::getRed);
 //        indexerTab.addNumber("Intake Blue", colorSensorIntake::getBlue);
 //        indexerTab.addNumber("Intake proximity", colorSensorIntake::getProximity);
-//        indexerTab.addBoolean("Reversed", () -> reverse);
+        indexerTab.addBoolean("Reversed", () -> reverse);
 //        indexerTab.addBoolean("Intake Sensor", () -> colorSensorIntake.getProximity() > 200);
 //        indexerTab.addBoolean("sensor tower", sensorTower::get);
 //        indexerTab.addBoolean("sensor shooter", sensorShooter::get);
 //        indexerTab.addBoolean("intake still", () -> ballStillAtIntake);
 //        indexerTab.addBoolean("tower still", () -> ballStillAtTower);
-//        indexerTab.addBoolean("Shooting?", () -> shooting);
+        indexerTab.addBoolean("Shooting?", () -> shooting);
     }
 
     @Override

@@ -4,11 +4,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 
-public class ShooterStart extends CommandBase {
+public class ShooterSpeed extends CommandBase {
     private final Shooter shooter = Shooter.getInstance();
+    private final int speed;
 
-    public ShooterStart() {
+    public ShooterSpeed(int speed) {
         addRequirements(this.shooter);
+        this.speed = speed;
     }
 
     @Override
@@ -17,7 +19,7 @@ public class ShooterStart extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setSpeed(3000);
+        shooter.setSpeed(speed);
     }
 
     @Override

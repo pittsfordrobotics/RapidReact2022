@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
@@ -19,6 +18,7 @@ public class RobotContainer {
   private final Shooter shooter = Shooter.getInstance();
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
+  private final Limelight limelight = Limelight.getInstance();
   private final Indexer indexer = Indexer.getInstance();
   private final Compressor7 compressor = Compressor7.getInstance();
 
@@ -32,40 +32,23 @@ public class RobotContainer {
   public RobotContainer() {
     CameraServer.startAutomaticCapture(0);
 
+    autoConfig();
+
     configureButtonBindings();
 //    testButtons();
 
     drive.setDefaultCommand(new DriveXbox());
     compressor.setDefaultCommand(new CompressorSmart());
-
-    firstAutoChooser.setDefaultOption("No auto", new WaitCommand(1));
-    firstAutoChooser.setDefaultOption("Shoot and Run", new AutoShootAndRun());
-    firstAutoChooser.addOption("2 Ball Bottom Low", new AutoFirstBottomLow2());
-    firstAutoChooser.addOption("2 Ball Left Low", new AutoFirstLeftLow2());
-
-    secondAutoChooser.setDefaultOption("No auto", new WaitCommand(1));
-    secondAutoChooser.addOption("3 Ball Low", new AutoSecondLow3());
-    secondAutoChooser.addOption("4 Ball Low", new AutoSecondLow4());
-
-    ballChooser.setDefaultOption("0", 0);
-    ballChooser.addOption("1", 1);
-
-    //TODO: redo autos
-    SmartDashboard.putData("First Auto Command", firstAutoChooser);
-    SmartDashboard.putData("Second Auto Command", secondAutoChooser);
-    SmartDashboard.putData("Starting Balls", ballChooser);
   }
 
   private void testButtons() {
-    driverController.A.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
-    driverController.Y.whenActive(new IntakeToggle());
-    driverController.X.whenHeld(new IntakeOff());
+    driverController.A.whenActive(new IntakeToggle());
+    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
     driverController.B.whenActive(new DriveTurn(180));
-//    driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
-//    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
-//    operatorController.A.whenActive(new CG_ClimberCalibrate());
-//    operatorController.X.whenActive(new ClimberForward());
-//    operatorController.Y.whenActive(new ClimberReverse());
+    driverController.RB.and(driverController.B).whenActive(new DriveTurn(90));
+    driverController.Y.whenActive(new ShooterLime());
+    driverController.Start.whenActive(new LimelightEnable());
+    driverController.Back.whenActive(new LimelightDisable());
 
     operatorController.Y.whenHeld(new IndexerOverride(false));
     operatorController.B.whileActiveOnce(new IndexerOverride(true));
@@ -80,6 +63,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverController.A.whenActive(new IntakeToggle());
     driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
+//    driverController.Y.whileActiveOnce(new CG_LimeShot()).whenInactive(new ShooterZero());
     driverController.X.and(driverController.RB).whileActiveOnce(new ShooterLow()).whenInactive(new ShooterZero());
     driverController.B.whenActive(new CG_UnoShot());
     driverController.DUp.whenActive(new DriveSetThrottle(1));
@@ -95,6 +79,25 @@ public class RobotContainer {
     operatorController.LB.and(operatorController.Back).whileActiveOnce(new CG_ClimberAuto()).whenInactive(new ClimberStop());
     operatorController.LB.and(operatorController.DUp).whileActiveOnce(new ClimberForward());
     operatorController.LB.and(operatorController.DDown).whileActiveOnce(new ClimberReverse());
+  }
+
+  private void autoConfig() {
+    firstAutoChooser.setDefaultOption("No auto", null);
+    firstAutoChooser.setDefaultOption("Test", new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
+    firstAutoChooser.addOption("Shoot and Run", new AutoShootAndRun());
+    firstAutoChooser.addOption("2 Ball Bottom", new AutoFirstBottomLow2());
+    firstAutoChooser.addOption("2 Ball Left", new AutoFirstLeftLow2());
+
+    secondAutoChooser.setDefaultOption("No auto", null);
+    secondAutoChooser.addOption("3 Ball", new AutoSecondLow3());
+    secondAutoChooser.addOption("5 Ball", new AutoSecondLow5());
+
+    ballChooser.setDefaultOption("0", 0);
+    ballChooser.addOption("1", 1);
+
+    SmartDashboard.putData("First Auto Command", firstAutoChooser);
+    SmartDashboard.putData("Second Auto Command", secondAutoChooser);
+    SmartDashboard.putData("Starting Balls", ballChooser);
   }
 
   public Command getAutonomousCommand() {

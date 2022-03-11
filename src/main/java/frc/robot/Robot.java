@@ -21,6 +21,7 @@ public class Robot extends TimedRobot {
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
   private final Compressor7 compressor = Compressor7.getInstance();
+  private final Limelight limelight = Limelight.getInstance();
 
   private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
 
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
     revPDH.setSwitchableChannel(true);
     drive.coastMode();
     intake.retract();
+    limelight.disable();
   }
 
   @Override
@@ -74,8 +76,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.brakeMode();
-//    remove this
-    indexer.resetEverything();
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
