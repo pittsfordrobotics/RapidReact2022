@@ -7,7 +7,9 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
@@ -25,36 +27,40 @@ public class RobotContainer {
 
   private final SendableChooser<Command> firstAutoChooser = new SendableChooser<>();
   private final SendableChooser<Command> secondAutoChooser = new SendableChooser<>();
+  private final SendableChooser<Integer> ballChooser = new SendableChooser<>();
 
   public RobotContainer() {
     CameraServer.startAutomaticCapture(0);
 
-//    configureButtonBindings();
-    testButtons();
+    configureButtonBindings();
+//    testButtons();
 
     drive.setDefaultCommand(new DriveXbox());
     compressor.setDefaultCommand(new CompressorSmart());
 
-    firstAutoChooser.setDefaultOption("No auto", null);
+    firstAutoChooser.setDefaultOption("No auto", new WaitCommand(1));
     firstAutoChooser.setDefaultOption("Shoot and Run", new AutoShootAndRun());
     firstAutoChooser.addOption("2 Ball Bottom Low", new AutoFirstBottomLow2());
     firstAutoChooser.addOption("2 Ball Left Low", new AutoFirstLeftLow2());
 
-    secondAutoChooser.setDefaultOption("No auto", null);
+    secondAutoChooser.setDefaultOption("No auto", new WaitCommand(1));
     secondAutoChooser.addOption("3 Ball Low", new AutoSecondLow3());
     secondAutoChooser.addOption("4 Ball Low", new AutoSecondLow4());
+
+    ballChooser.setDefaultOption("0", 0);
+    ballChooser.addOption("1", 1);
 
     //TODO: redo autos
     SmartDashboard.putData("First Auto Command", firstAutoChooser);
     SmartDashboard.putData("Second Auto Command", secondAutoChooser);
+    SmartDashboard.putData("Starting Balls", ballChooser);
   }
 
   private void testButtons() {
-      driverController.A.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());;
-    //    TODO: test holding intake
-    //    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
+    driverController.A.whenHeld(new CG_LowShot()).whenInactive(new ShooterZero());
     driverController.Y.whenActive(new IntakeToggle());
     driverController.X.whenHeld(new IntakeOff());
+    driverController.B.whenActive(new DriveTurn(180));
 //    driverController.X.whenHeld(new ShooterDumb()).whenInactive(new ShooterZero());
 //    driverController.RB.and(driverController.LB).and(operatorController.RB).and(operatorController.LB).whileActiveOnce(new CG_ClimberAuto());
 //    operatorController.A.whenActive(new CG_ClimberCalibrate());
@@ -66,27 +72,23 @@ public class RobotContainer {
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
-    driverController.DRight.whenPressed(new DriveSetThrottle(0.4));
-    driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
+    driverController.DRight.whenPressed(new DriveSetThrottle(0.5));
+    driverController.DDown.whenPressed(new DriveSetThrottle(0.25));
 
   }
 
   private void configureButtonBindings() {
     driverController.A.whenActive(new IntakeToggle());
-//    intake held
-//    driverController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
     driverController.X.and(driverController.RB).whileActiveOnce(new ShooterLow()).whenInactive(new ShooterZero());
+    driverController.B.whenActive(new CG_UnoShot());
     driverController.DUp.whenActive(new DriveSetThrottle(1));
     driverController.DLeft.whenActive(new DriveSetThrottle(0.7));
     driverController.DRight.whenActive(new DriveSetThrottle(0.4));
     driverController.DDown.whenActive(new DriveSetThrottle(0.1));
 
     operatorController.A.whenActive(new IntakeToggle());
-//    intake held
-//    operatorController.A.whenHeld(new IntakeDown()).whenInactive(new IntakeUp());
     operatorController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
-    operatorController.X.and(operatorController.RB).whileActiveOnce(new ShooterLow()).whenInactive(new ShooterZero());
     operatorController.B.whenActive(new CG_UnoShot());
     operatorController.Y.whileActiveOnce(new IndexerOverride(false));
     operatorController.Y.and(operatorController.RB).whileActiveOnce(new IndexerOverride(true));
@@ -96,6 +98,9 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    if (ballChooser.getSelected() == 1) {
+      indexer.addBallToTower();
+    }
     return new SequentialCommandGroup(
       firstAutoChooser.getSelected(),
       secondAutoChooser.getSelected()

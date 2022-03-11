@@ -85,10 +85,10 @@ public final class Constants {
     public static final double INDEXER_TOWER_SPEED = 0.6;
 
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
-    public static final int INDEXER_COLOR_PROXIMITY = 300;
+    public static final int INDEXER_COLOR_PROXIMITY = 200;
 
-    public static final int INDEXER_SENSOR_TOWER = 0;
-    public static final int INDEXER_SENSOR_SHOOTER = 1;
+    public static final int INDEXER_SENSOR_TOWER = 9;
+    public static final int INDEXER_SENSOR_SHOOTER = 8;
 
     /**
      *
@@ -102,7 +102,7 @@ public final class Constants {
     public static final double SHOOTER_VELOCITY_GAIN = 0.12404;
     public static final double SHOOTER_ACCELERATION_GAIN = 0.0072228;
 
-    public static final double SHOOTER_LOW_SPEED = 3000;
+    public static final double SHOOTER_LOW_SPEED = 1800;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
 
@@ -157,9 +157,9 @@ public final class Constants {
     public static final Trajectory TRAJECTORY_EXIT_TARMAC = TrajectoryGenerator.generateTrajectory(
             List.of(
                     new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                    new Pose2d(Units.inchesToMeters(90), 0, Rotation2d.fromDegrees(0))
+                    new Pose2d(-Units.inchesToMeters(90), 0, Rotation2d.fromDegrees(0))
             ),
-            TRAJECTORY_CONFIG_FORWARD
+            TRAJECTORY_CONFIG_REVERSED
     );
 
     public static final Trajectory TRAJECTORY_PATHPLANNER_LEFT_BALL2_ALL1 = PathPlanner.loadPath("LeftBall2All1", DRIVE_MAX_VELOCITY_METERS_PER_SECOND, DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);

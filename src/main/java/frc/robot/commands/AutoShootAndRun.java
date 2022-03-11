@@ -7,6 +7,7 @@ import frc.robot.Constants;
 public class AutoShootAndRun extends SequentialCommandGroup {
     public AutoShootAndRun() {
         super(
+                new IndexerWaitForArmed(),
                 new CG_LowShot(),
                 new DrivePathing(Constants.TRAJECTORY_EXIT_TARMAC)
         );

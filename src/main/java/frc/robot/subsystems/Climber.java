@@ -35,6 +35,8 @@ public class Climber extends SubsystemBase {
     }
 
     private Climber() {
+        resetEncoders();
+
         leftForwardSwitch.enableLimitSwitch(true);
         leftReverseSwitch.enableLimitSwitch(true);
         rightForwardSwitch.enableLimitSwitch(true);
@@ -99,11 +101,11 @@ public class Climber extends SubsystemBase {
     }
 
     public boolean forwardAtHardLimit() {
-        return rightForwardSwitch.isPressed() || leftForwardSwitch.isPressed();
+        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
     }
 
     public boolean reverseAtHardLimit() {
-        return rightForwardSwitch.isPressed() || leftForwardSwitch.isPressed();
+        return rightReverseSwitch.isPressed() && leftReverseSwitch.isPressed();
     }
 
     public boolean forwardAtSoftLimit() {
@@ -116,7 +118,7 @@ public class Climber extends SubsystemBase {
 
     public void front() {
         if (getEncoder() < 75) {
-            setSpeed(1);
+            setSpeed(0.7);
         }
         else {
             setSpeed(0.6);
@@ -125,7 +127,7 @@ public class Climber extends SubsystemBase {
 
     public void reverse() {
         if (getEncoder() > -75) {
-            setSpeed(-1);
+            setSpeed(-0.7);
         }
         else {
             setSpeed(-0.6);

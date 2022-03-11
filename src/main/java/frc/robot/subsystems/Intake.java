@@ -22,7 +22,6 @@ public class Intake extends SubsystemBase {
 
     private Intake() {
         retract();
-        SmartDashboard.putNumber("Intake Speed", 0.6);
     }
 
     @Override

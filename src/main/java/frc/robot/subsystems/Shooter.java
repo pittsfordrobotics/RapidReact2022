@@ -2,12 +2,10 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
@@ -28,7 +26,6 @@ public class Shooter extends SubsystemBase {
     }
 
     private Shooter() {
-        SmartDashboard.putNumber("Shooter Guess Speed", 0);
         ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
         shooterTab.addNumber("Shooter Target RPM", () -> speed);
         shooterTab.addNumber("Shooter Actual", shooterEncoder::getVelocity);
@@ -37,17 +34,12 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        motorLeft.set(bangBangController.calculate(shooterEncoder.getVelocity(), speed));
-//        motorLeft.set(bangBangController.calculate(shooterEncoder.getVelocity(), speed) + 0.9 * shooterFeedforward.calculate(speed));
-    }
-
-    public void setSmartDashboard() {
-        this.speed = SmartDashboard.getNumber("Shooter Guess Speed", 0);
-        setSpeed(speed);
+//        motorLeft.set(bangBangController.calculate(shooterEncoder.getVelocity(), speed) + 0.0002 * speed);
+        motorLeft.set(0.0002 * speed);
     }
 
     public void setDumbSpeed() {
-        this.speed = 0.3;
+        this.speed = 0.4;
         motorLeft.set(speed);
     }
 
@@ -68,7 +60,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isAtSpeed() {
-        return MathUtil.applyDeadband(shooterEncoder.getVelocity() - speed, 10) == 0;
+        return shooterEncoder.getVelocity() > 0.9 * speed;
     }
 
 }
