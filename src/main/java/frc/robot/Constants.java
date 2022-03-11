@@ -58,6 +58,8 @@ public final class Constants {
 
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
 
+    public static final int DRIVE_VELOCITY_LOG_SIZE = 16;
+
     /**
      *
      * INTAKE
@@ -102,6 +104,8 @@ public final class Constants {
     public static final double SHOOTER_STATIC_GAIN = 0.15345;
     public static final double SHOOTER_VELOCITY_GAIN = 0.12404;
     public static final double SHOOTER_ACCELERATION_GAIN = 0.0072228;
+
+    public static final double SHOOTER_WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
 
     public static final int SHOOTER_LOW_SPEED = 1800;
     public static final int SHOOTER_TARMAC_SPEED = 3000;

@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
+import java.util.LinkedList;
+
 public class Drive extends SubsystemBase {
     private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, 60,false);
     private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, 60, leftPrimary);
@@ -40,6 +42,7 @@ public class Drive extends SubsystemBase {
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+    private LinkedList<Double> velocities = new LinkedList<>();
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
 
     private final SlewRateLimiter rateLimit = new SlewRateLimiter(Constants.DRIVE_RATE_LIMIT);
@@ -75,6 +78,7 @@ public class Drive extends SubsystemBase {
                 rightEncoder.getPosition());
 
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+        updateAverageVelocities();
     }
 
     public void driveArcade(double speed, double rotation, boolean squared) {
@@ -83,7 +87,7 @@ public class Drive extends SubsystemBase {
 
     public void driveCurve(double speed, double rotation, boolean rateLimited) {
         if (rateLimited) {
-            if (MathUtil.applyDeadband(getAverageVelocity(), 0.2) == 0) rateLimit.reset(0);
+            if (MathUtil.applyDeadband(getOverallVelocity(), 0.2) == 0) rateLimit.reset(0);
             differentialDrive.curvatureDrive(speed, rotation, Math.abs(speed) < 0.15);
         }
         else {
@@ -138,7 +142,25 @@ public class Drive extends SubsystemBase {
         return rightEncoder.getVelocity();
     }
 
-    public double getAverageVelocity() { return (getLeftVelocity() + getRightVelocity()) / 2; }
+    public double getOverallVelocity() { return (getLeftVelocity() + getRightVelocity()) / 2; }
+
+    /**
+     * @return averaged velocity over past periodic cycles
+     */
+    public double getAverageVelocity() {
+        double average = 0;
+        for(double i : velocities){
+            average += i;
+        }
+        return (average / velocities.size());
+    }
+
+    public void updateAverageVelocities() {
+        velocities.addFirst(getOverallVelocity());
+        if(velocities.size() > Constants.DRIVE_VELOCITY_LOG_SIZE){
+            velocities.pop();
+        }
+    }
 
     public PIDController getLeftController() {
         return new PIDController(Constants.DRIVE_POSITION_GAIN, Constants.DRIVE_INTEGRAL_GAIN, Constants.DRIVE_DERIVATIVE_GAIN);
@@ -172,7 +194,7 @@ public class Drive extends SubsystemBase {
 
     /**
      * Gets the pigeon's angle
-     * @return current angle; positive = clockwise
+     * @return current angle; positive = clockwise from bird's eye view
      */
     public double getAngle() {
         return -pigeon.getAngle();

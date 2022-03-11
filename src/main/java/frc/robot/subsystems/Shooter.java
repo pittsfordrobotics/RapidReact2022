@@ -17,7 +17,7 @@ public class Shooter extends SubsystemBase {
 
     private final BangBangController bangBangController = new BangBangController();
 
-    private double speed = 0;
+    private double speed = 0; // setpoint
 
     private final static Shooter INSTANCE = new Shooter();
     public static Shooter getInstance() {
@@ -41,12 +41,31 @@ public class Shooter extends SubsystemBase {
         motorLeft.set(0.0002 * speed);
     }
 
+    /**
+     * @param speed The flywheel setpoint, in RPM
+     */
     public void setSpeed(double speed) {
         this.speed = speed;
     }
 
+    /**
+     * Sets the flywheel velocity, accounting for the velocity of the robot imparted to the cargo
+     * @param speed The flywheel setpoint, in RPM
+     * @param offset Gain applied to the robot velocity
+     */
+    public void setSpeed(double speed, double offset){
+        this.speed = speed - getGroundSpeed()*offset;
+    }
+
     public void shootLow() {
         this.speed = Constants.SHOOTER_LOW_SPEED;
+    }
+
+    /**
+     * @return averaged velocity of the ground with respect to the flywheel, in RPM
+     */
+    public double getGroundSpeed(){
+        return (Drive.getInstance().getAverageVelocity()*60/Constants.SHOOTER_WHEEL_DIAMETER_METERS/Math.PI);
     }
 
     public void shootStop() {
@@ -56,7 +75,7 @@ public class Shooter extends SubsystemBase {
     public boolean isAtSpeed() {
 //        TODO: test new at speed
 //        return MathUtil.applyDeadband(shooterEncoder.getVelocity() - speed, 100) == 0;
-        return shooterEncoder.getVelocity() > 0.9 * speed;
+        return (shooterEncoder.getVelocity() > 0.9 * speed && shooterEncoder.getVelocity() < 1.1 * speed);
     }
 
 }

@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     indexer.disable();
-    if (drive.getAverageVelocity() == 0) {
+    if (drive.getOverallVelocity() == 0) {
       drive.coastMode();
     }
   }
