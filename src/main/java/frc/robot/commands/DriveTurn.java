@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
@@ -15,23 +14,25 @@ public class DriveTurn extends CommandBase {
   private final Drive drive = Drive.getInstance();
   private final PIDController pidController = new PIDController(0.01,0, 0);
 
+  /**
+   * Auto turn for driving
+   * @param angle positive = counterclockwise
+   */
   public DriveTurn(double angle) {
     this.angle = angle;
-    SmartDashboard.putNumber("PID TURN", 0.07);
     addRequirements(this.drive);
   }
 
   @Override
   public void initialize() {
-    pidController.setP(SmartDashboard.getNumber("PID TURN", 0));
     drive.setTempThrottle(0.6);
     pidController.setSetpoint(drive.getAngle() + angle);
-    pidController.setTolerance(1);
+    pidController.setTolerance(5);
   }
 
   @Override
   public void execute() {
-    drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + ((angle < 0) ? -0.2 : 0.2), -0.5, 0.5), false);
+    drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + (angle > 0 ? 0.1 : -0.1), -0.5, 0.5), false);
   }
 
   @Override

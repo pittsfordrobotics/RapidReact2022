@@ -13,7 +13,7 @@ public class ClimberReverse extends CommandBase {
 
     @Override
     public void initialize() {
-        climber.enableSoftLimit();
+//        climber.enableSoftLimit();
     }
 
     @Override
@@ -23,11 +23,10 @@ public class ClimberReverse extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return climber.reverseAtSoftLimit();
+        return true;
     }
 
     @Override
     public void end(boolean interrupted) {
-        climber.stopAll();
     }
 }

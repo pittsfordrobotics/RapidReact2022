@@ -248,7 +248,7 @@ public class Indexer extends SubsystemBase {
                 stomachMotorOff();
                 towerMotorOff();
         }
-        if (isFull()) {
+        if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterupt());
         }
         if (isWrongColorBall()) {

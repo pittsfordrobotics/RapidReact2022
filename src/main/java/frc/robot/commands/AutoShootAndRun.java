@@ -9,7 +9,7 @@ public class AutoShootAndRun extends SequentialCommandGroup {
         super(
                 new IndexerWaitForArmed(),
                 new CG_LowShot(),
-                new DrivePathing(Constants.TRAJECTORY_EXIT_TARMAC)
+                new DrivePathing(Constants.TRAJECTORY_THREE_METER_BACKWARD)
         );
     }
 }

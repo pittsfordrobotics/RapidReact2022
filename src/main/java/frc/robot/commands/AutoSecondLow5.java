@@ -10,6 +10,7 @@ public class AutoSecondLow5 extends SequentialCommandGroup {
     public AutoSecondLow5() {
         super(
             new IntakeDown(),
+            new WaitCommand(0.2),
             new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_BALL5_NUMBER3),
             new ParallelCommandGroup(
                 new IntakeUp(),

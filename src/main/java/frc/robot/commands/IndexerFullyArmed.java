@@ -1,32 +1,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Indexer;
 
 
-public class ClimberForward extends CommandBase {
-    private final Climber climber = Climber.getInstance();
+public class IndexerFullyArmed extends CommandBase {
+    private final Indexer indexer = Indexer.getInstance();
 
-    public ClimberForward() {
-        addRequirements(this.climber);
+    public IndexerFullyArmed() {
+        addRequirements(this.indexer);
     }
 
     @Override
     public void initialize() {
-//        climber.enableSoftLimit();
     }
 
     @Override
     public void execute() {
-        climber.front();
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return indexer.fullyLoaded();
     }
 
     @Override
     public void end(boolean interrupted) {
+
     }
 }

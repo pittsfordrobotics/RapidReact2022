@@ -54,7 +54,7 @@ public final class Constants {
     public static final double DRIVE_ACCELERATION_GAIN = 0.0093369;
 
     public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = 5;
-    public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 4;
+    public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
 
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
 
@@ -65,7 +65,7 @@ public final class Constants {
      */
     public static final int INTAKE_CAN_MAIN = 10;
 
-    public static final double INTAKE_MAIN_SPEED = 0.6;
+    public static final double INTAKE_MAIN_SPEED = 0.7;
 
     public static final int INTAKE_PNEUMATIC_LEFT_FORWARD = 2;
     public static final int INTAKE_PNEUMATIC_LEFT_REVERSE = 3;
@@ -104,7 +104,7 @@ public final class Constants {
     public static final double SHOOTER_ACCELERATION_GAIN = 0.0072228;
 
     public static final int SHOOTER_LOW_SPEED = 1800;
-    public static final int SHOOTER_TARMAC_SPEED = 3000;
+    public static final int SHOOTER_TARMAC_SPEED = 2200;
     public static final int SHOOTER_AUTO_5_SPEED = 3000;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
@@ -166,18 +166,18 @@ public final class Constants {
                             10)
             );
 
-    public static final Trajectory TRAJECTORY_ONE_METER_BACKWARD = TrajectoryGenerator.generateTrajectory(
+    public static final Trajectory TRAJECTORY_THREE_METER_BACKWARD = TrajectoryGenerator.generateTrajectory(
             List.of(
                     new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                    new Pose2d(-1, 0, Rotation2d.fromDegrees(0))
+                    new Pose2d(-3, 0, Rotation2d.fromDegrees(0))
             ),
             TRAJECTORY_CONFIG_REVERSED
     );
 
-    public static final Trajectory TRAJECTORY_EXIT_TARMAC = TrajectoryGenerator.generateTrajectory(
+    public static final Trajectory TRAJECTORY_ONE_METER_BACKWARD = TrajectoryGenerator.generateTrajectory(
             List.of(
                     new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                    new Pose2d(-Units.inchesToMeters(90), 0, Rotation2d.fromDegrees(0))
+                    new Pose2d(-1, 0, Rotation2d.fromDegrees(0))
             ),
             TRAJECTORY_CONFIG_REVERSED
     );

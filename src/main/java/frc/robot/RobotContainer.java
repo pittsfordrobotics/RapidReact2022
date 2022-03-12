@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.controller.BetterXboxController;
@@ -44,6 +45,7 @@ public class RobotContainer {
   private void testButtons() {
     driverController.A.whenActive(new IntakeToggle());
     driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
+//    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
     driverController.B.whenActive(new DriveTurn(180));
     driverController.RB.and(driverController.B).whenActive(new DriveTurn(90));
     driverController.Y.whenActive(new ShooterLime());
@@ -54,9 +56,9 @@ public class RobotContainer {
     operatorController.B.whileActiveOnce(new IndexerOverride(true));
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
-    driverController.DLeft.whenPressed(new DriveSetThrottle(0.7));
-    driverController.DRight.whenPressed(new DriveSetThrottle(0.5));
-    driverController.DDown.whenPressed(new DriveSetThrottle(0.25));
+    driverController.DLeft.whenPressed(new DriveSetThrottle(0.8));
+    driverController.DRight.whenPressed(new DriveSetThrottle(0.7));
+    driverController.DDown.whenPressed(new DriveSetThrottle(0.6));
 
   }
 
@@ -71,24 +73,23 @@ public class RobotContainer {
     driverController.DRight.whenActive(new DriveSetThrottle(0.4));
     driverController.DDown.whenActive(new DriveSetThrottle(0.1));
 
-    operatorController.A.whenActive(new IntakeToggle());
     operatorController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
     operatorController.B.whenActive(new CG_UnoShot());
     operatorController.Y.whileActiveOnce(new IndexerOverride(false));
-    operatorController.Y.and(operatorController.RB).whileActiveOnce(new IndexerOverride(true));
-    operatorController.LB.and(operatorController.Back).whileActiveOnce(new CG_ClimberAuto()).whenInactive(new ClimberStop());
-    operatorController.LB.and(operatorController.DUp).whileActiveOnce(new ClimberForward());
-    operatorController.LB.and(operatorController.DDown).whileActiveOnce(new ClimberReverse());
+    operatorController.Y.and(operatorController.RB).whileActiveOnce(new SequentialCommandGroup(new IntakeReverse(), new IndexerOverride(true)));
+    operatorController.LB.and(operatorController.Start).whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
+    operatorController.LB.and(operatorController.Back).whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
   }
 
   private void autoConfig() {
-    firstAutoChooser.setDefaultOption("No auto", null);
+    firstAutoChooser.setDefaultOption("No auto", new WaitCommand(0));
     firstAutoChooser.setDefaultOption("Test", new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
+    firstAutoChooser.addOption("Run", new SequentialCommandGroup(new CG_SpeedShot(2700), new DrivePathing(Constants.TRAJECTORY_THREE_METER_BACKWARD)));
     firstAutoChooser.addOption("Shoot and Run", new AutoShootAndRun());
     firstAutoChooser.addOption("2 Ball Bottom", new AutoFirstBottomLow2());
     firstAutoChooser.addOption("2 Ball Left", new AutoFirstLeftLow2());
 
-    secondAutoChooser.setDefaultOption("No auto", null);
+    secondAutoChooser.setDefaultOption("No auto", new WaitCommand(0));
     secondAutoChooser.addOption("3 Ball", new AutoSecondLow3());
     secondAutoChooser.addOption("5 Ball", new AutoSecondLow5());
 
