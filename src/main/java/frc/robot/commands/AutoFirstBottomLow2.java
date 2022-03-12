@@ -10,6 +10,7 @@ public class AutoFirstBottomLow2 extends SequentialCommandGroup {
         super(
             new IntakeDown(),
             new WaitCommand(1),
+//            new WaitCommand(0.5),
             new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_BOTTOM_BALL2_NUMBER1),
             new IndexerFullyArmed(),
             new IntakeUp(),

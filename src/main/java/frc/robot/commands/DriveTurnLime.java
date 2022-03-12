@@ -9,7 +9,7 @@ import frc.robot.subsystems.Limelight;
 public class DriveTurnLime extends CommandBase {
     private final Drive drive = Drive.getInstance();
     private final Limelight limelight = Limelight.getInstance();
-    private final PIDController pidController = new PIDController(0.06,0,0);
+    private final PIDController pidController = new PIDController(0.01,0,0);
 
     public DriveTurnLime() {
         addRequirements(this.drive, this.limelight);
@@ -19,7 +19,7 @@ public class DriveTurnLime extends CommandBase {
     public void initialize() {
         drive.setTempThrottle(0.6);
         pidController.setSetpoint(0);
-        pidController.setTolerance(1);
+        pidController.setTolerance(5);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class DriveTurnLime extends CommandBase {
             drive.driveArcade(0, 0.5, false);
         }
         else {
-            drive.driveArcade(0, MathUtil.clamp(pidController.calculate(limelight.getHorizontal()) + (limelight.getHorizontal() > 0 ? 0.2 : -0.2), -0.5, 0.5), false);
+            drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(limelight.getHorizontal()) + (limelight.getHorizontal() > 0 ? 0.1 : -0.1), -0.2, 0.2), false);
         }
     }
 

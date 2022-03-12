@@ -26,8 +26,7 @@ public class RobotContainer {
   private final BetterXboxController driverController = new BetterXboxController(0, BetterXboxController.Hand.LEFT, BetterXboxController.Humans.DRIVER);
   private final BetterXboxController operatorController = new BetterXboxController(1, BetterXboxController.Humans.OPERATOR);
 
-  private final SendableChooser<Command> firstAutoChooser = new SendableChooser<>();
-  private final SendableChooser<Command> secondAutoChooser = new SendableChooser<>();
+  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
   private final SendableChooser<Integer> ballChooser = new SendableChooser<>();
 
   public RobotContainer() {
@@ -45,9 +44,7 @@ public class RobotContainer {
   private void testButtons() {
     driverController.A.whenActive(new IntakeToggle());
     driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
-//    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
-    driverController.B.whenActive(new DriveTurn(180));
-    driverController.RB.and(driverController.B).whenActive(new DriveTurn(90));
+    driverController.B.whileActiveOnce(new ShooterDashboard()).whenInactive(new ShooterZero());
     driverController.Y.whenActive(new ShooterLime());
     driverController.Start.whenActive(new LimelightEnable());
     driverController.Back.whenActive(new LimelightDisable());
@@ -82,22 +79,18 @@ public class RobotContainer {
   }
 
   private void autoConfig() {
-    firstAutoChooser.setDefaultOption("No auto", new WaitCommand(0));
-    firstAutoChooser.setDefaultOption("Test", new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_TEST));
-    firstAutoChooser.addOption("Run", new SequentialCommandGroup(new CG_SpeedShot(2700), new DrivePathing(Constants.TRAJECTORY_THREE_METER_BACKWARD)));
-    firstAutoChooser.addOption("Shoot and Run", new AutoShootAndRun());
-    firstAutoChooser.addOption("2 Ball Bottom", new AutoFirstBottomLow2());
-    firstAutoChooser.addOption("2 Ball Left", new AutoFirstLeftLow2());
-
-    secondAutoChooser.setDefaultOption("No auto", new WaitCommand(0));
-    secondAutoChooser.addOption("3 Ball", new AutoSecondLow3());
-    secondAutoChooser.addOption("5 Ball", new AutoSecondLow5());
+    autoChooser.setDefaultOption("No auto", new WaitCommand(0));
+    autoChooser.addOption("Run Forward", new SequentialCommandGroup(new DrivePathing(Constants.TRAJECTORY_THREE_METER_BACKWARD)));
+    autoChooser.addOption("Shoot and Run Back", new AutoShootAndRun());
+    autoChooser.addOption("2 Ball Bottom", new AutoFirstBottomLow2());
+    autoChooser.addOption("2 Ball Left", new AutoFirstLeftLow2());
+    autoChooser.addOption("3 Ball", new AutoSecondLow3());
+    autoChooser.addOption("5 Ball", new AutoThirdLow5());
 
     ballChooser.setDefaultOption("0", 0);
     ballChooser.addOption("1", 1);
 
-    SmartDashboard.putData("First Auto Command", firstAutoChooser);
-    SmartDashboard.putData("Second Auto Command", secondAutoChooser);
+    SmartDashboard.putData("Auto Command", autoChooser);
     SmartDashboard.putData("Starting Balls", ballChooser);
   }
 
@@ -105,9 +98,6 @@ public class RobotContainer {
     if (ballChooser.getSelected() == 1) {
       indexer.addBallToTower();
     }
-    return new SequentialCommandGroup(
-      firstAutoChooser.getSelected(),
-      secondAutoChooser.getSelected()
-    );
+    return autoChooser.getSelected();
   }
 }

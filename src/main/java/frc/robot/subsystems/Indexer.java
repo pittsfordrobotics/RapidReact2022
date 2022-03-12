@@ -421,7 +421,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean isWrongColorBall() {
-        return balls[0].getColor() != allianceColor && balls[0].getColor() != COLOR.UNKNOWN ;
+        return balls[0].getColor() != allianceColor && balls[0].getColor() != COLOR.UNKNOWN && allianceColor != COLOR.UNKNOWN;
     }
 
     public boolean allianceIsUnknown() {
