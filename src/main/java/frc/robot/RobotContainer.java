@@ -40,7 +40,8 @@ public class RobotContainer {
 
   private void testButtons() {
     driverController.A.whenActive(new IntakeToggle());
-    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
+//    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
+    driverController.X.whenActive(new CG_IntakeWiggle());
     driverController.B.whileActiveOnce(new ShooterDashboard()).whenInactive(new ShooterZero());
     driverController.Y.whenActive(new ShooterLime());
     driverController.Start.whenActive(new LimelightEnable());
@@ -71,7 +72,7 @@ public class RobotContainer {
 
   private void autoConfig() {
     autoChooser.setDefaultOption("No auto", new WaitCommand(0));
-    autoChooser.addOption("Run Forward", new SequentialCommandGroup(new DrivePathing(Constants.TRAJECTORY_THREE_METER_BACKWARD)));
+    autoChooser.addOption("Run Back", new SequentialCommandGroup(new DrivePathing(Constants.TRAJECTORY_THREE_METER_BACKWARD)));
     autoChooser.addOption("Shoot and Run Back", new AutoShootAndRun());
     autoChooser.addOption("2 Ball Bottom", new AutoFirstBottomLow2());
     autoChooser.addOption("2 Ball Left", new AutoFirstLeftLow2());

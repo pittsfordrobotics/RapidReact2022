@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
     drive.coastMode();
     intake.retract();
     limelight.disable();
+    indexer.disable();
   }
 
   @Override
@@ -50,7 +51,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    indexer.disable();
     if (drive.getAverageVelocity() == 0) {
       drive.coastMode();
     }
@@ -76,7 +76,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.brakeMode();
-    indexer.resetEverything();
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
