@@ -60,7 +60,7 @@ public class Drive extends SubsystemBase {
         leftEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO / 60);
         rightEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO / 60);
 
-        setThrottle(0.6);
+        setThrottle(0.7);
 
         ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
         driveTab.addNumber("Pigeon", pigeon::getAngle);
