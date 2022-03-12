@@ -9,7 +9,7 @@ public class AutoFirstLeftLow2 extends SequentialCommandGroup {
     public AutoFirstLeftLow2() {
         super(
             new IntakeDown(),
-            new WaitCommand(0.5),
+            new WaitCommand(1),
             new DrivePathing(Constants.TRAJECTORY_PATHPLANNER_LEFT_BALL2_NUMBER1),
             new IndexerWaitForArmed(),
             new IntakeUp(),

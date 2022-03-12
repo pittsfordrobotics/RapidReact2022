@@ -85,7 +85,6 @@ public class RobotContainer {
     autoChooser.addOption("2 Ball Bottom", new AutoFirstBottomLow2());
     autoChooser.addOption("2 Ball Left", new AutoFirstLeftLow2());
     autoChooser.addOption("3 Ball", new AutoSecondLow3());
-    autoChooser.addOption("5 Ball", new AutoThirdLow5());
 
     ballChooser.setDefaultOption("0", 0);
     ballChooser.addOption("1", 1);
