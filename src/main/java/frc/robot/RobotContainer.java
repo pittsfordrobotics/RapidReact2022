@@ -48,12 +48,6 @@ public class RobotContainer {
 
     operatorController.Y.whenHeld(new IndexerOverride(false));
     operatorController.B.whileActiveOnce(new IndexerOverride(true));
-
-    driverController.DUp.whenPressed(new DriveSetThrottle(1));
-    driverController.DLeft.whenPressed(new DriveSetThrottle(0.8));
-    driverController.DRight.whenPressed(new DriveSetThrottle(0.7));
-    driverController.DDown.whenPressed(new DriveSetThrottle(0.6));
-
   }
 
   private void configureButtonBindings() {
@@ -62,10 +56,10 @@ public class RobotContainer {
 //    driverController.Y.whileActiveOnce(new CG_LimeShot()).whenInactive(new ShooterZero());
     driverController.X.and(driverController.RB).whileActiveOnce(new ShooterLow()).whenInactive(new ShooterZero());
     driverController.B.whenActive(new CG_UnoShot());
-    driverController.DUp.whenActive(new DriveSetThrottle(1));
-    driverController.DLeft.whenActive(new DriveSetThrottle(0.7));
-    driverController.DRight.whenActive(new DriveSetThrottle(0.4));
-    driverController.DDown.whenActive(new DriveSetThrottle(0.1));
+    driverController.DUp.whenPressed(new DriveSetThrottle(1));
+    driverController.DLeft.whenPressed(new DriveSetThrottle(0.8));
+    driverController.DRight.whenPressed(new DriveSetThrottle(0.7));
+    driverController.DDown.whenPressed(new DriveSetThrottle(0.6));
 
     operatorController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
     operatorController.B.whenActive(new CG_UnoShot());
