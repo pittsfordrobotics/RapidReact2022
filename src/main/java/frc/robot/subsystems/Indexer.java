@@ -278,6 +278,10 @@ public class Indexer extends SubsystemBase {
         }
     }
 
+    public boolean isDisabled() {
+        return state == State.DISABLED;
+    }
+
     public void resetEverything() {
         state = State.FIELD2;
         resetBalls();

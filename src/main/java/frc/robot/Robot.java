@@ -76,6 +76,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.brakeMode();
+    if (indexer.isDisabled()) {
+      indexer.resetEverything();
+    }
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }

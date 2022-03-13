@@ -65,7 +65,7 @@ public final class Constants {
      */
     public static final int INTAKE_CAN_MAIN = 10;
 
-    public static final double INTAKE_MAIN_SPEED = 0.7;
+    public static final double INTAKE_MAIN_SPEED = 0.9;
 
     public static final int INTAKE_PNEUMATIC_LEFT_FORWARD = 2;
     public static final int INTAKE_PNEUMATIC_LEFT_REVERSE = 3;
@@ -83,7 +83,7 @@ public final class Constants {
     public static final int INDEXER_CAN_TOWER = 9; // elevator
 
     public static final double INDEXER_STOMACH_SPEED = 0.6;
-    public static final double INDEXER_TOWER_SPEED = 0.6;
+    public static final double INDEXER_TOWER_SPEED = 0.9;
 
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
     public static final int INDEXER_COLOR_PROXIMITY = 200;
