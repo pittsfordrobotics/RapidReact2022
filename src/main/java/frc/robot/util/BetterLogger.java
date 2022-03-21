@@ -26,7 +26,7 @@ public class BetterLogger {
     private static final Limelight limelight = Limelight.getInstance();
 
     private static final String logFolder = "/media/sda2/";
-    private static final String logTitle = "'BetterLogger'_yy-MM-dd_HH-mm-ss'.csv'";
+    private static final String logTitle = "'BetterLogger'_MM-dd-yyyy_HH:mm:ss'.csv'";
     private static final String basicLogValues = "Timestamp,Enabled,X,Y,Rotation,Throttle,Shooter Armed,Indexer Balls,Target Detected";
     private static final String detailedLogValues = "Target Distance,Target Horizontal,Target Vertical,Shooter Speed,Shooter Set Speed,Indexer State,Ball0 Color,Ball0 Location,Ball1 Color,Ball1 Location,Compressor State,Intake Extended,Climber Encoder,Climber Forward Limit,Climber Reverse Limit,Pigeon Angle,Battery Voltage,CAN Bus Utilization";
     private static final String xboxLogValues = "Connected,Left X,Left Y,Right X,Right Y,Right Stick Button,Left Stick Button,A,B,X,Y,Start,Back,Right Bumper,Left Bumper,Right Trigger,Left Trigger,DPad";;
@@ -58,7 +58,7 @@ public class BetterLogger {
                         logTimer.start();
                         new File(logPath).createNewFile();
                         logger = new FileWriter(logPath);
-                        logger.write(new SimpleDateFormat("yy-MM-dd_HH-mm-ss").format(new Date()) + "\n");
+                        logger.write(new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()) + "\n");
                         logger.write(DriverStation.getAlliance().name() + "\n");
                         logger.write(basicLogValues + "," + detailedLogValues + ",Driver," + xboxLogValues + ",Operator," + xboxLogValues + "\n");
                         logger.flush();
