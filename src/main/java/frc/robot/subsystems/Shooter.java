@@ -59,4 +59,12 @@ public class Shooter extends SubsystemBase {
         return shooterEncoder.getVelocity() > 0.9 * speed;
     }
 
+    public double getSpeed() {
+        return shooterEncoder.getVelocity();
+    }
+
+    public double getSetSpeed() {
+        return speed;
+    }
+
 }

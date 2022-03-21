@@ -19,7 +19,7 @@ public class PIDTuner {
         this.name = name;
         this.pidController = pidController;
         controllerType = ControllerType.WPI;
-        SmartDashboard.putNumber(name + " P", 0);
+        SmartDashboard.putNumber(name + " P", pidController.getP());
         SmartDashboard.putNumber(name + " I", 0);
         SmartDashboard.putNumber(name + " D", 0);
     }

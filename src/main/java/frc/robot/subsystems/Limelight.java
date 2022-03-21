@@ -11,8 +11,6 @@ import org.jetbrains.annotations.NotNull;
 public class Limelight extends SubsystemBase {
     private final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
-    private final ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
-
     public enum Pipelines {
         PRACTICE(0), COMPETITION(1);
 
@@ -60,6 +58,7 @@ public class Limelight extends SubsystemBase {
     }
 
     private Limelight() {
+        ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
         limelightTab.addBoolean("Has Target", this::hasTarget);
         limelightTab.addNumber("Distance", this::getDistance);
         limelightTab.addNumber("Horizontal", this::getHorizontal);
