@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -33,6 +34,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    DriverStation.silenceJoystickConnectionWarning(true);
     climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
     robotContainer = new RobotContainer();
     revPDH.setSwitchableChannel(true);
