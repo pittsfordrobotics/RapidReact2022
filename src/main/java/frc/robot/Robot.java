@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CG_ClimberCalibrate;
 import frc.robot.subsystems.*;
-import frc.robot.util.BetterLogger;
+import frc.robot.util.TestLogger;
 import frc.robot.util.controller.BetterXboxController;
 
 public class Robot extends TimedRobot {
@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     intake.retract();
     limelight.disable();
     indexer.disable();
-    BetterLogger.enable();
+    TestLogger.enable();
   }
 
   @Override
@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     new BetterXboxController(0, BetterXboxController.Hand.LEFT, BetterXboxController.Humans.DRIVER);
     new BetterXboxController(1, BetterXboxController.Humans.OPERATOR);
-    BetterLogger.logData();
+    TestLogger.logData();
   }
 
   @Override
