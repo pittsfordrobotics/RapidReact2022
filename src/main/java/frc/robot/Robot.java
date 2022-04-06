@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -12,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CG_ClimberCalibrate;
 import frc.robot.subsystems.*;
-import frc.robot.util.TestLogger;
+import frc.robot.util.BetterLogger;
 import frc.robot.util.controller.BetterXboxController;
 
 public class Robot extends TimedRobot {
@@ -41,15 +42,17 @@ public class Robot extends TimedRobot {
     intake.retract();
     limelight.disable();
     indexer.disable();
-    TestLogger.enable();
+//    TestLogger.enable();
+    BetterLogger.enable();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    if (DriverStation.isDSAttached()) BetterLogger.createFile();
     new BetterXboxController(0, BetterXboxController.Hand.LEFT, BetterXboxController.Humans.DRIVER);
     new BetterXboxController(1, BetterXboxController.Humans.OPERATOR);
-    TestLogger.logData();
+//    TestLogger.logData();
   }
 
   @Override
