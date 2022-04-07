@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.Alert;
+import frc.robot.util.Alert.AlertType;
 import org.jetbrains.annotations.NotNull;
 
 public class Limelight extends SubsystemBase {
@@ -52,6 +54,8 @@ public class Limelight extends SubsystemBase {
         }
     }
 
+    private final Alert limelightAlert = new Alert("Limelight not detected! Vision will NOT work!", AlertType.ERROR);
+
     private static final Limelight INSTANCE = new Limelight();
     public static Limelight getInstance() {
         return INSTANCE;
@@ -65,6 +69,11 @@ public class Limelight extends SubsystemBase {
         limelightTab.addNumber("Vertical", this::getVertical);
         setLED(LED.OFF);
         setCamMode(CameraMode.DRIVER_CAMERA);
+    }
+
+    @Override
+    public void periodic() {
+        limelightAlert.set(limelight.getEntry("tl").getDouble(0) == 0);
     }
 
     public boolean hasTarget() {

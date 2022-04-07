@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.Alert;
-import frc.robot.util.Alert.AlertType;
 import frc.robot.util.LazySparkMax;
 
 public class Drive extends SubsystemBase {
@@ -45,8 +44,12 @@ public class Drive extends SubsystemBase {
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
+    private boolean pigeonConnected = true;
 
     private final SlewRateLimiter rateLimit = new SlewRateLimiter(Constants.DRIVE_RATE_LIMIT);
+
+    private final Alert pigeonSoftAlert = new Alert("Pigeon not detected! NavX will be used instead!", Alert.AlertType.WARNING);
+    private final Alert gyroAlert = new Alert("navX and Pigeon both not detected! Autonomous will NOT work!", Alert.AlertType.ERROR);
 
     private static final Drive INSTANCE = new Drive();
     public static Drive getInstance() {
@@ -56,14 +59,6 @@ public class Drive extends SubsystemBase {
     private Drive() {
         differentialDrive.setDeadband(0.2);
 
-        Alert pigeonSoftAlert = new Alert("Pigeon not detected! NavX will be used instead!", AlertType.WARNING);
-        if (!(pigeon.getUpTime() > 0)) {
-            pigeonSoftAlert.set(true);
-        }
-        if (!navX.isConnected()) {
-            pigeonSoftAlert.set(false);
-            new Alert("navX and Pigeon both not detected! Autonomous will NOT work!", AlertType.ERROR).set(true);
-        }
         pigeon.configAllSettings(Constants.DRIVE_PIGEON_CONFIG);
         pigeon.reset();
         navX.reset();
@@ -82,6 +77,10 @@ public class Drive extends SubsystemBase {
 
     @Override
     public void periodic() {
+        pigeonConnected = pigeon.getUpTime() > 0;
+        pigeonSoftAlert.set(!pigeonConnected && navX.isConnected());
+        gyroAlert.set(!pigeonConnected && !navX.isConnected());
+
         pose = odometry.update(
                 Rotation2d.fromDegrees(getAngle()),
                 leftEncoder.getPosition(),
@@ -188,7 +187,7 @@ public class Drive extends SubsystemBase {
      * @return current angle; positive = clockwise
      */
     public double getAngle() {
-        return -pigeon.getAngle();
+        return pigeonConnected ? -pigeon.getAngle() : -navX.getAngle();
     }
 
     public SlewRateLimiter getRateLimit() {
