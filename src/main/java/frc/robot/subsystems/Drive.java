@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
@@ -22,6 +23,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.Alert;
+import frc.robot.util.Alert.AlertType;
 import frc.robot.util.LazySparkMax;
 
 public class Drive extends SubsystemBase {
@@ -34,6 +37,7 @@ public class Drive extends SubsystemBase {
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
     private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
+    private final AHRS navX = new AHRS();
 
     private double throttle;
     private double tempThrottle;
@@ -52,8 +56,17 @@ public class Drive extends SubsystemBase {
     private Drive() {
         differentialDrive.setDeadband(0.2);
 
+        Alert pigeonSoftAlert = new Alert("Pigeon not detected! NavX will be used instead!", AlertType.WARNING);
+        if (!(pigeon.getUpTime() > 0)) {
+            pigeonSoftAlert.set(true);
+        }
+        if (!navX.isConnected()) {
+            pigeonSoftAlert.set(false);
+            new Alert("navX and Pigeon both not detected! Autonomous will NOT work!", AlertType.ERROR).set(true);
+        }
         pigeon.configAllSettings(Constants.DRIVE_PIGEON_CONFIG);
         pigeon.reset();
+        navX.reset();
 
         leftEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
         rightEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);

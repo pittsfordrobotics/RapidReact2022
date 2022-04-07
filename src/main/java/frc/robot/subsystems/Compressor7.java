@@ -15,6 +15,11 @@ public class Compressor7 extends SubsystemBase {
 
     private Compressor7(){}
 
+    @Override
+    public void periodic() {
+//        TODO: add alert for not building pressure
+    }
+
     public void enable() {
         compressor.enableDigital();
     }
