@@ -4,7 +4,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -73,7 +72,7 @@ public class Indexer extends SubsystemBase {
     @Override
     public void periodic() {
         if((colorSensorIntake.getProximity() == 0 && colorSensorIntake.getBlue() == 0 && colorSensorIntake.getRed() == 0)){
-            colorSensorIntake = new ColorSensorV3(I2C.Port.kOnboard);
+            colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
         }
         boolean ballCurrentlyAtIntake = getBallAtIntake();
         boolean ballCurrentlyAtTower = getBallAtTower();
