@@ -15,6 +15,8 @@ import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeUpNoInterupt;
+import frc.robot.util.Alert;
+import frc.robot.util.Alert.AlertType;
 import frc.robot.util.LazySparkMax;
 import frc.robot.util.controller.BetterXboxController;
 
@@ -40,6 +42,8 @@ public class Indexer extends SubsystemBase {
     private State state = State.DISABLED;
 
     private COLOR allianceColor = COLOR.UNKNOWN;
+
+    private final Alert colorSensorAlert = new Alert("Color sensor not detected! Auto indexing will NOT work!", AlertType.ERROR);
 
     private final static Indexer INSTANCE = new Indexer();
     public static Indexer getInstance() {
@@ -74,6 +78,7 @@ public class Indexer extends SubsystemBase {
         if((colorSensorIntake.getProximity() == 0 && colorSensorIntake.getBlue() == 0 && colorSensorIntake.getRed() == 0)){
             colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
         }
+        colorSensorAlert.set(!colorSensorIntake.isConnected());
         boolean ballCurrentlyAtIntake = getBallAtIntake();
         boolean ballCurrentlyAtTower = getBallAtTower();
         boolean ballCurrentlyAtShooter = getBallAtShooter();
