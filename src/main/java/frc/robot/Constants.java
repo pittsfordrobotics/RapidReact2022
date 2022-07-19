@@ -19,10 +19,31 @@ import edu.wpi.first.wpilibj.I2C;
 import frc.robot.util.InterpolatingTreeMap;
 import frc.robot.subsystems.Limelight.Pipelines;
 
+import java.util.HashMap;
 import java.util.List;
 
 // NEW ROBOT
 public final class Constants {
+    /**
+     * CAN ID Hash Map
+     */
+    public static final HashMap<Integer, String> SPARKMAX_HASHMAP = new HashMap<Integer, String>();
+
+    static {
+        SPARKMAX_HASHMAP.put(1, "Left Drive Leader");
+        SPARKMAX_HASHMAP.put(2, "Left Drive Follower");
+        SPARKMAX_HASHMAP.put(3, "Right Drive Leader");
+        SPARKMAX_HASHMAP.put(4, "Right Drive Follower");
+        SPARKMAX_HASHMAP.put(5, "Climber Left");
+        SPARKMAX_HASHMAP.put(6, "Climber Right");
+        SPARKMAX_HASHMAP.put(7, "Stomach Right");
+        SPARKMAX_HASHMAP.put(8, "Stomach Left");
+        SPARKMAX_HASHMAP.put(9, "Tower");
+        SPARKMAX_HASHMAP.put(10, "Intake");
+        SPARKMAX_HASHMAP.put(11, "Shooter Left");
+        SPARKMAX_HASHMAP.put(12, "Shooter Right");
+    }
+
     /**
      *
      * DRIVE

@@ -14,7 +14,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.drive.Drive;
 
 public class DrivePathing extends SequentialCommandGroup {
   public DrivePathing(Trajectory trajectory) {

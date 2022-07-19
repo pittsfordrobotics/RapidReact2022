@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -36,7 +37,7 @@ public class Drive extends SubsystemBase {
     private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
 
     private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
-    private final AHRS navX = new AHRS();
+    private final AHRS navX = new AHRS(SPI.Port.kMXP);
 
     private double throttle;
     private double tempThrottle;
@@ -49,7 +50,7 @@ public class Drive extends SubsystemBase {
     private final SlewRateLimiter rateLimit = new SlewRateLimiter(Constants.DRIVE_RATE_LIMIT);
 
     private final Alert pigeonSoftAlert = new Alert("Pigeon not detected! NavX will be used instead!", Alert.AlertType.WARNING);
-    private final Alert gyroAlert = new Alert("navX and Pigeon both not detected! Autonomous will NOT work!", Alert.AlertType.ERROR);
+    private final Alert gyroAlert = new Alert("NavX and Pigeon both not detected! Autonomous will NOT work!", Alert.AlertType.ERROR);
 
     private static final Drive INSTANCE = new Drive();
     public static Drive getInstance() {
