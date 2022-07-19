@@ -19,7 +19,6 @@ import frc.robot.util.Alert.AlertType;
 import frc.robot.util.controller.BetterXboxController;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.inputs.LoggedDriverStation;
 import org.littletonrobotics.junction.inputs.LoggedNetworkTables;
 import org.littletonrobotics.junction.inputs.LoggedSystemStats;
 import org.littletonrobotics.junction.io.ByteLogReceiver;
@@ -55,7 +54,7 @@ public class Robot extends LoggedRobot {
 //    advantageKit
     Logger logger = Logger.getInstance();
     setUseTiming(true);
-    LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
+    LoggedNetworkTables.getInstance().addTable("/SmartDashboard/Indexer");
     logger.recordMetadata("Project", "RapidReact2022");
     logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
     logReceiver = new ByteLogReceiver("/media/sda1/");
@@ -77,7 +76,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    LoggedDriverStation.getInstance().periodic();
 
     Logger.getInstance().recordOutput("ActiveCommands/Scheduler",
             NetworkTableInstance.getDefault()
