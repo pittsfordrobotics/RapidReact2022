@@ -7,111 +7,79 @@
 
 package frc.robot.subsystems.drive;
 
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
-import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.drive.DriveIO.DriveIOInputs;
 import frc.robot.util.Alert;
-import frc.robot.util.LazySparkMax;
+import frc.robot.util.Alert.AlertType;
+import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
-    private final LazySparkMax leftPrimary = new LazySparkMax(Constants.DRIVE_CAN_LEFT_LEADER, IdleMode.kBrake, 60,false);
-    private final LazySparkMax leftFollower = new LazySparkMax(Constants.DRIVE_CAN_LEFT_FOLLOWER, IdleMode.kBrake, 60, leftPrimary);
-    private final LazySparkMax rightPrimary = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_LEADER, IdleMode.kBrake, 60, true);
-    private final LazySparkMax rightFollower = new LazySparkMax(Constants.DRIVE_CAN_RIGHT_FOLLOWER, IdleMode.kBrake, 60, rightPrimary);
-
-    private final RelativeEncoder leftEncoder = leftPrimary.getEncoder();
-    private final RelativeEncoder rightEncoder = rightPrimary.getEncoder();
-
-    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(Constants.DRIVE_CAN_PIGEON);
-    private final AHRS navX = new AHRS(SPI.Port.kMXP);
+    private final DriveIO io;
+    private final DriveIOInputs inputs = new DriveIOInputs();
 
     private double throttle;
     private double tempThrottle;
-    private final DifferentialDrive differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
-    private boolean pigeonConnected = true;
 
-    private final SlewRateLimiter rateLimit = new SlewRateLimiter(Constants.DRIVE_RATE_LIMIT);
+    private final Alert pigeonAlert = new Alert("Pigeon not detected! Many functions of the robot will FAIL!", AlertType.ERROR);
 
-    private final Alert pigeonSoftAlert = new Alert("Pigeon not detected! NavX will be used instead!", Alert.AlertType.WARNING);
-    private final Alert gyroAlert = new Alert("NavX and Pigeon both not detected! Autonomous will NOT work!", Alert.AlertType.ERROR);
-
-    private static final Drive INSTANCE = new Drive();
+    private static final Drive INSTANCE = new Drive(new DriveIOSparkMax());
     public static Drive getInstance() {
         return INSTANCE;
     }
 
-    private Drive() {
-        differentialDrive.setDeadband(0.2);
-
-        pigeon.configAllSettings(Constants.DRIVE_PIGEON_CONFIG);
-        pigeon.reset();
-
-        leftEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
-        rightEncoder.setPositionConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO);
-        leftEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO / 60);
-        rightEncoder.setVelocityConversionFactor(Math.PI * Constants.DRIVE_WHEEL_DIAMETER_METERS / Constants.DRIVE_GEAR_RATIO / 60);
+    private Drive(DriveIO io) {
+        this.io = io;
 
         setThrottle(0.7);
 
         ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
-        driveTab.addNumber("Pigeon", pigeon::getAngle);
+        driveTab.addNumber("Pigeon", () -> Units.radiansToDegrees(inputs.gyroYawPositionRad));
         driveTab.addNumber("Throttle", this::getThrottle);
     }
 
     @Override
     public void periodic() {
-        pigeonConnected = pigeon.getUpTime() > 0;
-        pigeonSoftAlert.set(!pigeonConnected && navX.isConnected());
-        gyroAlert.set(!pigeonConnected && !navX.isConnected());
+        io.updateInputs(inputs);
+        Logger.getInstance().processInputs("Drive", inputs);
+        pigeonAlert.set(!(inputs.gyroUpTime > 0));
 
         pose = odometry.update(
                 Rotation2d.fromDegrees(getAngle()),
-                leftEncoder.getPosition(),
-                rightEncoder.getPosition());
+                inputs.leftPositionRad,
+                inputs.rightPositionRad);
 
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
     }
 
     public void driveArcade(double speed, double rotation, boolean squared) {
-        differentialDrive.arcadeDrive(speed, rotation, squared);
+        WheelSpeeds speeds = DifferentialDrive.arcadeDriveIK(speed, rotation, squared);
+        io.set(speeds.left * throttle, speeds.right * throttle);
     }
 
-    public void driveCurve(double speed, double rotation, boolean rateLimited) {
-        if (rateLimited) {
-            if (MathUtil.applyDeadband(getAverageVelocity(), 0.2) == 0) rateLimit.reset(0);
-            differentialDrive.curvatureDrive(speed, rotation, Math.abs(speed) < 0.15);
-        }
-        else {
-            differentialDrive.curvatureDrive(speed, rotation, Math.abs(speed) < 0.15);
-        }
+    public void driveCurve(double speed, double rotation) {
+        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(speed, rotation, Math.abs(speed) < 0.15);
+        io.set(speeds.left * throttle, speeds.right * throttle);
     }
 
     public void driveVolts(double left, double right) {
-        leftPrimary.setVoltage(left);
-        rightPrimary.setVoltage(right);
-
-        differentialDrive.feed();
+        io.setVoltage(left, right);
     }
 
     public void setThrottle(double throttle) {
-        differentialDrive.setMaxOutput(throttle);
         this.throttle = throttle;
     }
 
@@ -134,20 +102,15 @@ public class Drive extends SubsystemBase {
     }
 
     public void resetEncoders() {
-        leftEncoder.setPosition(0);
-        rightEncoder.setPosition(0);
-    }
-
-    public void resetGyro() {
-        pigeon.reset();
+        io.resetEncoders();
     }
 
     public double getLeftVelocity() {
-        return leftEncoder.getVelocity();
+        return inputs.leftVelocityRadPerSec;
     }
 
     public double getRightVelocity() {
-        return rightEncoder.getVelocity();
+        return inputs.rightVelocityRadPerSec;
     }
 
     public double getAverageVelocity() { return (getLeftVelocity() + getRightVelocity()) / 2; }
@@ -165,17 +128,11 @@ public class Drive extends SubsystemBase {
     }
 
     public void coastMode() {
-        leftPrimary.setIdleMode(IdleMode.kCoast);
-        leftFollower.setIdleMode(IdleMode.kCoast);
-        rightPrimary.setIdleMode(IdleMode.kCoast);
-        rightFollower.setIdleMode(IdleMode.kCoast);
+        io.setBrakeMode(false);
     }
 
     public void brakeMode() {
-        leftPrimary.setIdleMode(IdleMode.kBrake);
-        leftFollower.setIdleMode(IdleMode.kBrake);
-        rightPrimary.setIdleMode(IdleMode.kBrake);
-        rightFollower.setIdleMode(IdleMode.kBrake);
+        io.setBrakeMode(true);
     }
 
     public Pose2d getPose() {
@@ -187,11 +144,7 @@ public class Drive extends SubsystemBase {
      * @return current angle; positive = clockwise
      */
     public double getAngle() {
-        return pigeonConnected ? -pigeon.getAngle() : -navX.getAngle();
-    }
-
-    public SlewRateLimiter getRateLimit() {
-        return rateLimit;
+        return Units.radiansToDegrees(inputs.gyroYawPositionRad);
     }
 
 }

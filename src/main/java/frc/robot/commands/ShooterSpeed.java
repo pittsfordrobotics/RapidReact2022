@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.shooter.Shooter;
 
 
 public class ShooterSpeed extends CommandBase {
@@ -19,7 +19,7 @@ public class ShooterSpeed extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setSpeed(speed);
+        shooter.updateSetpoint(speed);
     }
 
     @Override

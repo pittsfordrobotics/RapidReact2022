@@ -17,7 +17,6 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.util.InterpolatingTreeMap;
-import frc.robot.subsystems.Limelight.Pipelines;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +24,9 @@ import java.util.List;
 // NEW ROBOT
 public final class Constants {
     /**
-     * CAN ID Hash Map
+     *
+     * ROBOT
+     *
      */
     public static final HashMap<Integer, String> SPARKMAX_HASHMAP = new HashMap<Integer, String>();
 
@@ -54,8 +55,6 @@ public final class Constants {
     public static final int DRIVE_CAN_RIGHT_FOLLOWER = 4;
     public static final int DRIVE_CAN_LEFT_LEADER = 1;
     public static final int DRIVE_CAN_LEFT_FOLLOWER = 2;
-
-    public static final double DRIVE_RATE_LIMIT = 1;
 
     public static final Pigeon2Configuration DRIVE_PIGEON_CONFIG = new Pigeon2Configuration();
 
@@ -87,6 +86,7 @@ public final class Constants {
     public static final int INTAKE_CAN_MAIN = 10;
 
     public static final double INTAKE_MAIN_SPEED = 0.9;
+    public static final double INTAKE_GEARING = 18;
 
     public static final int INTAKE_PNEUMATIC_LEFT_FORWARD = 2;
     public static final int INTAKE_PNEUMATIC_LEFT_REVERSE = 3;
@@ -147,18 +147,14 @@ public final class Constants {
     /**
      *
      * LIMELIGHT
-     * all distances measured in inches
+     * all distances measured in meters
      *
      **/
 //    104 inches to top of goal
 //    101.625 inches to bottom of vision target
 //    middle is 102.8125 inches from field
-    public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.8125;
-    public static final double LIMELIGHT_MOUNTING_HEIGHT_INCHES = 24;
-    public static final double LIMELIGHT_ANGLE = 40;
-
-    public static final Pipelines LIMELIGHT_PIPELINE = Pipelines.COMPETITION;
-
+    public static final double LIMELIGHT_MOUNTING_HEIGHT = Units.inchesToMeters(24);
+    public static final double LIMELIGHT_ANGLE = 55;
 
 
     /**

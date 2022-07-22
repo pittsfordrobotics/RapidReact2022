@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.compressor7;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;

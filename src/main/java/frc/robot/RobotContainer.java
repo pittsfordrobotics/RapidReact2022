@@ -10,8 +10,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.compressor7.Compressor7;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.controller.BetterXboxController;
 
 public class RobotContainer {
@@ -19,7 +24,7 @@ public class RobotContainer {
   private final Shooter shooter = Shooter.getInstance();
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
-  private final Limelight limelight = Limelight.getInstance();
+  private final Vision vision = Vision.getInstance();
   private final Indexer indexer = Indexer.getInstance();
   private final Compressor7 compressor = Compressor7.getInstance();
 
@@ -45,8 +50,6 @@ public class RobotContainer {
     driverController.X.whenActive(new CG_IntakeWiggle());
     driverController.B.whileActiveOnce(new ShooterDashboard()).whenInactive(new ShooterZero());
     driverController.Y.whenActive(new ShooterLime());
-    driverController.Start.whenActive(new LimelightEnable());
-    driverController.Back.whenActive(new LimelightDisable());
 
     operatorController.Y.whenHeld(new IndexerOverride(false));
     operatorController.B.whileActiveOnce(new IndexerOverride(true));

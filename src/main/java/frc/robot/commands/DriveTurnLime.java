@@ -4,15 +4,15 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.vision.Vision;
 
 public class DriveTurnLime extends CommandBase {
     private final Drive drive = Drive.getInstance();
-    private final Limelight limelight = Limelight.getInstance();
+    private final Vision vision = Vision.getInstance();
     private final PIDController pidController = new PIDController(0.01,0,0);
 
     public DriveTurnLime() {
-        addRequirements(this.drive, this.limelight);
+        addRequirements(this.drive, this.vision);
     }
 
     @Override
@@ -24,11 +24,11 @@ public class DriveTurnLime extends CommandBase {
 
     @Override
     public void execute() {
-        if (!limelight.hasTarget()) {
+        if (!vision.hasTarget()) {
             drive.driveArcade(0, 0.5, false);
         }
         else {
-            drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(limelight.getHorizontal()) + (limelight.getHorizontal() > 0 ? 0.1 : -0.1), -0.2, 0.2), false);
+            drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(vision.getHorizontal()) + (vision.getHorizontal() > 0 ? 0.1 : -0.1), -0.2, 0.2), false);
         }
     }
 

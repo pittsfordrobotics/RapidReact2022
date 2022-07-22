@@ -13,8 +13,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CG_ClimberCalibrate;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.compressor7.Compressor7;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
 import frc.robot.util.controller.BetterXboxController;
@@ -35,7 +40,7 @@ public class Robot extends LoggedRobot {
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
   private final Compressor7 compressor = Compressor7.getInstance();
-  private final Limelight limelight = Limelight.getInstance();
+  private final Vision vision = Vision.getInstance();
 
   private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
 
@@ -55,7 +60,7 @@ public class Robot extends LoggedRobot {
 //    advantageKit
     Logger logger = Logger.getInstance();
     setUseTiming(true);
-    LoggedNetworkTables.getInstance().addTable("/SmartDashboard/Indexer");
+    LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
     logger.recordMetadata("Project", "RapidReact2022");
     logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
     logReceiver = new ByteLogReceiver("/media/sda1/");
@@ -70,7 +75,6 @@ public class Robot extends LoggedRobot {
     revPDH.setSwitchableChannel(true);
     drive.coastMode();
     intake.retract();
-    limelight.disable();
     indexer.disable();
   }
 

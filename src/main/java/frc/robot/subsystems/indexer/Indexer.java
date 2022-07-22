@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.indexer;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ColorSensorV3;

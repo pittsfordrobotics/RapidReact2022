@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Compressor7;
+import frc.robot.subsystems.compressor7.Compressor7;
 
 
 public class CompressorSmart extends CommandBase {

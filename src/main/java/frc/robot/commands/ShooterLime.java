@@ -2,16 +2,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.shooter.Shooter;
 
 
 public class ShooterLime extends CommandBase {
     private final Shooter shooter = Shooter.getInstance();
-    private final Limelight limelight = Limelight.getInstance();
+    private final Vision vision = Vision.getInstance();
 
     public ShooterLime() {
-        addRequirements(this.limelight, this.shooter);
+        addRequirements(this.vision, this.shooter);
     }
 
     @Override
@@ -20,12 +20,12 @@ public class ShooterLime extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setSpeed(Constants.SHOOTER_SPEED_MAP.lookup(limelight.getDistance()));
+        shooter.updateSetpoint(Constants.SHOOTER_SPEED_MAP.lookup(vision.getDistance()));
     }
 
     @Override
     public boolean isFinished() {
-        return limelight.hasTarget();
+        return vision.hasTarget();
     }
 
     @Override
