@@ -23,7 +23,7 @@ public class ClimberReverse extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return climber.reverseAtSoftLimit();
     }
 
     @Override

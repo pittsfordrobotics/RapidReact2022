@@ -18,7 +18,7 @@ public class IntakeToggle extends CommandBase {
     @Override
     public void execute() {
         intake.toggleSolenoid();
-        intake.toggleMotor();
+        intake.autoMotor();
     }
 
     @Override

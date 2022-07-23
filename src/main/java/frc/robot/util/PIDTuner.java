@@ -8,12 +8,18 @@ public class PIDTuner {
     private final String name;
     private PIDController pidController;
     private SparkMaxPIDController sparkMaxPIDController;
+    private static boolean enabled = false;
 
     private enum ControllerType {
         WPI, SPARKMAX
     }
 
     private final ControllerType controllerType;
+
+    public static void enable(boolean enabled) {
+        PIDTuner.enabled = enabled;
+
+    }
 
     public PIDTuner(String name, PIDController pidController) {
         this.name = name;

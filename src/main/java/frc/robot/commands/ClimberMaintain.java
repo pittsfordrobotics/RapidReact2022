@@ -13,7 +13,6 @@ public class ClimberMaintain extends CommandBase {
 
     @Override
     public void initialize() {
-//        climber.enableSoftLimit();
     }
 
     @Override

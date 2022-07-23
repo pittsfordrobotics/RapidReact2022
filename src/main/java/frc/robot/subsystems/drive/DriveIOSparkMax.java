@@ -3,6 +3,7 @@ package frc.robot.subsystems.drive;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
@@ -64,7 +65,7 @@ public class DriveIOSparkMax implements DriveIO {
 
     @Override
     public void set(double leftPercent, double rightPercent) {
-        setVoltage(leftPercent * 12, rightPercent * 12);
+        setVoltage(MathUtil.clamp(leftPercent,-1, 1) * 12, MathUtil.clamp(rightPercent,-1, 1) * 12);
     }
 
     @Override

@@ -1,8 +1,5 @@
 package frc.robot.subsystems.indexer;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.ColorSensorV3;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -15,19 +12,15 @@ import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeUpNoInterupt;
+import frc.robot.subsystems.indexer.IndexerIO.IndexerIOInputs;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
-import frc.robot.util.LazySparkMax;
 import frc.robot.util.controller.BetterXboxController;
+import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
-    private final LazySparkMax motorLeft = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_LEFT, IdleMode.kBrake, 30, false);
-    private final LazySparkMax motorRight = new LazySparkMax(Constants.INDEXER_CAN_STOMACH_RIGHT, IdleMode.kBrake, 30, true, motorLeft);
-    private final LazySparkMax towerMotor = new LazySparkMax(Constants.INDEXER_CAN_TOWER, IdleMode.kBrake, 30, true);
-
-    private ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
-    private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER);
-    private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER);
+    private final IndexerIO io;
+    private final IndexerIOInputs inputs = new IndexerIOInputs();
 
     private boolean reverse = false;
     private boolean shooting = false;
@@ -45,12 +38,13 @@ public class Indexer extends SubsystemBase {
 
     private final Alert colorSensorAlert = new Alert("Color sensor not detected! Auto indexing will NOT work!", AlertType.ERROR);
 
-    private final static Indexer INSTANCE = new Indexer();
+    private final static Indexer INSTANCE = new Indexer(new IndexerIOSparkMax());
     public static Indexer getInstance() {
         return INSTANCE;
     }
 
-    private Indexer() {
+    private Indexer(IndexerIO io) {
+        this.io = io;
         ShuffleboardTab indexerTab = Shuffleboard.getTab("Indexer");
         indexerTab.add("Reset", new InstantCommand(this::resetEverything));
         indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
@@ -60,22 +54,22 @@ public class Indexer extends SubsystemBase {
         indexerTab.addString("Ball 2 Color", () -> balls[1].getColor().toString());
         indexerTab.addString("Ball 1 Location", () -> balls[0].getLocation().toString());
         indexerTab.addString("Ball 2 Location", () -> balls[1].getLocation().toString());
-        indexerTab.addNumber("Intake Red", colorSensorIntake::getRed);
-        indexerTab.addNumber("Intake Blue", colorSensorIntake::getBlue);
-        indexerTab.addNumber("Intake proximity", colorSensorIntake::getProximity);
+        indexerTab.addNumber("Intake Red", () -> inputs.colorRed);
+        indexerTab.addNumber("Intake Blue", () -> inputs.colorBlue);
+        indexerTab.addNumber("Intake proximity", () -> inputs.colorProximity);
         indexerTab.addBoolean("Reversed", () -> reverse);
-        indexerTab.addBoolean("Intake Sensor", () -> colorSensorIntake.getProximity() > 200);
-        indexerTab.addBoolean("Tower Sensor", sensorTower::get);
-        indexerTab.addBoolean("Shooter Sensor", sensorShooter::get);
+        indexerTab.addBoolean("Intake Sensor", () -> inputs.colorProximity > 200);
+        indexerTab.addBoolean("Tower Sensor", () -> inputs.towerDetected);
+        indexerTab.addBoolean("Shooter Sensor", () -> inputs.shooterDetected);
         indexerTab.addBoolean("Shooting?", () -> shooting);
     }
 
     @Override
     public void periodic() {
-        if((colorSensorIntake.getProximity() == 0 && colorSensorIntake.getBlue() == 0 && colorSensorIntake.getRed() == 0)){
-            colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
-        }
-        colorSensorAlert.set(!colorSensorIntake.isConnected());
+        io.updateInputs(inputs);
+        Logger.getInstance().processInputs("Indexer", inputs);
+        Logger.getInstance().recordOutput("Indexer/State", state.toString());
+        colorSensorAlert.set(!inputs.colorConnected);
         boolean ballCurrentlyAtIntake = getBallAtIntake();
         boolean ballCurrentlyAtTower = getBallAtTower();
         boolean ballCurrentlyAtShooter = getBallAtShooter();
@@ -310,27 +304,30 @@ public class Indexer extends SubsystemBase {
     }
 
     public void stomachMotorOn() {
-        motorLeft.set(Constants.INDEXER_STOMACH_SPEED);
+        io.setStomachLeft(Constants.INDEXER_STOMACH_SPEED);
+        io.setStomachRight(Constants.INDEXER_STOMACH_SPEED);
     }
 
     public void stomachMotorReverse() {
-        motorLeft.set(-Constants.INDEXER_STOMACH_SPEED);
+        io.setStomachRight(-Constants.INDEXER_STOMACH_SPEED);
+        io.setStomachLeft(-Constants.INDEXER_STOMACH_SPEED);
     }
 
     public void stomachMotorOff() {
-        motorLeft.stopMotor();
+        io.setStomachLeft(0);
+        io.setStomachRight(0);
     }
 
     public void towerMotorOn() {
-        towerMotor.set(Constants.INDEXER_TOWER_SPEED);
+        io.setTower(Constants.INDEXER_TOWER_SPEED);
     }
 
     public void towerMotorReverse() {
-        towerMotor.set(-Constants.INDEXER_TOWER_SPEED);
+        io.setTower(-Constants.INDEXER_TOWER_SPEED);
     }
 
     public void towerMotorOff() {
-        towerMotor.stopMotor();
+        io.setTower(0);
     }
 
     public Ball getBall0() {
@@ -355,15 +352,15 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean getBallAtIntake() {
-        if (!colorSensorIntake.isConnected()) {
+        if (!inputs.colorConnected) {
             return true;
         }
         boolean ballAtIntake = false;
         if (ballStillAtIntake) {
-            ballStillAtIntake = colorSensorIntake.getProximity() > Constants.INDEXER_COLOR_PROXIMITY;
+            ballStillAtIntake = inputs.colorProximity > Constants.INDEXER_COLOR_PROXIMITY;
         }
         else {
-            ballAtIntake = colorSensorIntake.getProximity() > Constants.INDEXER_COLOR_PROXIMITY;
+            ballAtIntake = inputs.colorProximity > Constants.INDEXER_COLOR_PROXIMITY;
             ballStillAtIntake = ballAtIntake;
         }
         return ballAtIntake;
@@ -372,21 +369,21 @@ public class Indexer extends SubsystemBase {
     public boolean getBallAtTower() {
         boolean ballAtTower = false;
         if (ballStillAtTower) {
-            ballStillAtTower = sensorTower.get();
+            ballStillAtTower = inputs.towerDetected;
         }
         else {
-            ballAtTower = sensorTower.get();
+            ballAtTower = inputs.towerDetected;
             ballStillAtTower = ballAtTower;
         }
         return ballAtTower;
     }
 
     public boolean getBallAtShooter() {
-        return sensorShooter.get();
+        return inputs.shooterDetected;
     }
 
     public void intakeBall() {
-        COLOR color = colorSensorIntake.getRed() > colorSensorIntake.getBlue() ? COLOR.RED : COLOR.BLUE;
+        COLOR color = inputs.colorRed > inputs.colorBlue ? COLOR.RED : COLOR.BLUE;
         if (balls[0].getLocation() == LOCATION.FIELD) {
             balls[0].setLocationColor(LOCATION.INTAKE, color);
         }

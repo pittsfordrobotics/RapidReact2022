@@ -6,6 +6,7 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -36,7 +37,7 @@ public class IntakeIOSparkMax implements IntakeIO {
 
     @Override
     public void set(double percent) {
-        setVoltage(percent * 12);
+        setVoltage(MathUtil.clamp(percent,-1, 1) * 12);
     }
 
     @Override

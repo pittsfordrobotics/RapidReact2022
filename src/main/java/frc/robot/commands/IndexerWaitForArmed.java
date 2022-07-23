@@ -25,7 +25,7 @@ public class IndexerWaitForArmed extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return indexer.ableToShoot() || timer.get() > 3;
+        return indexer.ableToShoot() || timer.get() > 2;
     }
 
     @Override

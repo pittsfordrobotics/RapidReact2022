@@ -1,110 +1,71 @@
 package frc.robot.subsystems.climber;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxLimitSwitch;
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.util.LazySparkMax;
+import frc.robot.subsystems.climber.ClimberIO.ClimberIOInputs;
+import org.littletonrobotics.junction.Logger;
 
 public class Climber extends SubsystemBase {
-    private final LazySparkMax leftMotor = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kBrake, 60, true);
-    private final LazySparkMax rightMotor = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kBrake, 60);
-
-    private final SparkMaxLimitSwitch leftForwardSwitch = leftMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    private final SparkMaxLimitSwitch leftReverseSwitch = leftMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    private final SparkMaxLimitSwitch rightForwardSwitch = rightMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    private final SparkMaxLimitSwitch rightReverseSwitch = rightMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-
-    private final DigitalInput leftSensor = new DigitalInput(Constants.CLIMBER_SENSOR_LEFT);
-    private final DigitalInput rightSensor = new DigitalInput(Constants.CLIMBER_SENSOR_RIGHT);
-
-    private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
-    private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
+    private final ClimberIO io;
+    private final ClimberIOInputs inputs = new ClimberIOInputs();
 
     private double halfway = 0;
+    private boolean enabled = false;
 
-    private final static Climber INSTANCE = new Climber();
+    private final static Climber INSTANCE = new Climber(new ClimberIOSparkMax());
     public static Climber getInstance() {
         return INSTANCE;
     }
 
-    private Climber() {
-        resetEncoders();
-
-        leftForwardSwitch.enableLimitSwitch(true);
-        leftReverseSwitch.enableLimitSwitch(true);
-        rightForwardSwitch.enableLimitSwitch(true);
-        rightReverseSwitch.enableLimitSwitch(true);
-
-        rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
-        rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
-        leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
-        leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
-
+    private Climber(ClimberIO io) {
+        this.io = io;
         ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
-        climberTab.addNumber("Left Encoder", leftEncoder::getPosition);
-        climberTab.addNumber("Right Encoder", rightEncoder::getPosition);
-
-        climberTab.addBoolean("Right Sensor", this::getRightSensor);
-        climberTab.addBoolean("Left Sensor", this::getLeftSensor);
-        climberTab.addBoolean("Right Front Limit Switch", rightForwardSwitch::isPressed);
-        climberTab.addBoolean("Right Reverse Limit Switch", rightReverseSwitch::isPressed);
-        climberTab.addBoolean("Left Front Limit Switch", leftForwardSwitch::isPressed);
-        climberTab.addBoolean("Left Reverse Limit Switch", leftReverseSwitch::isPressed);
+        climberTab.addNumber("Encoder", () -> Units.radiansToRotations(inputs.positionRad));
+        climberTab.addBoolean("Right Front Limit Switch", () -> inputs.rightForwardSwitch);
+        climberTab.addBoolean("Right Reverse Limit Switch", () -> inputs.rightReverseSwitch);
+        climberTab.addBoolean("Left Front Limit Switch", () -> inputs.leftForwardSwitch);
+        climberTab.addBoolean("Left Reverse Limit Switch", () -> inputs.leftReverseSwitch);
     }
 
-    public boolean getRightSensor() {
-        return !rightSensor.get();
-    }
-
-    public boolean getLeftSensor() {
-        return !leftSensor.get();
+    @Override
+    public void periodic() {
+        io.updateInputs(inputs);
+        Logger.getInstance().processInputs("Climber", inputs);
+        Logger.getInstance().recordOutput("Climber/Enabled", enabled);
     }
 
     public void setSpeed(double speed) {
-        leftMotor.set(speed);
-        rightMotor.set(speed);
-    }
-
-    public void setRightMotor(double speed) {
-        rightMotor.set(speed);
+        if (enabled) io.set(speed);
     }
 
     public void resetEncoders() {
-        leftEncoder.setPosition(0);
-        rightEncoder.setPosition(0);
+        io.resetEncoders();
     }
 
     public void enableSoftLimit() {
-        rightMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        rightMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-        leftMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        leftMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        io.enableSoftLimit(true);
     }
 
     public double getEncoder() {
-        return rightEncoder.getPosition();
+        return Units.radiansToRotations(inputs.positionRad);
     }
 
     public void saveHalfway() {
-        halfway = rightEncoder.getPosition()/2;
+        halfway = Units.radiansToRotations(inputs.positionRad)/2;
     }
 
     public boolean hasBeenCentered() {
-        return rightEncoder.getPosition() >= halfway;
+        return Units.radiansToRotations(inputs.positionRad) >= halfway;
     }
 
     public boolean forwardAtHardLimit() {
-        return rightForwardSwitch.isPressed() && leftForwardSwitch.isPressed();
+        return inputs.rightForwardSwitch && inputs.leftForwardSwitch;
     }
 
     public boolean reverseAtHardLimit() {
-        return rightReverseSwitch.isPressed() && leftReverseSwitch.isPressed();
+        return inputs.rightReverseSwitch && inputs.leftReverseSwitch;
     }
 
     public boolean forwardAtSoftLimit() {
@@ -142,8 +103,15 @@ public class Climber extends SubsystemBase {
     }
 
     public void stopAll() {
-        leftMotor.stopMotor();
-        rightMotor.stopMotor();
+        io.set(0);
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
 }

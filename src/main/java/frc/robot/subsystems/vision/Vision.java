@@ -21,8 +21,7 @@ public class Vision extends SubsystemBase {
     private Pipelines pipeline = Pipelines.COMPETITION;
     private LED led = LED.OFF;
     private CameraMode camera = CameraMode.VISION_PROCESSING;
-
-    private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
+    private boolean climbing = false;
 
     private final Alert limelightAlert = new Alert("Limelight not detected! Vision will NOT work!", AlertType.ERROR);
 
@@ -33,6 +32,7 @@ public class Vision extends SubsystemBase {
 
     private Vision(VisionIO io) {
         this.io = io;
+        ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
         visionTab.addBoolean("Has Target", this::hasTarget);
         visionTab.addNumber("Distance", this::getDistance);
         visionTab.addNumber("Horizontal", this::getHorizontal);
@@ -43,7 +43,7 @@ public class Vision extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Vision", inputs);
-        if (DriverStation.isDisabled()) {
+        if (DriverStation.isDisabled() || climbing) {
             led = LED.OFF;
             camera = CameraMode.DRIVER_CAMERA;
         }
@@ -83,5 +83,9 @@ public class Vision extends SubsystemBase {
 
     public double getDistance() {
         return (FieldConstants.visionTargetHeighCenter - Constants.LIMELIGHT_MOUNTING_HEIGHT) / Math.tan(Constants.LIMELIGHT_ANGLE + getVertical());
+    }
+
+    public void setClimbing(boolean climbing) {
+        this.climbing = climbing;
     }
 }

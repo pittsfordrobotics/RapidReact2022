@@ -50,11 +50,13 @@ public interface DriveIO {
             leftVelocityRadPerSec = table.getDouble("LeftVelocityRadPerSec", leftVelocityRadPerSec);
             leftAppliedVolts = table.getDouble("LeftAppliedVolts", leftAppliedVolts);
             leftCurrentAmps = table.getDoubleArray("LeftCurrentAmps", leftCurrentAmps);
+            leftTempCelcius = table.getDoubleArray("LeftTempCelcius", leftTempCelcius);
 
             rightPositionRad = table.getDouble("RightPositionRad", rightPositionRad);
             rightVelocityRadPerSec = table.getDouble("RightVelocityRadPerSec", rightVelocityRadPerSec);
             rightAppliedVolts = table.getDouble("RightAppliedVolts", rightAppliedVolts);
             rightCurrentAmps = table.getDoubleArray("RightCurrentAmps", rightCurrentAmps);
+            rightTempCelcius = table.getDoubleArray("RightTempCelcius", rightTempCelcius);
 
             gyroUpTime = table.getInteger("GyroUpTime", gyroUpTime);
             gyroYawPositionRad = table.getDouble("GyroYawPositionRad", gyroYawPositionRad);

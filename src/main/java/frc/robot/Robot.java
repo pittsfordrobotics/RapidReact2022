@@ -73,7 +73,6 @@ public class Robot extends LoggedRobot {
     climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
     robotContainer = new RobotContainer();
     revPDH.setSwitchableChannel(true);
-    drive.coastMode();
     intake.retract();
     indexer.disable();
   }
@@ -99,9 +98,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledInit() {
-    if (drive.getAverageVelocity() == 0) {
-      drive.coastMode();
-    }
   }
 
   @Override
@@ -109,7 +105,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    drive.brakeMode();
     indexer.resetEverything();
     autonomousCommand = robotContainer.getAutonomousCommand();
 
@@ -123,7 +118,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    drive.brakeMode();
     if (indexer.isDisabled()) {
       indexer.resetEverything();
     }

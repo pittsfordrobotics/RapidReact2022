@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -47,7 +48,7 @@ public class Drive extends SubsystemBase {
         setThrottle(0.7);
 
         ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
-        driveTab.addNumber("Pigeon", () -> Units.radiansToDegrees(inputs.gyroYawPositionRad));
+        driveTab.addNumber("Pigeon", () -> Units.radiansToRotations(inputs.gyroYawPositionRad));
         driveTab.addNumber("Throttle", this::getThrottle);
     }
 
@@ -55,7 +56,15 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Drive", inputs);
+
         pigeonAlert.set(!(inputs.gyroUpTime > 0));
+
+        if (DriverStation.isDisabled() && getAverageVelocity() == 0) {
+            coastMode();
+        }
+        else {
+            brakeMode();
+        }
 
         pose = odometry.update(
                 Rotation2d.fromDegrees(getAngle()),

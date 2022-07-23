@@ -61,10 +61,10 @@ public class LazySparkMax extends CANSparkMax {
      * @param port port of CAN ID of CANSparkMax
      * @param mode Brake or Coast
      * @param currentLimit 0-30 for 550 / 0-80 for NEO
-     * @param inverted Inverted?
      * @param leader SparkMax to follow
+     * @param inverted Whether to follow the leader inverted
      */
-    public LazySparkMax(int port, IdleMode mode, int currentLimit, boolean inverted, CANSparkMax leader) {
+    public LazySparkMax(int port, IdleMode mode, int currentLimit, CANSparkMax leader, boolean inverted) {
         super(port, MotorType.kBrushless);
         while (errors > 0 && ++attempts <= 5) {
             if (attempts > 0) {
@@ -98,7 +98,7 @@ public class LazySparkMax extends CANSparkMax {
      * @param leader SparkMax to follow
      */
     public LazySparkMax(int port, IdleMode mode, int currentLimit, CANSparkMax leader) {
-        this(port, mode, currentLimit,false, leader);
+        this(port, mode, currentLimit, leader, false);
     }
 
     /**

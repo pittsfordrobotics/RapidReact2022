@@ -29,7 +29,6 @@ public final class Constants {
      *
      */
     public static final HashMap<Integer, String> SPARKMAX_HASHMAP = new HashMap<Integer, String>();
-
     static {
         SPARKMAX_HASHMAP.put(1, "Left Drive Leader");
         SPARKMAX_HASHMAP.put(2, "Left Drive Follower");
@@ -43,6 +42,7 @@ public final class Constants {
         SPARKMAX_HASHMAP.put(10, "Intake");
         SPARKMAX_HASHMAP.put(11, "Shooter Left");
         SPARKMAX_HASHMAP.put(12, "Shooter Right");
+        SPARKMAX_HASHMAP.put(13, "Hood");
     }
 
     /**
@@ -57,7 +57,6 @@ public final class Constants {
     public static final int DRIVE_CAN_LEFT_FOLLOWER = 2;
 
     public static final Pigeon2Configuration DRIVE_PIGEON_CONFIG = new Pigeon2Configuration();
-
     static {
         DRIVE_PIGEON_CONFIG.EnableCompass = false;
     }
@@ -109,8 +108,8 @@ public final class Constants {
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
     public static final int INDEXER_COLOR_PROXIMITY = 200;
 
-    public static final int INDEXER_SENSOR_TOWER = 9;
-    public static final int INDEXER_SENSOR_SHOOTER = 8;
+    public static final int INDEXER_SENSOR_TOWER_DIO_PORT = 9;
+    public static final int INDEXER_SENSOR_SHOOTER_DIO_PORT = 8;
 
     /**
      *
@@ -128,9 +127,27 @@ public final class Constants {
     public static final int SHOOTER_TARMAC_SPEED = 2200;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
-
     static {
         SHOOTER_SPEED_MAP.put(0, 3000);
+    }
+
+    /**
+     *
+     * HOOD
+     *
+     */
+    public static final int HOOD_CAN = 13;
+    public static final int HOOD_REV_THROUGH_BORE_DIO_PORT = 0;
+    public static final double HOOD_MIN = 0;
+    public static final double HOOD_MAX = 0;
+
+    public static final double HOOD_550_GEAR_RATIO =  (1.0 / 3.0) * 24.0 / 18.0;
+    public static final double HOOD_REV_THROUGH_BORE_GEAR_RATIO = 18.0;
+
+    public static final InterpolatingTreeMap HOOD_POSITION_MAP = new InterpolatingTreeMap();
+
+    static {
+        SHOOTER_SPEED_MAP.put(0, 0);
     }
 
     /**
@@ -141,8 +158,8 @@ public final class Constants {
     public static final int CLIMBER_CAN_LEFT = 5;
     public static final int CLIMBER_CAN_RIGHT = 6;
 
-    public static final int CLIMBER_SENSOR_LEFT = 2;
-    public static final int CLIMBER_SENSOR_RIGHT = 3;
+    public static final int CLIMBER_SENSOR_LEFT_DIO_PORT = 2;
+    public static final int CLIMBER_SENSOR_RIGHT_DIO_PORT = 3;
 
     /**
      *

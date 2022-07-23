@@ -21,8 +21,7 @@ public interface ShooterIO {
 
         public void fromLog(LogTable table) {
             positionRad = table.getDouble("PositionRad", positionRad);
-            velocityRadPerSec =
-                    table.getDouble("VelocityRadPerSec", velocityRadPerSec);
+            velocityRadPerSec = table.getDouble("VelocityRadPerSec", velocityRadPerSec);
             appliedVolts = table.getDouble("AppliedVolts", appliedVolts);
             currentAmps = table.getDoubleArray("CurrentAmps", currentAmps);
             tempCelcius = table.getDoubleArray("TempCelcius", tempCelcius);

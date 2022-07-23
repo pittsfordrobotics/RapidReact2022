@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
@@ -16,7 +17,7 @@ import frc.robot.util.LazySparkMax;
 
 public class ShooterIOSparkMax implements ShooterIO {
     private final LazySparkMax motorLeft = new LazySparkMax(Constants.SHOOTER_CAN_LEFT, IdleMode.kCoast, 60, false);
-    private final LazySparkMax motorRight = new LazySparkMax(Constants.SHOOTER_CAN_RIGHT, IdleMode.kCoast, 60, true, motorLeft);
+    private final LazySparkMax motorRight = new LazySparkMax(Constants.SHOOTER_CAN_RIGHT, IdleMode.kCoast, 60, motorLeft, true);
     private final RelativeEncoder encoder = motorLeft.getEncoder();
     private final SparkMaxPIDController pid = motorLeft.getPIDController();
 
@@ -36,7 +37,7 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     @Override
     public void set(double percent) {
-        setVoltage(percent * 12);
+        setVoltage(MathUtil.clamp(percent,-1, 1) * 12);
     }
 
     @Override

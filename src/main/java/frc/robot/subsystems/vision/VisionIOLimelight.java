@@ -26,13 +26,15 @@ public class VisionIOLimelight implements VisionIO {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx");
     private final NetworkTableEntry vAngleEntry =
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty");
+    private final NetworkTableEntry heartbeatEntry =
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("hb");
 
     public VisionIOLimelight() {
         led = ledEntry.getDouble(0.0);
         pipeline = pipelineEntry.getDouble(0.0);
         camera = cameraEntry.getDouble(0.0);
         hasTarget = validEntry.getDouble(0.0) == 1.0;
-        connected = latencyEntry.getDouble(0.0) != 0.0;
+        connected = heartbeatEntry.getDouble(0.0) > 0.0;
         vAngle = vAngleEntry.getDouble(0.0);
         hAngle = hAngleEntry.getDouble(0.0);
     }
