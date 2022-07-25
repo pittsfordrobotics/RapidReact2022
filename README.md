@@ -3,6 +3,7 @@
 - PathPlanner
 - Advantage Kit
 - Auto Indexing and Cargo Rejection
+- Full Field Odometry
 - Automated climb
 
 ## Credits and References:

@@ -35,6 +35,8 @@ public final class Constants {
 
     public static final HashMap<Integer, String> ROBOT_SPARKMAX_HASHMAP = new HashMap<Integer, String>();
     public static final double INDEXER_REJECTION_TIME = 1;
+    public static final int ROBOT_PDP_CAN = 1;
+    public static final int ROBOT_PNEUMATIC_HUB_CAN = 1;
 
     static {
         ROBOT_SPARKMAX_HASHMAP.put(1, "Left Drive Leader");

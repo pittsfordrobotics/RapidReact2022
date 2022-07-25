@@ -56,7 +56,7 @@ public class Robot extends LoggedRobot {
     logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
     logger.addDataReceiver(new ByteLogReceiver(Constants.ROBOT_LOGGING_PATH));
     logger.addDataReceiver(new LogSocketServer(5800));
-    LoggedSystemStats.getInstance().setPowerDistributionConfig(1, ModuleType.kRev);
+    LoggedSystemStats.getInstance().setPowerDistributionConfig(Constants.ROBOT_PDP_CAN, ModuleType.kRev);
     if (Constants.ROBOT_LOGGING_ENABLED) logger.start();
     PIDTuner.enable(Constants.ROBOT_PIDTUNER_ENABLED);
 //    setup
