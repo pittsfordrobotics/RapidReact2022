@@ -44,8 +44,8 @@ public class Climber extends SubsystemBase {
         io.resetEncoders();
     }
 
-    public void enableSoftLimit() {
-        io.enableSoftLimit(true);
+    public void setSoftLimit(boolean state) {
+        io.enableSoftLimit(state);
     }
 
     public double getEncoder() {

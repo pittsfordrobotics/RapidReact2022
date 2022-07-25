@@ -19,7 +19,7 @@ public class ShooterSpeed extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.updateSetpoint(speed);
+        shooter.updateSpeed(speed);
     }
 
     @Override

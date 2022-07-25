@@ -13,15 +13,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CG_ClimberCalibrate;
-import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.compressor7.Compressor7;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
+import frc.robot.util.PIDTuner;
 import frc.robot.util.controller.BetterXboxController;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -34,13 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Robot extends LoggedRobot {
-  private final Drive drive = Drive.getInstance();
-  private final Shooter shooter = Shooter.getInstance();
-  private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
-  private final Compressor7 compressor = Compressor7.getInstance();
-  private final Vision vision = Vision.getInstance();
 
   private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
 
@@ -61,17 +52,17 @@ public class Robot extends LoggedRobot {
     Logger logger = Logger.getInstance();
     setUseTiming(true);
     LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
-    logger.recordMetadata("Project", "RapidReact2022");
+    logger.recordMetadata("Project", Constants.ROBOT_PROJECT_NAME);
     logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
-    logReceiver = new ByteLogReceiver("/media/sda1/");
-    logger.addDataReceiver(logReceiver);
+    logger.addDataReceiver(new ByteLogReceiver(Constants.ROBOT_LOGGING_PATH));
     logger.addDataReceiver(new LogSocketServer(5800));
     LoggedSystemStats.getInstance().setPowerDistributionConfig(1, ModuleType.kRev);
-    logger.start();
-//    config
+    if (Constants.ROBOT_LOGGING_ENABLED) logger.start();
+    PIDTuner.enable(Constants.ROBOT_PIDTUNER_ENABLED);
+//    setup
+    robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);
     climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
-    robotContainer = new RobotContainer();
     revPDH.setSwitchableChannel(true);
     intake.retract();
     indexer.disable();

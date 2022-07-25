@@ -13,6 +13,8 @@ public class Shooter extends SubsystemBase {
     private final ShooterIOInputs inputs = new ShooterIOInputs();
 
     private double speed = 0;
+    private double setpoint = 0;
+    private double forcedSetpoint = -1;
 
     private final static Shooter INSTANCE = new Shooter(new ShooterIOSparkMax());
     public static Shooter getInstance() {
@@ -31,13 +33,32 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Shooter", inputs);
-        Logger.getInstance().recordOutput("Shooter/TargetRMP", speed);
+        Logger.getInstance().recordOutput("Shooter/TargetRMP", setpoint);
+        Logger.getInstance().recordOutput("Shooter/ForcedRMP", forcedSetpoint);
         Logger.getInstance().recordOutput("Shooter/ActualRMP", getVelocity());
+        if (forcedSetpoint == -1) {
+            io.setVelocity(Units.rotationsPerMinuteToRadiansPerSecond(setpoint), 0);
+        }
+        else {
+            io.setVelocity(Units.rotationsPerMinuteToRadiansPerSecond(forcedSetpoint), 0);
+        }
         io.set(0.0002 * speed);
     }
 
-    public void updateSetpoint(double speed) {
+    public void updateSpeed(double speed) {
         this.speed = speed;
+    }
+
+    /**
+     * @param setpoint -1 is disabled for forced
+     */
+    public void updateSetpoint(double setpoint, boolean forced) {
+        if (!forced) {
+            this.setpoint = setpoint;
+        }
+        else {
+            forcedSetpoint = setpoint;
+        }
     }
 
     public double getVelocity() {
@@ -53,9 +74,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isAtSpeed() {
-//        TODO: test new at speed
-//        return MathUtil.applyDeadband(shooterEncoder.getVelocity() - speed, 100) == 0;
         return getVelocity() > 0.9 * speed;
+    }
+
+    public boolean isAtSetpoint() {
+        return Math.abs(getVelocity()-(forcedSetpoint != -1 ? forcedSetpoint : setpoint)) < 100;
     }
 
 }

@@ -28,21 +28,28 @@ public final class Constants {
      * ROBOT
      *
      */
-    public static final HashMap<Integer, String> SPARKMAX_HASHMAP = new HashMap<Integer, String>();
+    public static final boolean ROBOT_PIDTUNER_ENABLED = true;
+    public static final boolean ROBOT_LOGGING_ENABLED = true;
+    public static final String ROBOT_PROJECT_NAME = "RapidReact2022";
+    public static final String ROBOT_LOGGING_PATH = "/media/sda1/";
+
+    public static final HashMap<Integer, String> ROBOT_SPARKMAX_HASHMAP = new HashMap<Integer, String>();
+    public static final double INDEXER_REJECTION_TIME = 1;
+
     static {
-        SPARKMAX_HASHMAP.put(1, "Left Drive Leader");
-        SPARKMAX_HASHMAP.put(2, "Left Drive Follower");
-        SPARKMAX_HASHMAP.put(3, "Right Drive Leader");
-        SPARKMAX_HASHMAP.put(4, "Right Drive Follower");
-        SPARKMAX_HASHMAP.put(5, "Climber Left");
-        SPARKMAX_HASHMAP.put(6, "Climber Right");
-        SPARKMAX_HASHMAP.put(7, "Stomach Right");
-        SPARKMAX_HASHMAP.put(8, "Stomach Left");
-        SPARKMAX_HASHMAP.put(9, "Tower");
-        SPARKMAX_HASHMAP.put(10, "Intake");
-        SPARKMAX_HASHMAP.put(11, "Shooter Left");
-        SPARKMAX_HASHMAP.put(12, "Shooter Right");
-        SPARKMAX_HASHMAP.put(13, "Hood");
+        ROBOT_SPARKMAX_HASHMAP.put(1, "Left Drive Leader");
+        ROBOT_SPARKMAX_HASHMAP.put(2, "Left Drive Follower");
+        ROBOT_SPARKMAX_HASHMAP.put(3, "Right Drive Leader");
+        ROBOT_SPARKMAX_HASHMAP.put(4, "Right Drive Follower");
+        ROBOT_SPARKMAX_HASHMAP.put(5, "Climber Left");
+        ROBOT_SPARKMAX_HASHMAP.put(6, "Climber Right");
+        ROBOT_SPARKMAX_HASHMAP.put(7, "Stomach Right");
+        ROBOT_SPARKMAX_HASHMAP.put(8, "Stomach Left");
+        ROBOT_SPARKMAX_HASHMAP.put(9, "Tower");
+        ROBOT_SPARKMAX_HASHMAP.put(10, "Intake");
+        ROBOT_SPARKMAX_HASHMAP.put(11, "Shooter Left");
+        ROBOT_SPARKMAX_HASHMAP.put(12, "Shooter Right");
+        ROBOT_SPARKMAX_HASHMAP.put(13, "Hood");
     }
 
     /**
@@ -125,6 +132,7 @@ public final class Constants {
 
     public static final int SHOOTER_LOW_SPEED = 1800;
     public static final int SHOOTER_TARMAC_SPEED = 2200;
+    public static final int SHOOTER_REJECT_SPEED = 1000;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
     static {
@@ -138,11 +146,11 @@ public final class Constants {
      */
     public static final int HOOD_CAN = 13;
     public static final int HOOD_REV_THROUGH_BORE_DIO_PORT = 0;
-    public static final double HOOD_MIN = 0;
-    public static final double HOOD_MAX = 0;
+    public static final double HOOD_POSITION_MAX = 0;
 
     public static final double HOOD_550_GEAR_RATIO =  (1.0 / 3.0) * 24.0 / 18.0;
     public static final double HOOD_REV_THROUGH_BORE_GEAR_RATIO = 18.0;
+    public static final double HOOD_REV_THROUGH_BORE_OFFSET = 0;
 
     public static final InterpolatingTreeMap HOOD_POSITION_MAP = new InterpolatingTreeMap();
 

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.indexer;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,12 +13,16 @@ import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeUpNoInterupt;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.IndexerIO.IndexerIOInputs;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
-import frc.robot.util.controller.BetterXboxController;
 import org.littletonrobotics.junction.Logger;
 
+/**
+ * This is the real brains of the operation
+ */
 public class Indexer extends SubsystemBase {
     private final IndexerIO io;
     private final IndexerIOInputs inputs = new IndexerIOInputs();
@@ -26,11 +31,13 @@ public class Indexer extends SubsystemBase {
     private boolean shooting = false;
     private boolean ballStillAtIntake = false;
     private boolean ballStillAtTower = false;
+    private final Timer rejectionTimer = new Timer();
+    private boolean rejectionTimerStarted = false;
 
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private enum State {
-        DISABLED, FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
+        DISABLED, FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, REJECT1INTAKE1, REJECT1, REJECT1ARMED1, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
     }
     private State state = State.DISABLED;
 
@@ -45,6 +52,7 @@ public class Indexer extends SubsystemBase {
 
     private Indexer(IndexerIO io) {
         this.io = io;
+        rejectionTimer.start();
         ShuffleboardTab indexerTab = Shuffleboard.getTab("Indexer");
         indexerTab.add("Reset", new InstantCommand(this::resetEverything));
         indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
@@ -73,6 +81,10 @@ public class Indexer extends SubsystemBase {
         boolean ballCurrentlyAtIntake = getBallAtIntake();
         boolean ballCurrentlyAtTower = getBallAtTower();
         boolean ballCurrentlyAtShooter = getBallAtShooter();
+        Logger.getInstance().recordOutput("Indexer/InstantIntakeBall", ballCurrentlyAtIntake);
+        Logger.getInstance().recordOutput("Indexer/InstantTowerBall", ballCurrentlyAtTower);
+        Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
+        getAllianceColor();
         switch (state) {
             case FIELD2:
                 stomachMotorOff();
@@ -163,6 +175,10 @@ public class Indexer extends SubsystemBase {
             case ARMED1:
                 stomachMotorOff();
                 towerMotorOff();
+                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && isWrongColorBall(1)) {
+                    state = State.REJECT1INTAKE1;
+                    break;
+                }
                 if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && shooting) {
                     intakeBall();
                     state = State.SHOOTING1INTAKE1;
@@ -180,6 +196,71 @@ public class Indexer extends SubsystemBase {
                 towerMotorOff();
                 if (shooting) {
                     state = State.SHOOTING2;
+                }
+                break;
+            case REJECT1INTAKE1:
+                if (rejectionTimerStarted) {
+                    towerMotorOn();
+                }
+                else {
+                    towerMotorOff();
+                }
+                stomachMotorOn();
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atPosition() && !rejectionTimerStarted) {
+                    rejectionTimer.reset();
+                    rejectionTimerStarted = true;
+                }
+                if (ballCurrentlyAtTower && rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                    shootBall();
+                    state = State.TOWER1;
+                }
+                else if (ballCurrentlyAtTower) {
+                    state = State.REJECT1ARMED1;
+                }
+                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                    shootBall();
+                    state = State.INTAKE1;
+                }
+                break;
+            case REJECT1:
+                if (rejectionTimerStarted) {
+                    towerMotorOn();
+                }
+                else {
+                    towerMotorOff();
+                }
+                stomachMotorOff();
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atPosition() && !rejectionTimerStarted) {
+                    rejectionTimer.reset();
+                    rejectionTimerStarted = true;
+                }
+                if (ballCurrentlyAtIntake && rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                    shootBall();
+                    state = State.INTAKE1;
+                }
+                else if (ballCurrentlyAtIntake) {
+                    state = State.REJECT1INTAKE1;
+                }
+                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                    shootBall();
+                    state = State.FIELD2;
+                }
+                break;
+            case REJECT1ARMED1:
+                if (rejectionTimerStarted) {
+                    towerMotorOn();
+                }
+                else {
+                    towerMotorOff();
+                }
+                stomachMotorOff();
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atPosition() && !rejectionTimerStarted) {
+                    rejectionTimer.reset();
+                    rejectionTimerStarted = true;
+                }
+                if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                    shootBall();
+                    state = State.TOWER1;
                 }
                 break;
             case SHOOTING1INTAKE1:
@@ -237,23 +318,28 @@ public class Indexer extends SubsystemBase {
                 else {
                     stomachMotorReverse();
                     towerMotorReverse();
+                    
                 }
                 break;
             default:
                 stomachMotorOff();
                 towerMotorOff();
         }
+        if (state == State.REJECT1 || state == State.REJECT1INTAKE1 || state == State.REJECT1ARMED1) {
+            Shooter.getInstance().updateSetpoint(Constants.SHOOTER_REJECT_SPEED, true);
+            Hood.getInstance().setPosition(Constants.HOOD_POSITION_MAX, true);
+        }
+        else {
+            Shooter.getInstance().updateSetpoint(-1, true);
+            Hood.getInstance().setPosition(-1, true);
+        }
         if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterupt());
         }
-        if (isWrongColorBall()) {
-            BetterXboxController.getController(BetterXboxController.Humans.OPERATOR).rumbleOn();
-        }
-        else {
-            BetterXboxController.getController(BetterXboxController.Humans.OPERATOR).rumbleOff();
-        }
+        Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
+        Logger.getInstance().recordOutput("Indexer/NumberOfBalls", getBallCount());
+        Logger.getInstance().recordOutput("Indexer/IsFull", isFull());
         SmartDashboard.putBoolean("Fully Loaded", fullyLoaded());
-        getAllianceColor();
     }
 
     public void getAllianceColor() {
@@ -422,8 +508,8 @@ public class Indexer extends SubsystemBase {
         return state == State.ARMED2;
     }
 
-    public boolean isWrongColorBall() {
-        return balls[0].getColor() != allianceColor && balls[0].getColor() != COLOR.UNKNOWN && allianceColor != COLOR.UNKNOWN;
+    public boolean isWrongColorBall(int index) {
+        return (balls[index].getColor() != allianceColor) && (balls[index].getColor() != COLOR.UNKNOWN) && (allianceColor != COLOR.UNKNOWN);
     }
 
     public boolean allianceIsUnknown() {

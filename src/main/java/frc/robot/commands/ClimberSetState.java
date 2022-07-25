@@ -7,22 +7,24 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
 
 
-public class ClimberEnable extends CommandBase {
+public class ClimberSetState extends CommandBase {
     private final Climber climber = Climber.getInstance();
     private final Hood hood = Hood.getInstance();
     private final Intake intake = Intake.getInstance();
     private final Vision vision = Vision.getInstance();
+    private final boolean state;
 
-    public ClimberEnable() {
+    public ClimberSetState(boolean state) {
         addRequirements(this.climber, this.hood, this.intake, this.vision);
+        this.state = state;
     }
 
     @Override
     public void initialize() {
-        climber.setEnabled(true);
-        hood.setClimbing(true);
-        intake.setClimbing(true);
-        vision.setClimbing(true);
+        climber.setEnabled(state);
+        hood.setClimbing(state);
+        intake.setClimbing(state);
+        vision.setClimbing(state);
     }
 
     @Override

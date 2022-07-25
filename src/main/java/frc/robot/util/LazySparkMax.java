@@ -26,7 +26,7 @@ public class LazySparkMax extends CANSparkMax {
         while (errors > 0 && ++attempts <= 5) {
             if (attempts > 0) {
                 DriverStation.reportWarning("SparkMax " + port + "FAILED to initialize. Reinitializing attempt " + attempts, false);
-                Logger.getInstance().recordOutput("SparkMaxes/"+Constants.SPARKMAX_HASHMAP.get(port)+port,"Reinitializing attempt " + attempts);
+                Logger.getInstance().recordOutput("SparkMaxes/"+Constants.ROBOT_SPARKMAX_HASHMAP.get(port)+port,"Reinitializing attempt " + attempts);
             }
             errors = 0;
             errors += check(restoreFactoryDefaults());
@@ -38,8 +38,8 @@ public class LazySparkMax extends CANSparkMax {
             errors += check(burnFlash());
         }
         if (errors > 0) {
-            Logger.getInstance().recordOutput("SparkMaxes/"+Constants.SPARKMAX_HASHMAP.get(port)+port,"FAILED");
-            new Alert("SparkMax Errors",Constants.SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ").", AlertType.ERROR).set(true);
+            Logger.getInstance().recordOutput("SparkMaxes/"+Constants.ROBOT_SPARKMAX_HASHMAP.get(port)+port,"FAILED");
+            new Alert("SparkMax Errors",Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ").", AlertType.ERROR).set(true);
         }
         else {
             setCANTimeout(0);
@@ -69,7 +69,7 @@ public class LazySparkMax extends CANSparkMax {
         while (errors > 0 && ++attempts <= 5) {
             if (attempts > 0) {
                 DriverStation.reportWarning("SparkMax " + port + "FAILED to initialize. Reinitializing attempt " + attempts, false);
-                Logger.getInstance().recordOutput("SparkMaxes/"+Constants.SPARKMAX_HASHMAP.get(port)+port,"Reinitializing attempt " + attempts);
+                Logger.getInstance().recordOutput("SparkMaxes/"+Constants.ROBOT_SPARKMAX_HASHMAP.get(port)+port,"Reinitializing attempt " + attempts);
             }
             errors = 0;
             errors += check(restoreFactoryDefaults());
@@ -82,8 +82,8 @@ public class LazySparkMax extends CANSparkMax {
             errors += check(setCANTimeout(0));
         }
         if (errors > 0) {
-            Logger.getInstance().recordOutput("SparkMaxes/"+Constants.SPARKMAX_HASHMAP.get(port)+port,"FAILED");
-            new Alert("SparkMax Errors",Constants.SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ").", AlertType.ERROR).set(true);
+            Logger.getInstance().recordOutput("SparkMaxes/"+Constants.ROBOT_SPARKMAX_HASHMAP.get(port)+port,"FAILED");
+            new Alert("SparkMax Errors",Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ").", AlertType.ERROR).set(true);
         }
         else {
             setCANTimeout(0);
