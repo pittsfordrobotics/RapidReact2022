@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
 
     private boolean climbing = false;
 
-    private final static Intake INSTANCE = new Intake(new IntakeIOSparkMax());
+    private final static Intake INSTANCE = new Intake(Constants.ROBOT_INTAKE_IO);
     public static Intake getInstance() {
         return INSTANCE;
     }

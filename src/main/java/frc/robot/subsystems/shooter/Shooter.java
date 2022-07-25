@@ -16,7 +16,7 @@ public class Shooter extends SubsystemBase {
     private double setpoint = 0;
     private double forcedSetpoint = -1;
 
-    private final static Shooter INSTANCE = new Shooter(new ShooterIOSparkMax());
+    private final static Shooter INSTANCE = new Shooter(Constants.ROBOT_SHOOTER_IO);
     public static Shooter getInstance() {
         return INSTANCE;
     }

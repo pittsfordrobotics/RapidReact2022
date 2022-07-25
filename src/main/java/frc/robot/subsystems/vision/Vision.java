@@ -25,7 +25,7 @@ public class Vision extends SubsystemBase {
 
     private final Alert limelightAlert = new Alert("Limelight not detected! Vision will NOT work!", AlertType.ERROR);
 
-    private static final Vision INSTANCE = new Vision(new VisionIOLimelight());
+    private static final Vision INSTANCE = new Vision(Constants.ROBOT_VISION_IO);
     public static Vision getInstance() {
         return INSTANCE;
     }

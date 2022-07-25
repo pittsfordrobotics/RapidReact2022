@@ -20,7 +20,7 @@ public class Hood extends SubsystemBase {
     private final PIDController pid = new PIDController(0,0,0);
     private final PIDTuner tuner = new PIDTuner("Hood", pid);
 
-    private final static Hood INSTANCE = new Hood(new HoodIOSparkMax());
+    private final static Hood INSTANCE = new Hood(Constants.ROBOT_HOOD_IO);
 
     public static Hood getInstance() {
         return INSTANCE;

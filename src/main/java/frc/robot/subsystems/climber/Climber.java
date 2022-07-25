@@ -4,6 +4,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.climber.ClimberIO.ClimberIOInputs;
 import org.littletonrobotics.junction.Logger;
 
@@ -14,7 +15,7 @@ public class Climber extends SubsystemBase {
     private double halfway = 0;
     private boolean enabled = false;
 
-    private final static Climber INSTANCE = new Climber(new ClimberIOSparkMax());
+    private final static Climber INSTANCE = new Climber(Constants.ROBOT_CLIMBER_IO);
     public static Climber getInstance() {
         return INSTANCE;
     }

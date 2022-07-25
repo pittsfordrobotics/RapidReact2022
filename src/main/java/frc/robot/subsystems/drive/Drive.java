@@ -37,7 +37,7 @@ public class Drive extends SubsystemBase {
 
     private final Alert pigeonAlert = new Alert("Pigeon not detected! Many functions of the robot will FAIL!", AlertType.ERROR);
 
-    private static final Drive INSTANCE = new Drive(new DriveIOSparkMax());
+    private static final Drive INSTANCE = new Drive(Constants.ROBOT_DRIVE_IO);
     public static Drive getInstance() {
         return INSTANCE;
     }

@@ -2,6 +2,7 @@ package frc.robot.subsystems.compressor7;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.compressor7.CompressorIO.CompressorIOInputs;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
@@ -16,7 +17,7 @@ public class Compressor7 extends SubsystemBase {
     private final Alert notPressurized = new Alert("Air tanks are not fully pressurized!", AlertType.INFO);
     private final Alert pressureNotIncreasing = new Alert("Air pressure isn't increasing! Check if quick release value is open!", AlertType.WARNING);
 
-    private final static Compressor7 INSTANCE = new Compressor7(new CompressorIORev());
+    private final static Compressor7 INSTANCE = new Compressor7(Constants.ROBOT_COMPRESSOR_IO);
     public static Compressor7 getInstance() {
         return INSTANCE;
     }

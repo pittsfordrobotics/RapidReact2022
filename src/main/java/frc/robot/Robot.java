@@ -58,7 +58,7 @@ public class Robot extends LoggedRobot {
     logger.addDataReceiver(new LogSocketServer(5800));
     LoggedSystemStats.getInstance().setPowerDistributionConfig(Constants.ROBOT_PDP_CAN, ModuleType.kRev);
     if (Constants.ROBOT_LOGGING_ENABLED) logger.start();
-    PIDTuner.enable(Constants.ROBOT_PIDTUNER_ENABLED);
+    PIDTuner.enable(Constants.ROBOT_PID_TUNER_ENABLED);
 //    setup
     robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);

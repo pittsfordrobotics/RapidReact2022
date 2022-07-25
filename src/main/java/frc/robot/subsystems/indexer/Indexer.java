@@ -45,7 +45,7 @@ public class Indexer extends SubsystemBase {
 
     private final Alert colorSensorAlert = new Alert("Color sensor not detected! Auto indexing will NOT work!", AlertType.ERROR);
 
-    private final static Indexer INSTANCE = new Indexer(new IndexerIOSparkMax());
+    private final static Indexer INSTANCE = new Indexer(Constants.ROBOT_INDEXER_IO);
     public static Indexer getInstance() {
         return INSTANCE;
     }
