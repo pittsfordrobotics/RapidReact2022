@@ -1,4 +1,5 @@
-# 3181 Rapid React Offseason
+# 3181 Rapid React Offseason 
+![Build](https://github.com/pittsfordrobotics/rapidreact2022/actions/workflows/frcbuild.yml/badge.svg?branch=advantageKit)
 ## Features:
 - PathPlanner
 - Advantage Kit
