@@ -20,7 +20,7 @@ public class ShooterLime extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.updateSetpoint(Constants.SHOOTER_SPEED_MAP.lookup(vision.getDistance()));
+        shooter.updateSetpoint(Constants.SHOOTER_SPEED_MAP.lookup(vision.getDistance()), false);
     }
 
     @Override

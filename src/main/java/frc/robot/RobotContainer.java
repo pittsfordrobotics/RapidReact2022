@@ -48,7 +48,6 @@ public class RobotContainer {
     driverController.A.whenActive(new IntakeToggle());
 //    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
     driverController.X.whenActive(new CG_IntakeWiggle());
-    driverController.B.whileActiveOnce(new ShooterDashboard()).whenInactive(new ShooterZero());
     driverController.Y.whenActive(new ShooterLime());
 
     operatorController.Y.whenHeld(new IndexerOverride(false));
@@ -60,14 +59,12 @@ public class RobotContainer {
     driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
 //    driverController.Y.whileActiveOnce(new CG_LimeShot()).whenInactive(new ShooterZero());
     driverController.X.and(driverController.RB).whileActiveOnce(new ShooterLow()).whenInactive(new ShooterZero());
-    driverController.B.whenActive(new CG_UnoShot());
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.8));
     driverController.DRight.whenPressed(new DriveSetThrottle(0.7));
     driverController.DDown.whenPressed(new DriveSetThrottle(0.6));
 
     operatorController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterZero());
-    operatorController.B.whenActive(new CG_UnoShot());
     operatorController.Y.whileActiveOnce(new IndexerOverride(false));
     operatorController.Y.and(operatorController.RB).whileActiveOnce(new SequentialCommandGroup(new IntakeReverse(), new IndexerOverride(true)));
     operatorController.LB.and(operatorController.Start).whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
