@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -50,15 +51,21 @@ public class Robot extends LoggedRobot {
   public void robotInit() {
 //    advantageKit
     Logger logger = Logger.getInstance();
-    setUseTiming(true);
-    LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
-    logger.recordMetadata("Project", Constants.ROBOT_PROJECT_NAME);
-    logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
-    logger.addDataReceiver(new ByteLogReceiver(Constants.ROBOT_LOGGING_PATH));
-    logger.addDataReceiver(new LogSocketServer(5800));
-    LoggedSystemStats.getInstance().setPowerDistributionConfig(Constants.ROBOT_PDP_CAN, ModuleType.kRev);
+    if (RobotBase.isReal()) {
+      setUseTiming(true);
+      LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
+      logger.recordMetadata("Project", Constants.ROBOT_PROJECT_NAME);
+      logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
+      logger.addDataReceiver(new ByteLogReceiver(Constants.ROBOT_LOGGING_PATH));
+      logger.addDataReceiver(new LogSocketServer(5800));
+      LoggedSystemStats.getInstance().setPowerDistributionConfig(Constants.ROBOT_PDP_CAN, ModuleType.kRev);
+    }
+    else {
+      logger.addDataReceiver(new LogSocketServer(5800));
+    }
     if (Constants.ROBOT_LOGGING_ENABLED) logger.start();
     PIDTuner.enable(Constants.ROBOT_PID_TUNER_ENABLED);
+
 //    setup
     robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);

@@ -18,25 +18,28 @@ public class PIDTuner {
 
     public static void enable(boolean enabled) {
         PIDTuner.enabled = enabled;
-
     }
 
     public PIDTuner(String name, PIDController pidController) {
         this.name = name;
         this.pidController = pidController;
         controllerType = ControllerType.WPI;
-        SmartDashboard.putNumber("PIDTuner/" + name + " P", 0);
-        SmartDashboard.putNumber("PIDTuner/" + name + " I", 0);
-        SmartDashboard.putNumber("PIDTuner/" + name + " D", 0);
+        if (enabled) {
+            SmartDashboard.putNumber("PIDTuner/" + name + " P", 0);
+            SmartDashboard.putNumber("PIDTuner/" + name + " I", 0);
+            SmartDashboard.putNumber("PIDTuner/" + name + " D", 0);
+        }
     }
 
     public PIDTuner(String name, SparkMaxPIDController sparkMaxPIDController) {
         this.name = name;
         this.sparkMaxPIDController = sparkMaxPIDController;
         controllerType = ControllerType.SPARKMAX;
-        SmartDashboard.putNumber("PIDTuner/" + name + " P Tuner", 0);
-        SmartDashboard.putNumber("PIDTuner/" + name + " I Tuner", 0);
-        SmartDashboard.putNumber("PIDTuner/" + name + " D Tuner", 0);
+        if (enabled) {
+            SmartDashboard.putNumber("PIDTuner/" + name + " P Tuner", 0);
+            SmartDashboard.putNumber("PIDTuner/" + name + " I Tuner", 0);
+            SmartDashboard.putNumber("PIDTuner/" + name + " D Tuner", 0);
+        }
     }
 
     public void setP() {

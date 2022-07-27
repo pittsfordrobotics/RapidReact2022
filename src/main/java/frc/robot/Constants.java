@@ -17,20 +17,14 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.compressor7.CompressorIO;
-import frc.robot.subsystems.compressor7.CompressorIORev;
 import frc.robot.subsystems.drive.DriveIO;
-import frc.robot.subsystems.drive.DriveIOSparkMax;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.indexer.IndexerIO;
-import frc.robot.subsystems.indexer.IndexerIOSparkMax;
+import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.intake.IntakeIO;
-import frc.robot.subsystems.intake.IntakeIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.vision.VisionIO;
-import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.util.InterpolatingTreeMap;
 
 import java.util.HashMap;
@@ -43,16 +37,26 @@ public final class Constants {
      * ROBOT: General Constants
      *
      */
-    public static final ClimberIO ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
-    public static final CompressorIO ROBOT_COMPRESSOR_IO = new CompressorIORev();
-    public static final DriveIO ROBOT_DRIVE_IO = new DriveIOSparkMax();
-    public static final HoodIO ROBOT_HOOD_IO = new HoodIO(){};
-    public static final IndexerIO ROBOT_INDEXER_IO = new IndexerIOSparkMax();
-    public static final IntakeIO ROBOT_INTAKE_IO = new IntakeIOSparkMax();
-    public static final ShooterIO ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
-    public static final VisionIO ROBOT_VISION_IO = new VisionIOLimelight();
+//    public static final ClimberIO ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
+//    public static final CompressorIO ROBOT_COMPRESSOR_IO = new CompressorIORev();
+//    public static final DriveIO ROBOT_DRIVE_IO = new DriveIOSparkMax();
+//    public static final HoodIO ROBOT_HOOD_IO = new HoodIO(){};
+//    public static final IndexerIO ROBOT_INDEXER_IO = new IndexerIOSparkMax();
+//    public static final IntakeIO ROBOT_INTAKE_IO = new IntakeIOSparkMax();
+//    public static final ShooterIO ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
+//    public static final VisionIO ROBOT_VISION_IO = new VisionIOLimelight();
 
-    public static final boolean ROBOT_PID_TUNER_ENABLED = true;
+    //    SIM
+    public static final ClimberIO ROBOT_CLIMBER_IO = new ClimberIO() {};
+    public static final CompressorIO ROBOT_COMPRESSOR_IO = new CompressorIO(){};
+    public static final DriveIO ROBOT_DRIVE_IO = new DriveIO(){};
+    public static final HoodIO ROBOT_HOOD_IO = new HoodIO(){};
+    public static final IndexerIO ROBOT_INDEXER_IO = new IndexerIOSim();
+    public static final IntakeIO ROBOT_INTAKE_IO = new IntakeIO(){};
+    public static final ShooterIO ROBOT_SHOOTER_IO = new ShooterIO(){};
+    public static final VisionIO ROBOT_VISION_IO = new VisionIO(){};
+
+    public static final boolean ROBOT_PID_TUNER_ENABLED = false;
     public static final boolean ROBOT_LOGGING_ENABLED = true;
     public static final String ROBOT_PROJECT_NAME = "RapidReact2022";
     public static final String ROBOT_LOGGING_PATH = "/media/sda1/";

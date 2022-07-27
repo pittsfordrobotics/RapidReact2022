@@ -38,7 +38,7 @@ public class Indexer extends SubsystemBase {
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private enum State {
-        DISABLED, FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, INTAKE1REJECT1, TOWER1REJECT1, ARMED1REJECT1, ARMED1INTAKE1, ARMED1, ARMED2, REJECT1INTAKE1, REJECT1, REJECT1ARMED1, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
+        DISABLED, FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, INTAKE1REJECT1, TOWER1REJECT1, ARMED1REJECT1, ARMED1INTAKE1, ARMED1, ARMED2, REJECT1INTAKE1, REJECT1, REJECT1TOWER1, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
     }
     private State state = State.DISABLED;
 
@@ -86,6 +86,7 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/InstantTowerBall", ballCurrentlyAtTower);
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
         getAllianceColor();
+        Logger.getInstance().recordOutput("Indexer/AllianceColor", allianceColor.toString());
 //        TODO: add intake rejection
         switch (state) {
             case FIELD2:
@@ -99,31 +100,30 @@ public class Indexer extends SubsystemBase {
             case INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
-                if (ballCurrentlyAtTower && ballCurrentlyAtIntake && isWrongColorBall(1)) {
+                if (ballCurrentlyAtTower && ballCurrentlyAtIntake) {
                     advanceToTower();
                     intakeBall();
-                    state = State.TOWER1REJECT1;
+                    if (isWrongColorBall(1)) {
+                        state = State.TOWER1REJECT1;
+                    }
+                    else {
+                        state = State.TOWER1INTAKE1;
+                    }
                     break;
                 }
-                if (!ballCurrentlyAtTower && ballCurrentlyAtIntake && isWrongColorBall(1)) {
+                if (!ballCurrentlyAtTower && ballCurrentlyAtIntake) {
                     intakeBall();
-                    state = State.INTAKE1REJECT1;
+                    if (isWrongColorBall(1)) {
+                        state = State.INTAKE1REJECT1;
+                    }
+                    else {
+                        state = State.INTAKE2;
+                    }
                     break;
                 }
                 if (ballCurrentlyAtTower && !ballCurrentlyAtIntake) {
                     advanceToTower();
                     state = State.TOWER1;
-                    break;
-                }
-                if (ballCurrentlyAtTower && ballCurrentlyAtIntake) {
-                    advanceToTower();
-                    intakeBall();
-                    state = State.TOWER1INTAKE1;
-                    break;
-                }
-                if (!ballCurrentlyAtTower && ballCurrentlyAtIntake) {
-                    intakeBall();
-                    state = State.INTAKE2;
                     break;
                 }
                 break;
@@ -197,18 +197,37 @@ public class Indexer extends SubsystemBase {
                 if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     advanceToShooter();
                     intakeBall();
-                    state = State.ARMED1INTAKE1;
+                    if (isWrongColorBall(1)) {
+                        state = State.ARMED1REJECT1;
+                    }
+                    else {
+                        state = State.ARMED1INTAKE1;
+                    }
                     break;
                 }
                 if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     intakeBall();
-                    state = State.TOWER1INTAKE1;
+                    if (isWrongColorBall(1)) {
+                        state = State.TOWER1REJECT1;
+                    }
+                    else {
+                        state = State.TOWER1INTAKE1;
+                    }
                     break;
                 }
                 break;
             case ARMED1INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && isWrongColorBall(0)) {
+                    advanceToTower();
+                    state = State.REJECT1TOWER1;
+                    break;
+                }
+                else if (ballCurrentlyAtShooter && !ballCurrentlyAtTower && isWrongColorBall(0)) {
+                    state = State.REJECT1INTAKE1;
+                    break;
+                }
                 if (ballCurrentlyAtShooter && ballCurrentlyAtTower && shooting) {
                     advanceToTower();
                     state = State.SHOOTING2;
@@ -246,20 +265,20 @@ public class Indexer extends SubsystemBase {
                     state = State.REJECT1;
                     break;
                 }
-                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && shooting) {
+                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     intakeBall();
-                    state = State.SHOOTING1INTAKE1;
+                    if (isWrongColorBall(1)) {
+                        state = State.ARMED1REJECT1;
+                    }
+                    else if (shooting) {
+                        state = State.SHOOTING1INTAKE1;
+                    }
+                    else {
+                        state = State.ARMED1INTAKE1;
+                    }
                 }
                 else if (shooting) {
                     state = State.SHOOTING1;
-                }
-                else if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && isWrongColorBall(1)) {
-                    intakeBall();
-                    state = State.ARMED1REJECT1;
-                }
-                else if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
-                    intakeBall();
-                    state = State.ARMED1INTAKE1;
                 }
                 break;
             case ARMED2:
@@ -288,7 +307,7 @@ public class Indexer extends SubsystemBase {
                 }
                 else if (ballCurrentlyAtTower) {
                     advanceToTower();
-                    state = State.REJECT1ARMED1;
+                    state = State.REJECT1TOWER1;
                 }
                 else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
@@ -324,7 +343,7 @@ public class Indexer extends SubsystemBase {
                     state = State.FIELD2;
                 }
                 break;
-            case REJECT1ARMED1:
+            case REJECT1TOWER1:
                 if (rejectionTimerStarted) {
                     towerMotorOn();
                 }
@@ -404,7 +423,7 @@ public class Indexer extends SubsystemBase {
                 stomachMotorOff();
                 towerMotorOff();
         }
-        if (state == State.REJECT1 || state == State.REJECT1INTAKE1 || state == State.REJECT1ARMED1) {
+        if (state == State.REJECT1 || state == State.REJECT1INTAKE1 || state == State.REJECT1TOWER1) {
             Shooter.getInstance().updateSetpoint(Constants.SHOOTER_REJECT_SPEED, true);
             Hood.getInstance().setPosition(Constants.HOOD_POSITION_MAX, true);
         }
@@ -418,6 +437,10 @@ public class Indexer extends SubsystemBase {
         else if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterupt());
         }
+        Logger.getInstance().recordOutput("Indexer/Ball0Color", getBall0().getColor().toString());
+        Logger.getInstance().recordOutput("Indexer/Ball0Location", getBall0().getLocation().toString());
+        Logger.getInstance().recordOutput("Indexer/Ball1Color", getBall1().getColor().toString());
+        Logger.getInstance().recordOutput("Indexer/Ball1Location", getBall1().getLocation().toString());
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
         Logger.getInstance().recordOutput("Indexer/NumberOfBalls", getBallCount());
         Logger.getInstance().recordOutput("Indexer/IsFull", isFull());
@@ -502,6 +525,10 @@ public class Indexer extends SubsystemBase {
         return balls[0];
     }
 
+    public Ball getBall1() {
+        return balls[1];
+    }
+
     public void resetBalls() {
         balls[0] = new Ball();
         balls[1] = new Ball();
@@ -552,6 +579,9 @@ public class Indexer extends SubsystemBase {
 
     public void intakeBall() {
         COLOR color = inputs.colorRed > inputs.colorBlue ? COLOR.RED : COLOR.BLUE;
+        if (!inputs.colorConnected) {
+            color = COLOR.UNKNOWN;
+        }
         if (balls[0].getLocation() == LOCATION.FIELD) {
             balls[0].setLocationColor(LOCATION.INTAKE, color);
         }
