@@ -51,17 +51,22 @@ public class Robot extends LoggedRobot {
   public void robotInit() {
 //    advantageKit
     Logger logger = Logger.getInstance();
+    setUseTiming(true);
+    LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
+    logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
+    logger.recordMetadata("PIDTuner", Boolean.toString(Constants.ROBOT_PID_TUNER_ENABLED));
+    logger.recordMetadata("RuntimeType", getRuntimeType().toString());
+    logger.recordMetadata("ProjectName", GitConstants.MAVEN_NAME);
+    logger.recordMetadata("BuildDate", GitConstants.BUILD_DATE);
+    logger.recordMetadata("GitSHA", GitConstants.GIT_SHA);
+    logger.recordMetadata("GitDate", GitConstants.GIT_DATE);
+    logger.recordMetadata("GitBranch", GitConstants.GIT_BRANCH);
+    logger.recordMetadata("GitDirty", GitConstants.DIRTY == 0 ? "Clean" : "Dirty");
+    logger.addDataReceiver(new LogSocketServer(5800));
     if (RobotBase.isReal()) {
-      setUseTiming(true);
-      LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
-      logger.recordMetadata("Project", Constants.ROBOT_PROJECT_NAME);
-      logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
-      logger.addDataReceiver(new ByteLogReceiver(Constants.ROBOT_LOGGING_PATH));
-      logger.addDataReceiver(new LogSocketServer(5800));
+      logReceiver = new ByteLogReceiver(Constants.ROBOT_LOGGING_PATH);
+      logger.addDataReceiver(logReceiver);
       LoggedSystemStats.getInstance().setPowerDistributionConfig(Constants.ROBOT_PDP_CAN, ModuleType.kRev);
-    }
-    else {
-      logger.addDataReceiver(new LogSocketServer(5800));
     }
     if (Constants.ROBOT_LOGGING_ENABLED) logger.start();
     PIDTuner.enable(Constants.ROBOT_PID_TUNER_ENABLED);

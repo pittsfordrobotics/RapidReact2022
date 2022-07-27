@@ -160,3 +160,7 @@ bin/
 
 # Simulation GUI and other tools window save file
 *-window.json
+simgui*.json
+
+# Version file
+src/main/java/frc/robot/GitConstants.java
