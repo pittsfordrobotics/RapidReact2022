@@ -25,7 +25,7 @@ public class IntakeUpNoInterupt extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !indexer.isFull();
+        return true;
     }
 
     @Override

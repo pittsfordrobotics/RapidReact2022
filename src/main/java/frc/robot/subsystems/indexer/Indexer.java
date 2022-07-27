@@ -12,6 +12,7 @@ import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
+import frc.robot.commands.IntakeReverse;
 import frc.robot.commands.IntakeUpNoInterupt;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.IndexerIO.IndexerIOInputs;
@@ -37,7 +38,7 @@ public class Indexer extends SubsystemBase {
     private final Ball[] balls = {new Ball(), new Ball()};
 
     private enum State {
-        DISABLED, FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, ARMED1INTAKE1, ARMED1, ARMED2, REJECT1INTAKE1, REJECT1, REJECT1ARMED1, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
+        DISABLED, FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, INTAKE1REJECT1, TOWER1REJECT1, ARMED1REJECT1, ARMED1INTAKE1, ARMED1, ARMED2, REJECT1INTAKE1, REJECT1, REJECT1ARMED1, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
     }
     private State state = State.DISABLED;
 
@@ -85,6 +86,7 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/InstantTowerBall", ballCurrentlyAtTower);
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
         getAllianceColor();
+//        TODO: add intake rejection
         switch (state) {
             case FIELD2:
                 stomachMotorOff();
@@ -97,6 +99,17 @@ public class Indexer extends SubsystemBase {
             case INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
+                if (ballCurrentlyAtTower && ballCurrentlyAtIntake && isWrongColorBall(1)) {
+                    advanceToTower();
+                    intakeBall();
+                    state = State.TOWER1REJECT1;
+                    break;
+                }
+                if (!ballCurrentlyAtTower && ballCurrentlyAtIntake && isWrongColorBall(1)) {
+                    intakeBall();
+                    state = State.INTAKE1REJECT1;
+                    break;
+                }
                 if (ballCurrentlyAtTower && !ballCurrentlyAtIntake) {
                     advanceToTower();
                     state = State.TOWER1;
@@ -112,6 +125,19 @@ public class Indexer extends SubsystemBase {
                     intakeBall();
                     state = State.INTAKE2;
                     break;
+                }
+                break;
+            case INTAKE1REJECT1:
+                towerMotorOff();
+                stomachMotorReverse();
+                if (!rejectionTimerStarted) {
+                    rejectionTimer.reset();
+                    rejectionTimerStarted = true;
+                }
+                if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
+                    intakeReject();
+                    rejectionTimerStarted = false;
+                    state = State.INTAKE1;
                 }
                 break;
             case INTAKE2:
@@ -135,6 +161,29 @@ public class Indexer extends SubsystemBase {
                     advanceToTower();
                     state = State.ARMED2;
                     break;
+                }
+                break;
+            case TOWER1REJECT1:
+                towerMotorOn();
+                stomachMotorReverse();
+                if (!rejectionTimerStarted) {
+                    rejectionTimer.reset();
+                    rejectionTimerStarted = true;
+                }
+                if (ballCurrentlyAtShooter && rejectionTimer.advanceIfElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
+                    intakeReject();
+                    advanceToShooter();
+                    rejectionTimerStarted = false;
+                    state = State.ARMED1;
+                }
+                else if (ballCurrentlyAtShooter) {
+                    advanceToShooter();
+                    state = State.ARMED1REJECT1;
+                }
+                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
+                    intakeReject();
+                    rejectionTimerStarted = false;
+                    state = State.TOWER1;
                 }
                 break;
             case TOWER1:
@@ -172,11 +221,29 @@ public class Indexer extends SubsystemBase {
                     state = State.ARMED2;
                 }
                 break;
+            case ARMED1REJECT1:
+                towerMotorOff();
+                stomachMotorReverse();
+                if (!rejectionTimerStarted) {
+                    rejectionTimer.reset();
+                    rejectionTimerStarted = true;
+                }
+                if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
+                    intakeReject();
+                    rejectionTimerStarted = false;
+                    state = State.ARMED1;
+                }
+                break;
             case ARMED1:
                 stomachMotorOff();
                 towerMotorOff();
-                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && isWrongColorBall(1)) {
+                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && isWrongColorBall(0)) {
+                    intakeBall();
                     state = State.REJECT1INTAKE1;
+                    break;
+                }
+                else if (ballCurrentlyAtShooter && isWrongColorBall(0)) {
+                    state = State.REJECT1;
                     break;
                 }
                 if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && shooting) {
@@ -185,6 +252,10 @@ public class Indexer extends SubsystemBase {
                 }
                 else if (shooting) {
                     state = State.SHOOTING1;
+                }
+                else if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && isWrongColorBall(1)) {
+                    intakeBall();
+                    state = State.ARMED1REJECT1;
                 }
                 else if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     intakeBall();
@@ -210,15 +281,18 @@ public class Indexer extends SubsystemBase {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (ballCurrentlyAtTower && rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                if (ballCurrentlyAtTower && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
+                    rejectionTimerStarted = false;
                     state = State.TOWER1;
                 }
                 else if (ballCurrentlyAtTower) {
+                    advanceToTower();
                     state = State.REJECT1ARMED1;
                 }
-                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
+                    rejectionTimerStarted = false;
                     state = State.INTAKE1;
                 }
                 break;
@@ -234,15 +308,19 @@ public class Indexer extends SubsystemBase {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (ballCurrentlyAtIntake && rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                if (ballCurrentlyAtIntake && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
+                    intakeBall();
+                    rejectionTimerStarted = false;
                     state = State.INTAKE1;
                 }
                 else if (ballCurrentlyAtIntake) {
+                    intakeBall();
                     state = State.REJECT1INTAKE1;
                 }
-                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
+                    rejectionTimerStarted = false;
                     state = State.FIELD2;
                 }
                 break;
@@ -258,8 +336,9 @@ public class Indexer extends SubsystemBase {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_REJECTION_TIME)) {
+                if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
+                    rejectionTimerStarted = false;
                     state = State.TOWER1;
                 }
                 break;
@@ -333,7 +412,10 @@ public class Indexer extends SubsystemBase {
             Shooter.getInstance().updateSetpoint(-1, true);
             Hood.getInstance().setPosition(-1, true);
         }
-        if (isFull() && !DriverStation.isAutonomous()) {
+        if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {
+            CommandScheduler.getInstance().schedule(false, new IntakeReverse());
+        }
+        else if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterupt());
         }
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
@@ -476,6 +558,10 @@ public class Indexer extends SubsystemBase {
         else if (balls[1].getLocation() == LOCATION.FIELD) {
             balls[1].setLocationColor(LOCATION.INTAKE, color);
         }
+    }
+
+    public void intakeReject() {
+        balls[1] = new Ball();
     }
 
     public void shootBall() {
