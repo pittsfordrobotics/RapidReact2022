@@ -102,8 +102,8 @@ public final class Constants {
     public static final double DRIVE_ACCELERATION_GAIN = 0.0093369;
 
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
-//    this was found in simkitbot code
-    public static final double DRIVE_MOI = 0.8501136363636363;
+
+    public static final double DRIVE_MOI = 0.8501136363636363; // this was found in simkitbot code
 
     public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = 10;
     public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 5;

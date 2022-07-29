@@ -18,10 +18,6 @@ public class DriveIOSim implements DriveIO {
         null
     );
 
-//    private final DifferentialDrivetrainSim drivetrain =
-//            DifferentialDrivetrainSim.createKitbotSim(KitbotMotor.kDualCIMPerSide,
-//                    KitbotGearing.k10p71, KitbotWheelSize.kSixInch, null);
-
     private double appliedVoltsLeft = 0;
     private double appliedVoltsRight = 0;
 
