@@ -1,26 +1,27 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drive.Drive;
 
 
-public class DriveResetOdometry extends CommandBase {
+public class DriveSetPose extends CommandBase {
     private final Drive drive = Drive.getInstance();
-    private final Trajectory trajectory;
-    private final boolean reset;
+    private final Pose2d pose;
 
-    public DriveResetOdometry(Trajectory trajectory, boolean reset) {
-        this.trajectory = trajectory;
-        this.reset = reset;
+    public DriveSetPose(Pose2d pose) {
+        this.pose = pose;
         addRequirements(this.drive);
     }
 
     @Override
     public void initialize() {
-        if (reset) {
-            drive.resetOdometry(trajectory.getInitialPose());
-        }
+        drive.resetOdometry(pose);
+    }
+
+    @Override
+    public void execute() {
+
     }
 
     @Override
@@ -30,5 +31,6 @@ public class DriveResetOdometry extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+
     }
 }

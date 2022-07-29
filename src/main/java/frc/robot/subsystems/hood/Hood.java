@@ -51,16 +51,16 @@ public class Hood extends SubsystemBase {
     }
 
     private void moveHood(double degrees) {
-        io.setVoltage(pid.calculate(MathUtil.clamp(degrees-getAbsoluteWithOffset(), 0, Constants.HOOD_POSITION_MAX)));
+        io.setVoltage(pid.calculate(MathUtil.clamp(degrees-getAbsoluteWithOffset(), 0, Constants.HOOD_ANGLE_MAX)));
     }
 
     /** Min: 0, Max: UNKNOWN */
-    public void setPosition(double position, boolean forced) {
+    public void setAngle(double angle, boolean forced) {
         if (!forced) {
-            this.position = position;
+            this.position = angle;
         }
         else {
-            forcedPosition = position;
+            forcedPosition = angle;
         }
     }
 
@@ -68,7 +68,7 @@ public class Hood extends SubsystemBase {
         this.climbing = climbing;
     }
 
-    public boolean atPosition() {
+    public boolean atAngle() {
         return Math.abs(getAbsoluteWithOffset()-(forcedPosition != -1 ? forcedPosition : position)) < 5;
     }
 }

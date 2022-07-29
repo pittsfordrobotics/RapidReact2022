@@ -10,7 +10,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
@@ -27,12 +26,9 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.positionRad =
-                Units.rotationsToRadians(encoder.getPosition());
-        inputs.velocityRadPerSec =
-                Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity());
-        inputs.appliedVolts =
-                motorLeft.getAppliedOutput() * RobotController.getBatteryVoltage();
+        inputs.positionRot = encoder.getPosition();
+        inputs.velocityRotPerMin = encoder.getVelocity();
+        inputs.appliedVolts = motorLeft.getAppliedOutput() * RobotController.getBatteryVoltage();
         inputs.currentAmps = new double[] {motorLeft.getOutputCurrent(),};
         inputs.tempCelcius = new double[] {motorLeft.getMotorTemperature()};
     }
@@ -48,10 +44,8 @@ public class ShooterIOSparkMax implements ShooterIO {
     }
 
     @Override
-    public void setVelocity(double velocityRadPerSec, double ffVolts) {
-        pid.setReference(
-                Units.radiansPerSecondToRotationsPerMinute(velocityRadPerSec),
-                ControlType.kVelocity, 0, ffVolts, ArbFFUnits.kVoltage);
+    public void setVelocity(double velocityRotPerMin, double ffVolts) {
+        pid.setReference(velocityRotPerMin, ControlType.kVelocity, 0, ffVolts, ArbFFUnits.kVoltage);
     }
 
     @Override

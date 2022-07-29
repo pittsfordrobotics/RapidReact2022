@@ -13,6 +13,7 @@ public class DriveTurn extends CommandBase {
   private final double angle;
   private final Drive drive = Drive.getInstance();
   private final PIDController pidController = new PIDController(0.01,0, 0);
+//  private final TrapezoidProfile profile = new TrapezoidProfile(new Constraints(10, 3), )
 
   /**
    * Auto turn for driving
@@ -33,10 +34,12 @@ public class DriveTurn extends CommandBase {
   @Override
   public void execute() {
     drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + (angle > 0 ? 0.1 : -0.1), -0.5, 0.5), false);
+//    drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + (angle > 0 ? 0.1 : -0.1), -0.5, 0.5), false);
   }
 
   @Override
   public void end(boolean interrupted) {
+    drive.setVolts(0,0);
     drive.setThrottleWithTemp();
   }
 

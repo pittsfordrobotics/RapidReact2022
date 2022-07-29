@@ -17,10 +17,10 @@ import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 
 public class DrivePathing extends SequentialCommandGroup {
-  public DrivePathing(Trajectory trajectory) {
+  public DrivePathing(Trajectory trajectory, boolean resetPose) {
     super(
         new DriveZero(),
-        new DriveResetOdometry(trajectory),
+        new DriveResetOdometry(trajectory, resetPose),
         new RamseteCommand(
             trajectory,
             Drive.getInstance()::getPose,
@@ -30,7 +30,7 @@ public class DrivePathing extends SequentialCommandGroup {
             Drive.getInstance()::getWheelSpeeds,
             Drive.getInstance().getLeftController(),
             Drive.getInstance().getRightController(),
-            Drive.getInstance()::driveVolts,
+            Drive.getInstance()::setVolts,
             Drive.getInstance()),
         new DriveZero()
     );

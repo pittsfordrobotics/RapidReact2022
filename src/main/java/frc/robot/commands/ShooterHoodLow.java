@@ -1,14 +1,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.shooter.Shooter;
 
 
-public class ShooterLow extends CommandBase {
+public class ShooterHoodLow extends CommandBase {
     private final Shooter shooter = Shooter.getInstance();
+    private final Hood hood = Hood.getInstance();
 
-    public ShooterLow() {
-        addRequirements(this.shooter);
+    public ShooterHoodLow() {
+        addRequirements(this.shooter, this.hood);
     }
 
     @Override
@@ -18,6 +21,7 @@ public class ShooterLow extends CommandBase {
     @Override
     public void execute() {
         shooter.shootLow();
+        hood.setAngle(Constants.HOOD_ANGLE_MAX, false);
     }
 
     @Override

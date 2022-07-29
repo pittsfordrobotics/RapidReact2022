@@ -13,7 +13,7 @@ public class DriveZero extends CommandBase {
 
     @Override
     public void initialize() {
-        drive.driveVolts(0,0);
+        drive.setVolts(0,0);
     }
 
     @Override

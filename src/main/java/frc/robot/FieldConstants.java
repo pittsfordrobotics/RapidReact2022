@@ -12,7 +12,6 @@ import frc.robot.util.GeomUtil;
 
 /** Contains various field dimensions and useful side points. All dimensions are in meters. */
 public final class FieldConstants {
-
     // Field dimensions
     public static final double fieldLength = Units.inchesToMeters(54.0 * 12.0);
     public static final double fieldWidth = Units.inchesToMeters(27.0 * 12.0);

@@ -124,6 +124,7 @@ public class Robot extends LoggedRobot {
     if (indexer.isDisabled()) {
       indexer.resetEverything();
     }
+    indexer.setRejectionEnabled(true);
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }

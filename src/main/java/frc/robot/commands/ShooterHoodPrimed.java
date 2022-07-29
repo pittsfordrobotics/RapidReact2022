@@ -1,14 +1,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.shooter.Shooter;
 
 
-public class ShooterPrimed extends CommandBase {
+public class ShooterHoodPrimed extends CommandBase {
+    private final Hood hood = Hood.getInstance();
     private final Shooter shooter = Shooter.getInstance();
 
-    public ShooterPrimed() {
-        addRequirements(this.shooter);
+    public ShooterHoodPrimed() {
+        addRequirements(this.hood, this.shooter);
     }
 
     @Override
@@ -21,7 +23,7 @@ public class ShooterPrimed extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return shooter.isAtSpeed();
+        return hood.atAngle() && shooter.isAtSpeed();
     }
 
     @Override

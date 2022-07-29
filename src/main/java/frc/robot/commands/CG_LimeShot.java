@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class CG_LimeShot extends SequentialCommandGroup {
     public CG_LimeShot() {
         super(
-                new ShooterLime(),
-                new DriveTurnLime(),
-                new ShooterLime(),
-                new ShooterPrimed(),
-                new IndexerShoot(),
                 new WaitCommand(1),
-                new ShooterZero()
+                new DriveTurnLime(),
+                new ShooterHoodLime(),
+                new ShooterHoodPrimed(),
+                new IndexerShoot(),
+//                new WaitCommand(0.5),
+                new ShooterHoodZero()
         );
     }
 }

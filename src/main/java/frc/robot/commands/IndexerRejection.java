@@ -1,22 +1,21 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.indexer.Indexer;
 
 
-public class IndexerFullyArmed extends CommandBase {
+public class IndexerRejection extends CommandBase {
     private final Indexer indexer = Indexer.getInstance();
-    private final Timer timer = new Timer();
+    private final boolean enabled;
 
-    public IndexerFullyArmed() {
+    public IndexerRejection(boolean enabled) {
+        this.enabled = enabled;
         addRequirements(this.indexer);
     }
 
     @Override
     public void initialize() {
-        timer.reset();
-        timer.start();
+        indexer.setRejectionEnabled(enabled);
     }
 
     @Override
@@ -25,11 +24,11 @@ public class IndexerFullyArmed extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return indexer.fullyLoaded() || timer.get() > 3;
+        return true;
     }
 
     @Override
     public void end(boolean interrupted) {
-        timer.stop();
+
     }
 }

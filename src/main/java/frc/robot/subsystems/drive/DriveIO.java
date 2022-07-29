@@ -7,14 +7,14 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 public interface DriveIO {
     /** The set of loggable inputs for the drive subsystem. */
     class DriveIOInputs implements LoggableInputs {
-        public double leftPositionRad = 0.0;
-        public double leftVelocityRadPerSec = 0.0;
+        public double leftPositionMeters = 0.0;
+        public double leftVelocityMetersPerSec = 0.0;
         public double leftAppliedVolts = 0.0;
         public double[] leftCurrentAmps = new double[] {};
         public double[] leftTempCelcius = new double[] {};
 
-        public double rightPositionRad = 0.0;
-        public double rightVelocityRadPerSec = 0.0;
+        public double rightPositionMeters = 0.0;
+        public double rightVelocityMetersPerSec = 0.0;
         public double rightAppliedVolts = 0.0;
         public double[] rightCurrentAmps = new double[] {};
         public double[] rightTempCelcius = new double[] {};
@@ -26,14 +26,14 @@ public interface DriveIO {
         public double gyroRollPositionRad = 0.0;
 
         public void toLog(LogTable table) {
-            table.put("LeftPositionRad", leftPositionRad);
-            table.put("LeftVelocityRadPerSec", leftVelocityRadPerSec);
+            table.put("LeftPositionMeters", leftPositionMeters);
+            table.put("LeftVelocityMetersPerSec", leftVelocityMetersPerSec);
             table.put("LeftAppliedVolts", leftAppliedVolts);
             table.put("LeftCurrentAmps", leftCurrentAmps);
             table.put("LeftTempCelcius", leftTempCelcius);
 
-            table.put("RightPositionRad", rightPositionRad);
-            table.put("RightVelocityRadPerSec", rightVelocityRadPerSec);
+            table.put("RightPositionMeters", rightPositionMeters);
+            table.put("RightVelocityMetersPerSec", rightVelocityMetersPerSec);
             table.put("RightAppliedVolts", rightAppliedVolts);
             table.put("RightCurrentAmps", rightCurrentAmps);
             table.put("RightTempCelcius", rightTempCelcius);
@@ -46,14 +46,14 @@ public interface DriveIO {
         }
 
         public void fromLog(LogTable table) {
-            leftPositionRad = table.getDouble("LeftPositionRad", leftPositionRad);
-            leftVelocityRadPerSec = table.getDouble("LeftVelocityRadPerSec", leftVelocityRadPerSec);
+            leftPositionMeters = table.getDouble("LeftPositionMeters", leftPositionMeters);
+            leftVelocityMetersPerSec = table.getDouble("LeftVelocityMetersPerSec", leftVelocityMetersPerSec);
             leftAppliedVolts = table.getDouble("LeftAppliedVolts", leftAppliedVolts);
             leftCurrentAmps = table.getDoubleArray("LeftCurrentAmps", leftCurrentAmps);
             leftTempCelcius = table.getDoubleArray("LeftTempCelcius", leftTempCelcius);
 
-            rightPositionRad = table.getDouble("RightPositionRad", rightPositionRad);
-            rightVelocityRadPerSec = table.getDouble("RightVelocityRadPerSec", rightVelocityRadPerSec);
+            rightPositionMeters = table.getDouble("RightPositionMeters", rightPositionMeters);
+            rightVelocityMetersPerSec = table.getDouble("RightVelocityMetersPerSec", rightVelocityMetersPerSec);
             rightAppliedVolts = table.getDouble("RightAppliedVolts", rightAppliedVolts);
             rightCurrentAmps = table.getDoubleArray("RightCurrentAmps", rightCurrentAmps);
             rightTempCelcius = table.getDoubleArray("RightTempCelcius", rightTempCelcius);
@@ -78,8 +78,6 @@ public interface DriveIO {
     /** Enable or disable brake mode. */
     default void setBrakeMode(boolean enable) {}
 
-    /**
-     * Resets encoders to 0
-     */
+    /** Resets encoders to 0 */
     default void resetEncoders() {}
 }

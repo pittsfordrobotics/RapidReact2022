@@ -34,6 +34,7 @@ public class Indexer extends SubsystemBase {
     private boolean ballStillAtTower = false;
     private final Timer rejectionTimer = new Timer();
     private boolean rejectionTimerStarted = false;
+    private boolean rejectionEnabled = true;
 
     private final Ball[] balls = {new Ball(), new Ball()};
 
@@ -103,7 +104,7 @@ public class Indexer extends SubsystemBase {
                 if (ballCurrentlyAtTower && ballCurrentlyAtIntake) {
                     advanceToTower();
                     intakeBall();
-                    if (isWrongColorBall(1)) {
+                    if (isWrongColorBall(1) && rejectionEnabled) {
                         state = State.TOWER1REJECT1;
                     }
                     else {
@@ -113,7 +114,7 @@ public class Indexer extends SubsystemBase {
                 }
                 if (!ballCurrentlyAtTower && ballCurrentlyAtIntake) {
                     intakeBall();
-                    if (isWrongColorBall(1)) {
+                    if (isWrongColorBall(1) && rejectionEnabled) {
                         state = State.INTAKE1REJECT1;
                     }
                     else {
@@ -197,7 +198,7 @@ public class Indexer extends SubsystemBase {
                 if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     advanceToShooter();
                     intakeBall();
-                    if (isWrongColorBall(1)) {
+                    if (isWrongColorBall(1) && rejectionEnabled) {
                         state = State.ARMED1REJECT1;
                     }
                     else {
@@ -207,7 +208,7 @@ public class Indexer extends SubsystemBase {
                 }
                 if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     intakeBall();
-                    if (isWrongColorBall(1)) {
+                    if (isWrongColorBall(1) && rejectionEnabled) {
                         state = State.TOWER1REJECT1;
                     }
                     else {
@@ -219,12 +220,12 @@ public class Indexer extends SubsystemBase {
             case ARMED1INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
-                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && isWrongColorBall(0)) {
+                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && isWrongColorBall(0) && rejectionEnabled) {
                     advanceToTower();
                     state = State.REJECT1TOWER1;
                     break;
                 }
-                else if (ballCurrentlyAtShooter && !ballCurrentlyAtTower && isWrongColorBall(0)) {
+                else if (ballCurrentlyAtShooter && !ballCurrentlyAtTower && isWrongColorBall(0) && rejectionEnabled) {
                     state = State.REJECT1INTAKE1;
                     break;
                 }
@@ -256,18 +257,18 @@ public class Indexer extends SubsystemBase {
             case ARMED1:
                 stomachMotorOff();
                 towerMotorOff();
-                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && isWrongColorBall(0)) {
+                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && isWrongColorBall(0) && rejectionEnabled) {
                     intakeBall();
                     state = State.REJECT1INTAKE1;
                     break;
                 }
-                else if (ballCurrentlyAtShooter && isWrongColorBall(0)) {
+                else if (ballCurrentlyAtShooter && isWrongColorBall(0) && rejectionEnabled) {
                     state = State.REJECT1;
                     break;
                 }
                 if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
                     intakeBall();
-                    if (isWrongColorBall(1)) {
+                    if (isWrongColorBall(1) && rejectionEnabled) {
                         state = State.ARMED1REJECT1;
                     }
                     else if (shooting) {
@@ -296,7 +297,7 @@ public class Indexer extends SubsystemBase {
                     towerMotorOff();
                 }
                 stomachMotorOn();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atPosition() && !rejectionTimerStarted) {
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atAngle() && !rejectionTimerStarted) {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
@@ -323,7 +324,7 @@ public class Indexer extends SubsystemBase {
                     towerMotorOff();
                 }
                 stomachMotorOff();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atPosition() && !rejectionTimerStarted) {
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atAngle() && !rejectionTimerStarted) {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
@@ -351,7 +352,7 @@ public class Indexer extends SubsystemBase {
                     towerMotorOff();
                 }
                 stomachMotorOff();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atPosition() && !rejectionTimerStarted) {
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atAngle() && !rejectionTimerStarted) {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
@@ -425,11 +426,11 @@ public class Indexer extends SubsystemBase {
         }
         if (state == State.REJECT1 || state == State.REJECT1INTAKE1 || state == State.REJECT1TOWER1) {
             Shooter.getInstance().updateSetpoint(Constants.SHOOTER_REJECT_SPEED, true);
-            Hood.getInstance().setPosition(Constants.HOOD_POSITION_MAX, true);
+            Hood.getInstance().setAngle(Constants.HOOD_ANGLE_MAX, true);
         }
         else {
             Shooter.getInstance().updateSetpoint(-1, true);
-            Hood.getInstance().setPosition(-1, true);
+            Hood.getInstance().setAngle(-1, true);
         }
         if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {
             CommandScheduler.getInstance().schedule(false, new IntakeReverse());
@@ -626,6 +627,10 @@ public class Indexer extends SubsystemBase {
 
     public boolean isWrongColorBall(int index) {
         return (balls[index].getColor() != allianceColor) && (balls[index].getColor() != COLOR.UNKNOWN) && (allianceColor != COLOR.UNKNOWN);
+    }
+
+    public void setRejectionEnabled(boolean enabled) {
+        this.rejectionEnabled = enabled;
     }
 
     public boolean allianceIsUnknown() {

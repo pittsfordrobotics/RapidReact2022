@@ -1,17 +1,18 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
+import frc.robot.util.BetterMath;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
     private final ShooterIO io;
     private final ShooterIOInputs inputs = new ShooterIOInputs();
 
+    private boolean idleEnabled = true;
     private double speed = 0;
     private double setpoint = 0;
     private double forcedSetpoint = -1;
@@ -36,11 +37,15 @@ public class Shooter extends SubsystemBase {
         Logger.getInstance().recordOutput("Shooter/TargetRMP", setpoint);
         Logger.getInstance().recordOutput("Shooter/ForcedRMP", forcedSetpoint);
         Logger.getInstance().recordOutput("Shooter/ActualRMP", getVelocity());
-        if (forcedSetpoint == -1) {
-            io.setVelocity(Units.rotationsPerMinuteToRadiansPerSecond(setpoint), 0);
+        if (forcedSetpoint != -1) {
+            io.setVelocity(forcedSetpoint, 0);
+        }
+        else if (setpoint != 0) {
+            io.setVelocity(setpoint, 0);
         }
         else {
-            io.setVelocity(Units.rotationsPerMinuteToRadiansPerSecond(forcedSetpoint), 0);
+//            use robot pose to estimate speed -200
+            io.setVelocity(0, 0);
         }
         io.set(0.0002 * speed);
     }
@@ -62,7 +67,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getVelocity() {
-        return Units.radiansPerSecondToRotationsPerMinute(inputs.velocityRadPerSec);
+        return inputs.velocityRotPerMin;
     }
 
     public void shootLow() {
@@ -78,7 +83,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isAtSetpoint() {
-        return Math.abs(getVelocity()-(forcedSetpoint != -1 ? forcedSetpoint : setpoint)) < 100;
+        return BetterMath.epsilonEquals(getVelocity(), forcedSetpoint,50);
+    }
+
+    public void setIdle(boolean enabled) {
+        this.idleEnabled = enabled;
     }
 
 }

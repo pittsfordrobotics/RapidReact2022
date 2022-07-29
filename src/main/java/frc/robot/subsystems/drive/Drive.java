@@ -48,7 +48,7 @@ public class Drive extends SubsystemBase {
         setThrottle(0.7);
 
         ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
-        driveTab.addNumber("Pigeon", () -> Units.radiansToRotations(inputs.gyroYawPositionRad));
+        driveTab.addNumber("Pigeon", this::getAngle);
         driveTab.addNumber("Throttle", this::getThrottle);
     }
 
@@ -68,8 +68,11 @@ public class Drive extends SubsystemBase {
 
         pose = odometry.update(
                 Rotation2d.fromDegrees(getAngle()),
-                inputs.leftPositionRad,
-                inputs.rightPositionRad);
+                inputs.leftPositionMeters,
+                inputs.rightPositionMeters);
+
+        Logger.getInstance().recordOutput("Drive/Pose",
+                new double[] {pose.getX(), pose.getY(), pose.getRotation().getRadians()});
 
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
     }
@@ -84,7 +87,7 @@ public class Drive extends SubsystemBase {
         io.set(speeds.left * throttle, speeds.right * throttle);
     }
 
-    public void driveVolts(double left, double right) {
+    public void setVolts(double left, double right) {
         io.setVoltage(left, right);
     }
 
@@ -115,11 +118,11 @@ public class Drive extends SubsystemBase {
     }
 
     public double getLeftVelocity() {
-        return inputs.leftVelocityRadPerSec;
+        return inputs.leftVelocityMetersPerSec;
     }
 
     public double getRightVelocity() {
-        return inputs.rightVelocityRadPerSec;
+        return inputs.rightVelocityMetersPerSec;
     }
 
     public double getAverageVelocity() { return (getLeftVelocity() + getRightVelocity()) / 2; }
@@ -153,7 +156,7 @@ public class Drive extends SubsystemBase {
      * @return current angle; positive = clockwise
      */
     public double getAngle() {
-        return Units.radiansToDegrees(inputs.gyroYawPositionRad);
+        return -Units.radiansToDegrees(inputs.gyroYawPositionRad);
     }
 
 }

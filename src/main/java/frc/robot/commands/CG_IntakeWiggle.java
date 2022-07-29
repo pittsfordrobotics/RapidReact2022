@@ -12,7 +12,6 @@ public class CG_IntakeWiggle extends SequentialCommandGroup {
                 new IntakeUp(),
                 new WaitCommand(0.3),
                 new IntakeDown()
-
         );
     }
 }

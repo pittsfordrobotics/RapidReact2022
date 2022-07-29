@@ -3,7 +3,7 @@
 //import edu.wpi.first.math.geometry.Pose2d;
 //import edu.wpi.first.math.geometry.Translation2d;
 //import edu.wpi.first.math.util.Units;
-//import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.TimeKeeper;
 //import org.littletonrobotics.junction.Logger;
 //
 //import java.util.Map;
@@ -40,7 +40,7 @@
 //                        realPose.getRotation().getRadians()});
 //        Map.Entry<Double, Translation2d> visionEntry = visionData.lastEntry();
 //        if (visionEntry != null) {
-//            if (visionEntry.getKey() > Timer.getFPGATimestamp() - maxNoVisionLog) {
+//            if (visionEntry.getKey() > TimeKeeper.getFPGATimestamp() - maxNoVisionLog) {
 //                Logger.getInstance().recordOutput("Odometry/VisionPose",
 //                        new double[] {visionEntry.getValue().getX(),
 //                                visionEntry.getValue().getY(),

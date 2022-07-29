@@ -36,10 +36,10 @@ public class DriveIOSparkMax implements DriveIO {
 
     @Override
     public void updateInputs(DriveIOInputs inputs) {
-        inputs.leftPositionRad = leftEncoder.getPosition();
-        inputs.rightPositionRad = rightEncoder.getPosition();
-        inputs.leftVelocityRadPerSec = leftEncoder.getVelocity();
-        inputs.rightVelocityRadPerSec = rightEncoder.getVelocity();
+        inputs.leftPositionMeters = leftEncoder.getPosition();
+        inputs.rightPositionMeters = rightEncoder.getPosition();
+        inputs.leftVelocityMetersPerSec = leftEncoder.getVelocity();
+        inputs.rightVelocityMetersPerSec = rightEncoder.getVelocity();
 
         inputs.leftAppliedVolts =
                 leftPrimary.getAppliedOutput() * RobotController.getBatteryVoltage();
