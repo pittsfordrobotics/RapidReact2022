@@ -37,17 +37,17 @@ public class Shooter extends SubsystemBase {
         Logger.getInstance().recordOutput("Shooter/TargetRMP", setpoint);
         Logger.getInstance().recordOutput("Shooter/ForcedRMP", forcedSetpoint);
         Logger.getInstance().recordOutput("Shooter/ActualRMP", getVelocity());
-        if (forcedSetpoint != -1) {
-            io.setVelocity(forcedSetpoint, 0);
-        }
-        else if (setpoint != 0) {
-            io.setVelocity(setpoint, 0);
-        }
-        else {
-//            use robot pose to estimate speed -200
-            io.setVelocity(0, 0);
-        }
-        io.set(0.0002 * speed);
+//        if (forcedSetpoint != -1) {
+//            io.setVelocity(forcedSetpoint, 0);
+//        }
+//        else if (setpoint != 0) {
+//            io.setVelocity(setpoint, 0);
+//        }
+//        else {
+////            use robot pose to estimate speed -200
+//            io.setVelocity(0, 0);
+//        }
+//        io.set(0.0002 * speed);
     }
 
     public void updateSpeed(double speed) {

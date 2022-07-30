@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -71,12 +72,12 @@ public class Drive extends SubsystemBase {
     }
 
     public void driveArcade(double speed, double rotation, boolean squared) {
-        WheelSpeeds speeds = DifferentialDrive.arcadeDriveIK(speed, rotation, squared);
+        WheelSpeeds speeds = DifferentialDrive.arcadeDriveIK(MathUtil.applyDeadband(speed,0.05), MathUtil.applyDeadband(rotation,0.05), squared);
         io.set(speeds.left * throttle, speeds.right * throttle);
     }
 
     public void driveCurve(double speed, double rotation) {
-        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(speed, rotation, Math.abs(speed) < 0.15);
+        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(speed,0.05), MathUtil.applyDeadband(rotation,0.05), Math.abs(speed) < 0.15);
         io.set(speeds.left * throttle, speeds.right * throttle);
     }
 

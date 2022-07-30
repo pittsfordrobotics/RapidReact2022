@@ -79,7 +79,6 @@ public class LazySparkMax extends CANSparkMax {
             errors += check(setSmartCurrentLimit(currentLimit));
             errors += check(follow(leader, inverted));
             errors += check(burnFlash());
-            errors += check(setCANTimeout(0));
         }
         if (errors > 0) {
             Logger.getInstance().recordOutput("SparkMaxes/"+Constants.ROBOT_SPARKMAX_HASHMAP.get(port)+port,"FAILED");

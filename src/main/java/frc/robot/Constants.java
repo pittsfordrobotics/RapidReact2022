@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.compressor7.CompressorIO;
-import frc.robot.subsystems.compressor7.CompressorIORev;
 import frc.robot.subsystems.drive.DriveIO;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOSparkMax;
@@ -211,7 +210,7 @@ public final class Constants {
     static {
         if (RobotBase.isReal()) {
             ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
-            ROBOT_COMPRESSOR_IO = new CompressorIORev();
+            ROBOT_COMPRESSOR_IO = new CompressorIO() {};
             ROBOT_DRIVE_IO = new DriveIOSparkMax();
             ROBOT_HOOD_IO = new HoodIO(){};
             ROBOT_INDEXER_IO = new IndexerIOSparkMax();

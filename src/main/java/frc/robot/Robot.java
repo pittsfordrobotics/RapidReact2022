@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -35,8 +34,6 @@ public class Robot extends LoggedRobot {
   private final Indexer indexer = Indexer.getInstance();
 
   private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
-
-  private final PowerDistribution revPDH = new PowerDistribution();
 
   private Command autonomousCommand;
 
@@ -75,7 +72,6 @@ public class Robot extends LoggedRobot {
     robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);
     climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
-    revPDH.setSwitchableChannel(true);
     intake.retract();
     indexer.disable();
   }
