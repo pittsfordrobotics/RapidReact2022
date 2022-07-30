@@ -142,6 +142,7 @@ public class Drive extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(pose, Rotation2d.fromDegrees(getAngle()));
+        RobotState.getInstance().resetPose(pose);
         resetEncoders();
     }
 
@@ -181,6 +182,7 @@ public class Drive extends SubsystemBase {
 
     public Pose2d getPose() {
         return pose;
+//        return RobotState.getInstance().getLatestPose();
     }
 
     /**
