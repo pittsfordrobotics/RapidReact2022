@@ -46,9 +46,9 @@ public class Shooter extends SubsystemBase {
         else if (setpoint != 0) {
             io.setVelocity(setpoint, 0);
         }
-        else if (Constants.SHOOTER_IDLE_ENABLED) {
+        else if (Constants.ROBOT_IDLE_SHOOTER_ENABLED) {
 //            use robot pose to estimate speed -200
-            io.setVelocity(Constants.SHOOTER_SPEED_MAP.lookup(RobotState.getInstance().getDistanceToHub())-200, 0);
+            io.setVelocity(Constants.SHOOTER_SPEED_MAP.lookup(RobotState.getInstance().getDistanceToHub()), 0);
         }
     }
 

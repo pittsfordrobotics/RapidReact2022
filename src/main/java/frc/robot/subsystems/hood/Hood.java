@@ -45,8 +45,8 @@ public class Hood extends SubsystemBase {
         else if (position != 0) {
             moveHood(position);
         }
-        else {
-            moveHood(Constants.HOOD_ANGLE_MAP(RobotState.getInstance().getDistanceToHub()));
+        else if (Constants.ROBOT_IDLE_SHOOTER_ENABLED) {
+            moveHood(Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()));
         }
     }
 

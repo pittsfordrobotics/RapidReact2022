@@ -54,6 +54,7 @@ public final class Constants {
 
     public static final boolean ROBOT_PID_TUNER_ENABLED = false;
     public static final boolean ROBOT_LOGGING_ENABLED = true;
+    public static final boolean ROBOT_IDLE_SHOOTER_ENABLED = false;
     public static final String ROBOT_LOGGING_PATH = "/media/sda1/";
 
     public static final int ROBOT_PDP_CAN = 1;
@@ -160,7 +161,6 @@ public final class Constants {
      */
     public static final int SHOOTER_CAN_LEFT = 11;
     public static final int SHOOTER_CAN_RIGHT = 12;
-    public static final boolean SHOOTER_IDLE_ENABLED = false;
 
     public static final double SHOOTER_STATIC_GAIN = 0.15345;
     public static final double SHOOTER_VELOCITY_GAIN = 0.12404;
