@@ -1,9 +1,17 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import org.littletonrobotics.junction.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VisionIOLimelight implements VisionIO {
+    public double captureTimestamp = 0.0;
+    public double[] cornerX = new double[] {};
+    public double[] cornerY = new double[] {};
     private double led = 0.0;
     private double pipeline = 0.0;
     private double camera = 0.0;
@@ -22,6 +30,8 @@ public class VisionIOLimelight implements VisionIO {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv");
     private final NetworkTableEntry latencyEntry =
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl");
+    private final NetworkTableEntry dataEntry =
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("tcornxy");
     private final NetworkTableEntry hAngleEntry =
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx");
     private final NetworkTableEntry vAngleEntry =
@@ -30,17 +40,45 @@ public class VisionIOLimelight implements VisionIO {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("hb");
 
     public VisionIOLimelight() {
-        led = ledEntry.getDouble(0.0);
-        pipeline = pipelineEntry.getDouble(0.0);
-        camera = cameraEntry.getDouble(0.0);
-        hasTarget = validEntry.getDouble(0.0) == 1.0;
-        connected = heartbeatEntry.getDouble(0.0) > 0.0;
-        vAngle = vAngleEntry.getDouble(0.0);
-        hAngle = hAngleEntry.getDouble(0.0);
+        latencyEntry.addListener(event -> {
+            double timestamp = Logger.getInstance().getRealTimestamp()
+                    - (latencyEntry.getDouble(0.0) / 1000.0);
+
+            List<Double> cornerXList = new ArrayList<>();
+            List<Double> cornerYList = new ArrayList<>();
+            if (validEntry.getDouble(0.0) == 1.0) {
+                boolean isX = true;
+                for (double coordinate : dataEntry.getDoubleArray(new double[] {})) {
+                    if (isX) {
+                        cornerXList.add(coordinate);
+                    } else {
+                        cornerYList.add(coordinate);
+                    }
+                    isX = !isX;
+                }
+            }
+
+            synchronized (VisionIOLimelight.this) {
+                captureTimestamp = timestamp;
+                cornerX = cornerXList.stream().mapToDouble(Double::doubleValue).toArray();
+                cornerY = cornerYList.stream().mapToDouble(Double::doubleValue).toArray();
+                led = ledEntry.getDouble(0.0);
+                pipeline = pipelineEntry.getDouble(0.0);
+                camera = cameraEntry.getDouble(0.0);
+                hasTarget = validEntry.getDouble(0.0) == 1.0;
+                connected = heartbeatEntry.getDouble(0.0) > 0.0;
+                vAngle = vAngleEntry.getDouble(0.0);
+                hAngle = hAngleEntry.getDouble(0.0);
+            }
+
+        }, EntryListenerFlags.kUpdate);
     }
 
     @Override
-    public void updateInputs(VisionIOInputs inputs) {
+    public synchronized void updateInputs(VisionIOInputs inputs) {
+        inputs.captureTimestamp = captureTimestamp;
+        inputs.cornerX = cornerX;
+        inputs.cornerY = cornerY;
         inputs.led = led;
         inputs.pipeline = pipeline;
         inputs.camera = camera;
@@ -63,7 +101,7 @@ public class VisionIOLimelight implements VisionIO {
     }
 
     @Override
-    public void setLEDS(LED led) {
+    public void setLEDs(LED led) {
         ledEntry.forceSetDouble(led.getNum());
         this.led = led.getNum();
     }

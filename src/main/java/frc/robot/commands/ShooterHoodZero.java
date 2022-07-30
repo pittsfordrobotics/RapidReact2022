@@ -24,7 +24,7 @@ public class ShooterHoodZero extends CommandBase {
     @Override
     public void execute() {
         hood.setAngle(0, false);
-        shooter.updateSetpoint(0, false);
+        shooter.setSetpoint(0, false);
         indexer.setStateStopShoot();
     }
 

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.robot.util.BetterMath;
 import org.littletonrobotics.junction.Logger;
@@ -12,8 +13,6 @@ public class Shooter extends SubsystemBase {
     private final ShooterIO io;
     private final ShooterIOInputs inputs = new ShooterIOInputs();
 
-    private boolean idleEnabled = true;
-    private double speed = 0;
     private double setpoint = 0;
     private double forcedSetpoint = -1;
 
@@ -25,9 +24,9 @@ public class Shooter extends SubsystemBase {
     private Shooter(ShooterIO io) {
         this.io = io;
         ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-        shooterTab.addNumber("Shooter Target RPM", () -> speed);
+        shooterTab.addNumber("Shooter Target RPM", () -> setpoint);
         shooterTab.addNumber("Shooter Actual", this::getVelocity);
-        shooterTab.addBoolean("Shooter up to Speed", this::isAtSpeed);
+        shooterTab.addBoolean("Shooter up to Speed", this::isAtSetpoint);
     }
 
     @Override
@@ -37,27 +36,26 @@ public class Shooter extends SubsystemBase {
         Logger.getInstance().recordOutput("Shooter/TargetRMP", setpoint);
         Logger.getInstance().recordOutput("Shooter/ForcedRMP", forcedSetpoint);
         Logger.getInstance().recordOutput("Shooter/ActualRMP", getVelocity());
-//        if (forcedSetpoint != -1) {
-//            io.setVelocity(forcedSetpoint, 0);
-//        }
-//        else if (setpoint != 0) {
-//            io.setVelocity(setpoint, 0);
-//        }
-//        else {
-////            use robot pose to estimate speed -200
-//            io.setVelocity(0, 0);
-//        }
-//        io.set(0.0002 * speed);
-    }
 
-    public void updateSpeed(double speed) {
-        this.speed = speed;
+        if (RobotState.getInstance().isClimbing()) {
+            io.setVelocity(0, 0);
+        }
+        else if (forcedSetpoint != -1) {
+            io.setVelocity(forcedSetpoint, 0);
+        }
+        else if (setpoint != 0) {
+            io.setVelocity(setpoint, 0);
+        }
+        else if (Constants.SHOOTER_IDLE_ENABLED) {
+//            use robot pose to estimate speed -200
+            io.setVelocity(Constants.SHOOTER_SPEED_MAP.lookup(RobotState.getInstance().getDistanceToHub())-200, 0);
+        }
     }
 
     /**
      * @param setpoint -1 is disabled for forced
      */
-    public void updateSetpoint(double setpoint, boolean forced) {
+    public void setSetpoint(double setpoint, boolean forced) {
         if (!forced) {
             this.setpoint = setpoint;
         }
@@ -70,24 +68,8 @@ public class Shooter extends SubsystemBase {
         return inputs.velocityRotPerMin;
     }
 
-    public void shootLow() {
-        this.speed = Constants.SHOOTER_LOW_SPEED;
-    }
-
-    public void shootStop() {
-        this.speed = 0;
-    }
-
-    public boolean isAtSpeed() {
-        return getVelocity() > 0.9 * speed;
-    }
-
     public boolean isAtSetpoint() {
         return BetterMath.epsilonEquals(getVelocity(), forcedSetpoint,50);
-    }
-
-    public void setIdle(boolean enabled) {
-        this.idleEnabled = enabled;
     }
 
 }

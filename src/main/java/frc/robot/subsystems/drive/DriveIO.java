@@ -19,7 +19,7 @@ public interface DriveIO {
         public double[] rightCurrentAmps = new double[] {};
         public double[] rightTempCelcius = new double[] {};
 
-        public int gyroUpTime = 0;
+        public boolean gyroConnected = false;
         public double gyroYawPositionRad = 0.0;
         public double gyroYawVelocityRadPerSec = 0.0;
         public double gyroPitchPositionRad = 0.0;
@@ -38,7 +38,7 @@ public interface DriveIO {
             table.put("RightCurrentAmps", rightCurrentAmps);
             table.put("RightTempCelcius", rightTempCelcius);
 
-            table.put("GyroUpTime", gyroUpTime);
+            table.put("GyroConnected", gyroConnected);
             table.put("GyroYawPositionRad", gyroYawPositionRad);
             table.put("GyroYawVelocityRadPerSec", gyroYawVelocityRadPerSec);
             table.put("GyroPitchPositionRad", gyroPitchPositionRad);
@@ -58,7 +58,7 @@ public interface DriveIO {
             rightCurrentAmps = table.getDoubleArray("RightCurrentAmps", rightCurrentAmps);
             rightTempCelcius = table.getDoubleArray("RightTempCelcius", rightTempCelcius);
 
-            gyroUpTime = table.getInteger("GyroUpTime", gyroUpTime);
+            gyroConnected = table.getBoolean("GyroConnected", gyroConnected);
             gyroYawPositionRad = table.getDouble("GyroYawPositionRad", gyroYawPositionRad);
             gyroYawVelocityRadPerSec = table.getDouble("GyroYawVelocityRadPerSec", gyroYawVelocityRadPerSec);
             gyroPitchPositionRad = table.getDouble("GyroPitchPositionRad", gyroPitchPositionRad);

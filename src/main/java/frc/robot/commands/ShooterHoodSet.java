@@ -19,7 +19,7 @@ public class ShooterHoodSet extends CommandBase {
 
     @Override
     public void initialize() {
-        shooter.updateSetpoint(speed, false);
+        shooter.setSetpoint(speed, false);
         hood.setAngle(angle, false);
     }
 

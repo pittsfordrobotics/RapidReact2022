@@ -5,12 +5,18 @@
 package frc.robot;
 
 import com.ctre.phoenix.sensors.Pigeon2Configuration;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.compressor7.CompressorIO;
+import frc.robot.subsystems.compressor7.CompressorIORev;
 import frc.robot.subsystems.drive.DriveIO;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOSparkMax;
@@ -31,7 +37,6 @@ import frc.robot.util.InterpolatingTreeMap;
 
 import java.util.HashMap;
 
-// NEW ROBOT
 public final class Constants {
     /**
      *
@@ -57,6 +62,7 @@ public final class Constants {
     public static final double ROBOT_WEIGHT_KILO = Units.lbsToKilograms(120);
 
     public static final HashMap<Integer, String> ROBOT_SPARKMAX_HASHMAP = new HashMap<Integer, String>();
+
     static {
         ROBOT_SPARKMAX_HASHMAP.put(1, "Left Drive Leader");
         ROBOT_SPARKMAX_HASHMAP.put(2, "Left Drive Follower");
@@ -100,9 +106,11 @@ public final class Constants {
     public static final double DRIVE_VELOCITY_GAIN = 0.046502;
     public static final double DRIVE_ACCELERATION_GAIN = 0.0093369;
 
+    public static final TrapezoidProfile.Constraints DRIVE_TURNING_CONSTRAINTS = new Constraints(10, 5);
+
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
 
-    public static final double DRIVE_MOI = 0.8501136363636363; // this was found in simkitbot code
+    public static final double DRIVE_MOI = 0.8501136363636363; // this was found in DifferentialDrivetrainSim.createKitbotSim() code
 
     public static final double DRIVE_MAX_VELOCITY_METERS_PER_SECOND = 10;
     public static final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 5;
@@ -152,6 +160,7 @@ public final class Constants {
      */
     public static final int SHOOTER_CAN_LEFT = 11;
     public static final int SHOOTER_CAN_RIGHT = 12;
+    public static final boolean SHOOTER_IDLE_ENABLED = false;
 
     public static final double SHOOTER_STATIC_GAIN = 0.15345;
     public static final double SHOOTER_VELOCITY_GAIN = 0.12404;
@@ -201,16 +210,37 @@ public final class Constants {
      * all distances measured in meters
      *
      **/
-//    104 inches to top of goal
-//    101.625 inches to bottom of vision target
-//    middle is 102.8125 inches from field
-    public static final double LIMELIGHT_MOUNTING_HEIGHT = Units.inchesToMeters(24);
-    public static final double LIMELIGHT_ANGLE = 55;
+    public static final int LIMELIGHT_WIDTH_PIXELS = 960;
+    public static final int LIMELIGHT_HEIGHT_PIXELS = 720;
+    public static final double LIMELIGHT_TARGET_FRAMERATE = 22.0;
+    public static final double LIMELIGHT_CROSSHAIR_X = 14.4;
+    public static final double LIMELIGHT_CROSSHAIR_Y = 0.0;
+    public static final Rotation2d LIMELIGHT_FOV_HOR = Rotation2d.fromDegrees(59.6);
+    public static final Rotation2d LIMELIGHT_FOV_VER = Rotation2d.fromDegrees(49.7);
+    public static final double LIMELIGHT_VEHICLE_TO_CAMERA_Y = 0.0;
+    public static final double LIMELIGHT_VEHICLE_TO_CAMERA_X = Units.inchesToMeters(6.1858655);
+    public static final double LIMELIGHT_VEHICLE_TO_CAMERA_Z = Units.inchesToMeters(28.3559475);
+//    if this no work use 35
+    public static final Rotation2d LIMELIGHT_CAMERA_ANGLE = Rotation2d.fromDegrees(55); // Measured relative to the flat part of the hood
+    public static final Rotation2d LIMELIGHT_CAMERA_VERT_ROT_FUDGE = Rotation2d.fromDegrees(-0.4); // Measured relative to the flat part of the hood
+    public static final CameraPosition LIMELIGHT_CAMERA_POSITION = new CameraPosition(Constants.LIMELIGHT_VEHICLE_TO_CAMERA_Z, Constants.LIMELIGHT_CAMERA_ANGLE, new Transform2d(new Translation2d(LIMELIGHT_VEHICLE_TO_CAMERA_X, LIMELIGHT_VEHICLE_TO_CAMERA_Y), Rotation2d.fromDegrees(0)));
+
+    public static final class CameraPosition {
+        public final double cameraHeight;
+        public final Rotation2d verticalRotation;
+        public final Transform2d vehicleToCamera;
+
+        public CameraPosition(double cameraHeight, Rotation2d verticalRotation, Transform2d vehicleToCamera) {
+            this.cameraHeight = cameraHeight;
+            this.verticalRotation = verticalRotation;
+            this.vehicleToCamera = vehicleToCamera;
+        }
+    }
 
     static {
         if (RobotBase.isReal()) {
             ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
-            ROBOT_COMPRESSOR_IO = new CompressorIO() {};
+            ROBOT_COMPRESSOR_IO = new CompressorIORev();
             ROBOT_DRIVE_IO = new DriveIOSparkMax();
             ROBOT_HOOD_IO = new HoodIO(){};
             ROBOT_INDEXER_IO = new IndexerIOSparkMax();

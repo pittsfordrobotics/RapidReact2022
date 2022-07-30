@@ -38,7 +38,7 @@ public interface ShooterIO {
     default void setVoltage(double volts) {}
 
     /** Run closed loop at the specified velocity. */
-    default void setVelocity(double velocityRadPerSec, double ffVolts) {}
+    default void setVelocity(double velocityRotPerMin, double ffVolts) {}
 
     /** Enable or disable brake mode. */
     default void setBrakeMode(boolean enable) {}

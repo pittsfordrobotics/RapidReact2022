@@ -7,6 +7,9 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 public interface VisionIO {
     /** The set of loggable inputs for the vision subsystem. */
     class VisionIOInputs implements LoggableInputs {
+        public double captureTimestamp = 0.0;
+        public double[] cornerX = new double[] {};
+        public double[] cornerY = new double[] {};
         public double led = 0.0;
         public double pipeline = 0.0;
         public double camera = 0.0;
@@ -16,6 +19,9 @@ public interface VisionIO {
         public double hAngle = 0.0;
 
         public void toLog(LogTable table) {
+            table.put("CaptureTimestamp", captureTimestamp);
+            table.put("CornerX", cornerX);
+            table.put("CornerY", cornerY);
             table.put("LEDState", led);
             table.put("Pipeline", pipeline);
             table.put("Camera", camera);
@@ -26,6 +32,9 @@ public interface VisionIO {
         }
 
         public void fromLog(LogTable table) {
+            captureTimestamp = table.getDouble("CaptureTimestamp", captureTimestamp);
+            cornerX = table.getDoubleArray("CornerX", cornerX);
+            cornerY = table.getDoubleArray("CornerY", cornerY);
             led = table.getDouble("LEDState", led);
             pipeline = table.getDouble("Pipeline", pipeline);
             camera = table.getDouble("Camera", camera);
@@ -81,7 +90,7 @@ public interface VisionIO {
     default void updateInputs(VisionIOInputs inputs) {}
 
     /** Enabled or disabled vision LEDs. */
-    default void setLEDS(LED led) {}
+    default void setLEDs(LED led) {}
 
     /** Enabled or disabled vision LEDs. */
     default void setCameraModes(CameraMode mode) {}

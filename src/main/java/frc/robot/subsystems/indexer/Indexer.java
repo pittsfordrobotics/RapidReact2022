@@ -425,11 +425,11 @@ public class Indexer extends SubsystemBase {
                 towerMotorOff();
         }
         if (state == State.REJECT1 || state == State.REJECT1INTAKE1 || state == State.REJECT1TOWER1) {
-            Shooter.getInstance().updateSetpoint(Constants.SHOOTER_REJECT_SPEED, true);
+            Shooter.getInstance().setSetpoint(Constants.SHOOTER_REJECT_SPEED, true);
             Hood.getInstance().setAngle(Constants.HOOD_ANGLE_MAX, true);
         }
         else {
-            Shooter.getInstance().updateSetpoint(-1, true);
+            Shooter.getInstance().setSetpoint(-1, true);
             Hood.getInstance().setAngle(-1, true);
         }
         if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {

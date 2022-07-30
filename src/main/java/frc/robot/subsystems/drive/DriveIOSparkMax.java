@@ -56,7 +56,7 @@ public class DriveIOSparkMax implements DriveIO {
         inputs.rightTempCelcius = new double[] {rightPrimary.getMotorTemperature(),
                 rightFollower.getMotorTemperature()};
 
-        inputs.gyroUpTime = pigeon.getUpTime();
+        inputs.gyroConnected = pigeon.getUpTime() > 0;
         inputs.gyroYawPositionRad = Math.toRadians(pigeon.getAngle());
         inputs.gyroYawVelocityRadPerSec = Math.toRadians(pigeon.getRate());
         inputs.gyroPitchPositionRad = Math.toRadians(pigeon.getRoll());

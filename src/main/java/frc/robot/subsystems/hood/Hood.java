@@ -2,9 +2,11 @@ package frc.robot.subsystems.hood;
 
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.hood.HoodIO.HoodIOInputs;
 import frc.robot.util.PIDTuner;
 import org.littletonrobotics.junction.Logger;
@@ -13,11 +15,10 @@ public class Hood extends SubsystemBase {
     private final HoodIO io;
     private final HoodIOInputs inputs = new HoodIOInputs();
 
-    private boolean climbing = false;
     private double position = 0;
     private double forcedPosition = -1;
 
-    private final PIDController pid = new PIDController(0,0,0);
+    private final ProfiledPIDController pid = new ProfiledPIDController(0,0,0, new Constraints(10, 1));
     private final PIDTuner tuner = new PIDTuner("Hood", pid);
 
     private final static Hood INSTANCE = new Hood(Constants.ROBOT_HOOD_IO);
@@ -35,14 +36,17 @@ public class Hood extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Hood", inputs);
         tuner.setPID(true, true, true);
-        if (climbing) {
+        if (RobotState.getInstance().isClimbing()) {
             moveHood(0);
         }
-        else if (forcedPosition == -1) {
+        else if (forcedPosition != -1) {
+            moveHood(forcedPosition);
+        }
+        else if (position != 0) {
             moveHood(position);
         }
         else {
-            moveHood(forcedPosition);
+            moveHood(Constants.HOOD_ANGLE_MAP(RobotState.getInstance().getDistanceToHub()));
         }
     }
 
@@ -62,10 +66,6 @@ public class Hood extends SubsystemBase {
         else {
             forcedPosition = angle;
         }
-    }
-
-    public void setClimbing(boolean climbing) {
-        this.climbing = climbing;
     }
 
     public boolean atAngle() {

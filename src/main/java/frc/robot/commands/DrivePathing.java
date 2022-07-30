@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 
+// TODO: Change this to use RobotState pose
 public class DrivePathing extends SequentialCommandGroup {
   public DrivePathing(Trajectory trajectory, boolean resetPose) {
     super(

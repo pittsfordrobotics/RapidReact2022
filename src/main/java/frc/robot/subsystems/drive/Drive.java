@@ -4,16 +4,19 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.drive.DriveIO.DriveIOInputs;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
@@ -28,6 +31,11 @@ public class Drive extends SubsystemBase {
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
+
+    private double lastLeftPositionMeters = 0.0;
+    private double lastRightPositionMeters = 0.0;
+    private boolean lastGyroConnected = false;
+    private Rotation2d lastGyroRotation = new Rotation2d();
 
     private final Alert pigeonAlert = new Alert("Pigeon not detected! Many functions of the robot will FAIL!", AlertType.ERROR);
 
@@ -51,7 +59,7 @@ public class Drive extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Drive", inputs);
 
-        pigeonAlert.set(!(inputs.gyroUpTime > 0));
+        pigeonAlert.set(!inputs.gyroConnected);
 
         if (DriverStation.isDisabled() && getAverageVelocity() == 0) {
             coastMode();
@@ -60,10 +68,40 @@ public class Drive extends SubsystemBase {
             brakeMode();
         }
 
+        Logger.getInstance().recordOutput("Drive/Throttle", throttle);
+
         pose = odometry.update(
                 Rotation2d.fromDegrees(getAngle()),
                 inputs.leftPositionMeters,
                 inputs.rightPositionMeters);
+
+        Rotation2d currentGyroRotation =
+                new Rotation2d(inputs.gyroYawPositionRad * -1);
+        double leftPositionMetersDelta =
+                inputs.leftPositionMeters - lastLeftPositionMeters;
+        double rightPositionMetersDelta =
+                inputs.rightPositionMeters - lastRightPositionMeters;
+        double avgPositionMetersDelta =
+                (leftPositionMetersDelta + rightPositionMetersDelta) / 2.0;
+        Rotation2d gyroRotationDelta =
+                (inputs.gyroConnected && !lastGyroConnected) ? new Rotation2d()
+                        : currentGyroRotation.minus(lastGyroRotation);
+
+        if (inputs.gyroConnected) {
+            RobotState.getInstance().addDriveData(Timer.getFPGATimestamp(), new Twist2d(
+                    avgPositionMetersDelta, 0.0, gyroRotationDelta.getRadians()));
+        } else {
+            RobotState.getInstance().addDriveData(Timer.getFPGATimestamp(),
+                    new Twist2d(avgPositionMetersDelta, 0.0,
+                            (rightPositionMetersDelta - leftPositionMetersDelta)
+                                    / Constants.DRIVE_TRACK_WIDTH_METERS));
+        }
+
+        lastLeftPositionMeters = inputs.leftPositionMeters;
+        lastRightPositionMeters = inputs.rightPositionMeters;
+        lastGyroConnected = inputs.gyroConnected;
+        lastGyroRotation = currentGyroRotation;
+
 
         Logger.getInstance().recordOutput("Drive/Pose",
                 new double[] {pose.getX(), pose.getY(), pose.getRotation().getRadians()});

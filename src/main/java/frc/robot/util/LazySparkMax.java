@@ -8,7 +8,7 @@ import frc.robot.util.Alert.AlertType;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * This is a thick wrapper for CANSparkMax because I am lazy, that reduces code
+ * This is a thick wrapper for CANSparkMax because I am lazy
  */
 public class LazySparkMax extends CANSparkMax {
     private int errors = 1;

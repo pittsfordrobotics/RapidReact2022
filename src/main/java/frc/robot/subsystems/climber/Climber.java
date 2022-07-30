@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.climber.ClimberIO.ClimberIOInputs;
 import org.littletonrobotics.junction.Logger;
 
@@ -13,7 +14,6 @@ public class Climber extends SubsystemBase {
     private final ClimberIOInputs inputs = new ClimberIOInputs();
 
     private double halfway = 0;
-    private boolean enabled = false;
 
     private final static Climber INSTANCE = new Climber(Constants.ROBOT_CLIMBER_IO);
     public static Climber getInstance() {
@@ -34,11 +34,11 @@ public class Climber extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Climber", inputs);
-        Logger.getInstance().recordOutput("Climber/Enabled", enabled);
+        Logger.getInstance().recordOutput("Climber/Enabled", RobotState.getInstance().isClimbing());
     }
 
     public void setSpeed(double speed) {
-        if (enabled) io.set(speed);
+        if (RobotState.getInstance().isClimbing()) io.set(speed);
     }
 
     public void resetEncoders() {
@@ -106,13 +106,4 @@ public class Climber extends SubsystemBase {
     public void stopAll() {
         io.set(0);
     }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
 }
