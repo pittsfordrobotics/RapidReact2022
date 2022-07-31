@@ -24,6 +24,8 @@ public class ShooterHoodLime extends CommandBase {
     public void execute() {
         shooter.setSetpoint(Constants.SHOOTER_SPEED_MAP.lookup(vision.getDistance()), false);
         hood.setAngle(Constants.HOOD_ANGLE_MAP.lookup(vision.getDistance()), false);
+//        shooter.setSetpoint(Constants.SHOOTER_SPEED_MAP.lookup(RobotState.getInstance().getDistanceToHub()), false);
+//        hood.setAngle(Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()), false);
     }
 
     @Override

@@ -11,7 +11,7 @@ public class Auto5BallAuto extends SequentialCommandGroup {
     public Auto5BallAuto() {
         super(
                 new TimeKeeper(true),
-                new CG_IntakeWiggle(),
+                new IntakeDown(),
                 new DrivePathing(Trajectories.PP_BALL5_NUMBER1,true),
                 new IndexerLoaded(2, Constants.INDEXER_LOADING_WAIT),
                 new DriveTurn(-90),

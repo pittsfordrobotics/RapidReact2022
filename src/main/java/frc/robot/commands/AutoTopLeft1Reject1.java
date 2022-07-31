@@ -16,7 +16,7 @@ public class AutoTopLeft1Reject1 extends SequentialCommandGroup {
             new IndexerRejection(false),
             new DriveSetPose(new Pose2d(6.05, 4 , new Rotation2d(Units.degreesToRadians(0)))),
             new ParallelCommandGroup(
-                new CG_IntakeWiggle(),
+                new IntakeDown(),
                 new CG_LimeShot()
             ),
             new DriveTurn(180),

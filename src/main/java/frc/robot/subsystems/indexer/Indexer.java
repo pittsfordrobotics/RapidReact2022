@@ -12,7 +12,7 @@ import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
-import frc.robot.commands.IntakeReverse;
+import frc.robot.commands.IntakeDown;
 import frc.robot.commands.IntakeUpNoInterupt;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.IndexerIO.IndexerIOInputs;
@@ -433,7 +433,7 @@ public class Indexer extends SubsystemBase {
             Hood.getInstance().setAngle(-1, true);
         }
         if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {
-            CommandScheduler.getInstance().schedule(false, new IntakeReverse());
+            CommandScheduler.getInstance().schedule(false, new IntakeDown());
         }
         else if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterupt());

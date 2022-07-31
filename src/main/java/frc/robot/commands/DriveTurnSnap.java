@@ -53,6 +53,7 @@ public class DriveTurnSnap extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        drive.setVolts(0,0);
         drive.setThrottleWithTemp();
     }
 }

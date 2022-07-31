@@ -333,6 +333,8 @@ public class Vision extends SubsystemBase {
         this.camera = camera;
     }
 
+    @Deprecated
+    // switch to full field odometry
     public double getDistance() {
         return (FieldConstants.visionTargetHeightCenter - Constants.LIMELIGHT_VEHICLE_TO_CAMERA_Z) / Math.tan(Constants.LIMELIGHT_CAMERA_ANGLE.getDegrees() + getVertical());
     }
