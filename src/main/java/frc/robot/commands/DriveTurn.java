@@ -38,8 +38,7 @@ public class DriveTurn extends CommandBase {
   @Override
   public void execute() {
 //    drive.driveVolts();
-    drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + (angle > 0 ? 0.1 : -0.1), -0.5, 0.5), false);
-//    drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + (angle > 0 ? 0.1 : -0.1), -0.5, 0.5), false);
+    drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + Math.signum(angle) * 0.1, -0.5, 0.5), false);
   }
 
   @Override

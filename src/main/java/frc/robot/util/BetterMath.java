@@ -80,4 +80,14 @@ public class BetterMath {
         double scaledValue = (value + (value < 0 ? deadband : -deadband)) / (1 - deadband);
         return (Math.abs(value) > Math.abs(deadband)) ? scaledValue : 0;
     }
+
+    /** returns equal angle between 0 and 360 */
+    public static double clamp360(double degrees) {
+        return degrees % 360 < 0 ? degrees % 360 + 360 : degrees % 360;
+    }
+
+    /** returns equal angle between -180 and 180 */
+    public static double clamp180(double degrees) {
+        return clamp360(degrees) > 180 ? clamp360(degrees) - 360 : clamp360(degrees);
+    }
 }

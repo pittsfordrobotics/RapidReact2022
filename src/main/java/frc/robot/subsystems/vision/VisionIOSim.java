@@ -8,7 +8,7 @@ public class VisionIOSim implements VisionIO {
         inputs.led = 0;
         inputs.pipeline = 0;
         inputs.camera = 0;
-        inputs.hasTarget = true;
+        inputs.hasTarget = false;
         inputs.connected = true;
         inputs.vAngle = 0;
         inputs.hAngle = 0;

@@ -49,7 +49,8 @@ public class Robot extends LoggedRobot {
 //    advantageKit
     Logger logger = Logger.getInstance();
     setUseTiming(true);
-    LoggedNetworkTables.getInstance().addTable("/");
+    LoggedNetworkTables.getInstance().addTable("/SmartDashboard/");
+    LoggedNetworkTables.getInstance().addTable("/Shuffleboard/");
     logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
     logger.recordMetadata("PIDTuner", Boolean.toString(Constants.ROBOT_PID_TUNER_ENABLED));
     logger.recordMetadata("RuntimeType", getRuntimeType().toString());

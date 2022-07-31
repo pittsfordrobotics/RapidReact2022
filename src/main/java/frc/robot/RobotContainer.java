@@ -44,6 +44,7 @@ public class RobotContainer {
     configureButtonBindings();
 //    testButtons();
 
+    SmartDashboard.putData("Turn to hub", new DriveTurnSnap());
     drive.setDefaultCommand(new DriveXbox());
     compressor.setDefaultCommand(new CompressorSmart());
   }

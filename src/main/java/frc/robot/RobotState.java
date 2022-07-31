@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.util.BetterMath;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.Map;
@@ -106,6 +107,12 @@ public class RobotState {
         Logger.getInstance().recordOutput("Odometry/Robot",
                 new double[] {latestPose.getX(), latestPose.getY(),
                         latestPose.getRotation().getRadians()});
+        Logger.getInstance().recordOutput("Odometry/Quadrant", getQuad());
+        Logger.getInstance().recordOutput("Odometry/DistanceToHubMeters", getDistanceToHub());
+        Logger.getInstance().recordOutput("Odometry/DegreesToHub", getRotationToHub().getDegrees());
+        Logger.getInstance().recordOutput("Odometry/ShortestDegreesToHub", getShortestRotationToHub().getDegrees());
+        Logger.getInstance().recordOutput("Odometry/LatestDegrees", getLatestRotation().getDegrees());
+        Logger.getInstance().recordOutput("Odometry/Degrees360", BetterMath.clamp360(getLatestRotation().getDegrees()));
         Map.Entry<Double, Translation2d> visionEntry = visionData.lastEntry();
         if (visionEntry != null) {
             if (visionEntry.getKey() > Timer.getFPGATimestamp() - maxNoVisionLog) {
@@ -200,11 +207,11 @@ public class RobotState {
 
     /**
      *  Quadrants
-     *  3   4
+     *  4   3
      *  1   2
      */
     public int getQuad() {
-        if (latestPose.getY() <= FieldConstants.hangarWidth / 2) {
+        if (latestPose.getY() <= FieldConstants.fieldWidth / 2) {
             if (latestPose.getX() < FieldConstants.fieldLength / 2) {
                 return 1;
             }
@@ -214,15 +221,15 @@ public class RobotState {
         }
         else {
             if (latestPose.getX() < FieldConstants.fieldLength / 2) {
-                return 3;
+                return 4;
             }
             else {
-                return 4;
+                return 3;
             }
         }
     }
 
-    public Rotation2d getDegreesToHub() {
+    public Rotation2d getRotationToHub() {
         double angle = Units.radiansToDegrees(Math.atan((latestPose.getY()-FieldConstants.hubCenter.getY())/(latestPose.getX()-FieldConstants.hubCenter.getX())));
         switch (getQuad()) {
             case 1:
@@ -234,6 +241,22 @@ public class RobotState {
                 return Rotation2d.fromDegrees(angle + 360);
         }
         return null;
+    }
+
+    /**
+     * Positive = Counterclockwise
+     * Negative = Clockwise
+     */
+    public Rotation2d getShortestRotationToHub() {
+        double angle = BetterMath.clamp360(latestPose.getRotation().getDegrees());
+        double minus = getRotationToHub().getDegrees() - angle;
+        double plus = (360 - Math.abs(getRotationToHub().getDegrees() - angle)) * -Math.signum(minus);
+        if (Math.abs(minus) <= Math.abs(plus)) {
+            return Rotation2d.fromDegrees(minus);
+        }
+        else {
+            return Rotation2d.fromDegrees(plus);
+        }
     }
 
     public double getDistanceToHub() {
