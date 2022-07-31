@@ -14,12 +14,11 @@ public class Auto5BallAuto extends SequentialCommandGroup {
                 new IntakeDown(),
                 new DrivePathing(Trajectories.PP_BALL5_NUMBER1,true),
                 new IndexerLoaded(2, Constants.INDEXER_LOADING_WAIT),
-                new DriveTurn(-90),
                 new DrivePathing(Trajectories.PP_BALL5_NUMBER2,false),
                 new DriveTurn(-100),
                 new CG_LimeShot(),
                 new ParallelDeadlineGroup(
-                    new IndexerLoaded(1, Constants.INDEXER_LOADING_WAIT),
+                    new IndexerLoaded(1, Constants.INDEXER_LOADING_WAIT + 0.2),
                     new DrivePathing(Trajectories.PP_BALL5_NUMBER3, false)
                 ),
                 new CG_LimeShot(),
