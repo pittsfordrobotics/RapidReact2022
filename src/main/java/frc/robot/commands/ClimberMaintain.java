@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.climber.Climber;
 
 
 public class ClimberMaintain extends CommandBase {
@@ -13,7 +13,6 @@ public class ClimberMaintain extends CommandBase {
 
     @Override
     public void initialize() {
-//        climber.enableSoftLimit();
     }
 
     @Override

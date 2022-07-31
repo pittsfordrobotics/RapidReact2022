@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.climber.Climber;
 
 
 public class ClimberReverse extends CommandBase {
@@ -23,7 +23,7 @@ public class ClimberReverse extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return climber.reverseAtSoftLimit();
     }
 
     @Override

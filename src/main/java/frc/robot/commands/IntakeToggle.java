@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.intake.Intake;
 
 
 public class IntakeToggle extends CommandBase {
@@ -18,7 +18,7 @@ public class IntakeToggle extends CommandBase {
     @Override
     public void execute() {
         intake.toggleSolenoid();
-        intake.toggleMotor();
+        intake.autoMotor();
     }
 
     @Override

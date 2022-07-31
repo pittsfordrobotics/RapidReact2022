@@ -7,11 +7,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class CG_ClimberAuto extends SequentialCommandGroup {
     public CG_ClimberAuto() {
         super(
-            new ClimberForward(),
+
             new ClimberReverse(),
             new WaitCommand(1),
             new ClimberForward(),
-            new WaitCommand(1),
             new ClimberMaintain()
         );
     }

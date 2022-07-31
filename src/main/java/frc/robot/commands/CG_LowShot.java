@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class CG_LowShot extends SequentialCommandGroup {
     public CG_LowShot() {
         super(
-                new ShooterLow(),
-                new ShooterPrimed(),
+                new ShooterHoodLow(),
+                new ShooterHoodPrimed(),
                 new IndexerShoot(),
-                new WaitCommand(1),
-                new ShooterZero()
+                new WaitCommand(0.5),
+                new ShooterHoodZero()
         );
     }
 }

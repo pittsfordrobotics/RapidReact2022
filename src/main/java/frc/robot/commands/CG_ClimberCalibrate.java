@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class CG_ClimberCalibrate extends SequentialCommandGroup {
     public CG_ClimberCalibrate() {
         super(
+                new ClimberSetState(true),
+                new ClimberSoftLimit(false),
                 new WaitCommand(1),
                 new ClimberResetEncoders(),
                 new ClimberCalibrateForward(),
@@ -16,7 +18,9 @@ public class CG_ClimberCalibrate extends SequentialCommandGroup {
                 new WaitCommand(1),
                 new ClimberCalibrateCenter(),
                 new WaitCommand(2),
-                new ClimberResetEncoders()
+                new ClimberResetEncoders(),
+                new ClimberSetState(false),
+                new ClimberSoftLimit(true)
         );
     }
 }
