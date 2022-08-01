@@ -58,7 +58,7 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Is Empty", indexer.isEmpty());
     SmartDashboard.putBoolean("1 Ball", indexer.getBallCount() == 1);
     SmartDashboard.putBoolean("Fully Loaded", indexer.fullyLoaded());
-    SmartDashboard.putBoolean("Aligned", vision.getHorizontal() < 5);
+    SmartDashboard.putBoolean("Snapped", RobotState.getInstance().isSnapped());
     SmartDashboard.putBoolean("Climber Enabled", RobotState.getInstance().isClimbing());
   }
 
@@ -77,29 +77,17 @@ public class RobotContainer {
     JoystickButton operatorShift = operatorController.RB;
 
 //    DRIVING
-//    driverController.Start.whileActiveOnce(new DriveAutoSnap());
-//
-//    driverController.X.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_FAR));
-//    driverController.Y.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_FAR));
-//    driverController.B.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_CLOSE));
-//    driverController.A.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_CLOSE));
-//
-//    driverController.X.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.LEFT));
-//    driverController.Y.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.FORWARD));
-//    driverController.B.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.RIGHT));
-//    driverController.A.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.BACKWARD));
+    driverController.Start.whileActiveOnce(new DriveAutoSnap());
 
-    driverController.Start.whileActiveOnce(new CG_AutoSnapAndShoot());
+    driverController.X.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_FAR));
+    driverController.Y.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_FAR));
+    driverController.B.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_CLOSE));
+    driverController.A.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_CLOSE));
 
-    driverController.X.whileActiveOnce(new CG_SnapAndShoot(SnapPosition.LEFT_FENDER_FAR));
-    driverController.Y.whileActiveOnce(new CG_SnapAndShoot(SnapPosition.RIGHT_FENDER_FAR));
-    driverController.B.whileActiveOnce(new CG_SnapAndShoot(SnapPosition.RIGHT_FENDER_CLOSE));
-    driverController.A.whileActiveOnce(new CG_SnapAndShoot(SnapPosition.LEFT_FENDER_CLOSE));
-
-    driverController.X.and(driverShift).whileActiveOnce(new CG_SnapAndShoot(SnapPosition.LEFT));
-    driverController.Y.and(driverShift).whileActiveOnce(new CG_SnapAndShoot(SnapPosition.FORWARD));
-    driverController.B.and(driverShift).whileActiveOnce(new CG_SnapAndShoot(SnapPosition.RIGHT));
-    driverController.A.and(driverShift).whileActiveOnce(new CG_SnapAndShoot(SnapPosition.BACKWARD));
+    driverController.X.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.LEFT));
+    driverController.Y.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.FORWARD));
+    driverController.B.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.RIGHT));
+    driverController.A.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.BACKWARD));
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.4));
