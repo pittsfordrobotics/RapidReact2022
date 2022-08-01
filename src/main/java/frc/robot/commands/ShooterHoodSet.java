@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotState;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.shooter.Shooter;
 
@@ -19,6 +20,7 @@ public class ShooterHoodSet extends CommandBase {
 
     @Override
     public void initialize() {
+        RobotState.getInstance().setSnapped(true);
         shooter.setSetpoint(speed, false);
         hood.setAngle(angle, false);
     }

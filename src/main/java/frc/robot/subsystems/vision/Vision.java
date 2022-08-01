@@ -89,6 +89,10 @@ public class Vision extends SubsystemBase {
             camera = CameraMode.VISION_PROCESSING;
         }
 
+        if (!inputs.hasTarget) {
+            RobotState.getInstance().setSnapped(false);
+        }
+
         io.setLEDs(led);
         io.setPipeline(pipeline);
         io.setCameraModes(camera);

@@ -53,6 +53,7 @@ public class DriveAutoSnap extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        RobotState.getInstance().setSnapped(true);
         drive.setVolts(0,0);
         drive.setThrottleWithTemp();
     }

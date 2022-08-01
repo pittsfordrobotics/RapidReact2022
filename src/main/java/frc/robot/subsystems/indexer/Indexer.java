@@ -85,7 +85,7 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/InstantIntakeBall", ballCurrentlyAtIntake);
         Logger.getInstance().recordOutput("Indexer/InstantTowerBall", ballCurrentlyAtTower);
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
-        getAllianceColor();
+        getAllianceColorFMS();
         Logger.getInstance().recordOutput("Indexer/AllianceColor", allianceColor.toString());
         switch (state) {
             case FIELD2:
@@ -445,7 +445,7 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/IsFull", isFull());
     }
 
-    public void getAllianceColor() {
+    public void getAllianceColorFMS() {
         if (allianceColor == COLOR.UNKNOWN) {
             switch (DriverStation.getAlliance()){
                 case Red:
@@ -533,7 +533,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean isFull() {
-        return balls[0].getLocation() != LOCATION.FIELD && balls[1].getLocation() != LOCATION.FIELD;
+        return balls[0].getLocation() != LOCATION.FIELD && balls[1].getLocation() != LOCATION.FIELD && balls[0].getColor() == balls[1].getColor() && balls[0].getColor() == allianceColor;
     }
 
     public boolean isEmpty() {

@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotState;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.BetterMath;
@@ -68,6 +69,7 @@ public class DriveSnap extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        RobotState.getInstance().setSnapped(true);
         drive.setVolts(0,0);
         drive.setThrottleWithTemp();
     }

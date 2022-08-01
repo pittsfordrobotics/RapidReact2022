@@ -16,7 +16,6 @@ import java.util.TreeMap;
 
 /** Manages the robot's pose based on state data from various subsystems. Also manages climbing. */
 public class RobotState {
-    private boolean climbing = false;
     private static final double historyLengthSecs = 1.0;
     private static final double maxNoVisionLog = 0.25; // How long to wait with no vision data before
     // clearing log visualization
@@ -31,6 +30,8 @@ public class RobotState {
     private Pose2d basePose = new Pose2d();
     private Pose2d latestPose = new Pose2d();
     private boolean resetOnNextVision = false;
+    private boolean snapped = false;
+    private boolean climbing = false;
 
     private static final RobotState INSTANCE = new RobotState();
     public static RobotState getInstance() {
@@ -265,9 +266,18 @@ public class RobotState {
 
     public void setClimbing(boolean climbing) {
         this.climbing = climbing;
+        if (climbing) snapped = false;
     }
 
     public boolean isClimbing() {
         return climbing;
+    }
+
+    public boolean isSnapped() {
+        return snapped;
+    }
+
+    public void setSnapped(boolean snapped) {
+        this.snapped = snapped;
     }
 }

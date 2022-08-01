@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotState;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 
@@ -17,6 +18,7 @@ public class DriveAlignVision extends CommandBase {
 
     @Override
     public void initialize() {
+        RobotState.getInstance().setSnapped(false);
         drive.setTempThrottle(0.6);
         pidController.setSetpoint(0);
         pidController.setTolerance(5);
