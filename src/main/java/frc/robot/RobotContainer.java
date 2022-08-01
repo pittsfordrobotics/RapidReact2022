@@ -40,7 +40,6 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
   private final SendableChooser<Integer> ballChooser = new SendableChooser<>();
   private final SendableChooser<Pose2d> positionChooser = new SendableChooser<>();
-  public static SendableChooser<SnapPosition> snapChooser = new SendableChooser<>();
 
   public RobotContainer() {
     autoConfig();
