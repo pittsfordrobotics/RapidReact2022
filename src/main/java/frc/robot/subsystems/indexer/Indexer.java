@@ -11,7 +11,7 @@ import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
-import frc.robot.commands.IntakeDown;
+import frc.robot.commands.IntakeReverse;
 import frc.robot.commands.IntakeUpNoInterrupt;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.IndexerIO.IndexerIOInputs;
@@ -87,7 +87,6 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
         getAllianceColor();
         Logger.getInstance().recordOutput("Indexer/AllianceColor", allianceColor.toString());
-//        TODO: add intake rejection
         switch (state) {
             case FIELD2:
                 stomachMotorOff();
@@ -432,7 +431,7 @@ public class Indexer extends SubsystemBase {
             Hood.getInstance().setAngle(-1, true);
         }
         if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {
-            CommandScheduler.getInstance().schedule(false, new IntakeDown());
+            CommandScheduler.getInstance().schedule(false, new IntakeReverse());
         }
         else if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterrupt());
