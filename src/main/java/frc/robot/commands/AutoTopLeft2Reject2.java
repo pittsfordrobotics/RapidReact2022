@@ -21,7 +21,7 @@ public class AutoTopLeft2Reject2 extends SequentialCommandGroup {
             new IndexerLoaded(1, Constants.INDEXER_LOADING_WAIT),
             new ParallelCommandGroup(
                     new DriveTurn(90),
-                    new ShooterHoodSet(Constants.SHOOTER_AUTO_REJECT_SPEED, Constants.HOOD_ANGLE_MAX)
+                    new ShooterHoodSet(Constants.SHOOTER_AUTO_REJECT_SPEED, Constants.HOOD_AUTO_REJECT_ANGLE)
             ),
             new ShooterHoodPrimed(),
             new IndexerShoot(),

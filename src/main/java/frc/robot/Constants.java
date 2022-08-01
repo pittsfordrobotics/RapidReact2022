@@ -63,7 +63,6 @@ public final class Constants {
     public static final double ROBOT_WEIGHT_KILO = Units.lbsToKilograms(120);
 
     public static final HashMap<Integer, String> ROBOT_SPARKMAX_HASHMAP = new HashMap<Integer, String>();
-
     static {
         ROBOT_SPARKMAX_HASHMAP.put(1, "Left Drive Leader");
         ROBOT_SPARKMAX_HASHMAP.put(2, "Left Drive Follower");
@@ -166,9 +165,12 @@ public final class Constants {
     public static final double SHOOTER_VELOCITY_GAIN = 0.12404;
     public static final double SHOOTER_ACCELERATION_GAIN = 0.0072228;
 
+    public static final double SHOOTER_SHOT_CALM_DELAY = 0.5;
+
     public static final int SHOOTER_LOW_SPEED = 1800;
     public static final int SHOOTER_AUTO_REJECT_SPEED = 2200;
-    public static final int SHOOTER_REJECT_SPEED = 1000;
+    public static final int SHOOTER_INDEXER_REJECT_SPEED = 1000;
+    public static final double SHOOTER_FENDER_SPEED = 3000;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
     static {
@@ -187,6 +189,9 @@ public final class Constants {
     public static final double HOOD_550_GEAR_RATIO =  (1.0 / 3.0) * 24.0 / 18.0;
     public static final double HOOD_REV_THROUGH_BORE_GEAR_RATIO = 18.0;
     public static final double HOOD_REV_THROUGH_BORE_OFFSET = 0;
+
+    public static final double HOOD_FENDER_ANGLE = 0;
+    public static final double HOOD_AUTO_REJECT_ANGLE = 0;
 
     public static final InterpolatingTreeMap HOOD_ANGLE_MAP = new InterpolatingTreeMap();
     static {

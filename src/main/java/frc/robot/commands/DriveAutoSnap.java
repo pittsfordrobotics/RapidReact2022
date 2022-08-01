@@ -7,14 +7,14 @@ import frc.robot.RobotState;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 
-public class DriveTurnSnap extends CommandBase {
+public class DriveAutoSnap extends CommandBase {
     private final Drive drive = Drive.getInstance();
     private final Vision vision = Vision.getInstance();
     private boolean hasDriveSetpoint;
     private boolean hasVisionSetpoint;
     private final PIDController pidController = new PIDController(0.01,0,0);
 
-    public DriveTurnSnap() {
+    public DriveAutoSnap() {
         addRequirements(this.drive, this.vision);
     }
 

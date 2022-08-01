@@ -21,7 +21,7 @@ public class AutoTop2Reject1 extends SequentialCommandGroup {
             new IntakeUp(),
             new ParallelCommandGroup(
                 new DriveTurn(70),
-                new ShooterHoodSet(Constants.SHOOTER_AUTO_REJECT_SPEED, Constants.HOOD_ANGLE_MAX)
+                new ShooterHoodSet(Constants.SHOOTER_AUTO_REJECT_SPEED, Constants.HOOD_AUTO_REJECT_ANGLE)
             ),
             new ShooterHoodPrimed(),
             new IndexerShoot(),

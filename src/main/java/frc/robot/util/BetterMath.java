@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 import java.util.List;
 
 /**
@@ -89,5 +91,17 @@ public class BetterMath {
     /** returns equal angle between -180 and 180 */
     public static double clamp180(double degrees) {
         return clamp360(degrees) > 180 ? clamp360(degrees) - 360 : clamp360(degrees);
+    }
+
+    public static Rotation2d getShortestRotation(double currentAngle, double wantedAngle) {
+        double angle = BetterMath.clamp360(currentAngle);
+        double minus = wantedAngle - angle;
+        double plus = (360 - Math.abs(wantedAngle - angle)) * -Math.signum(minus);
+        if (Math.abs(minus) <= Math.abs(plus)) {
+            return Rotation2d.fromDegrees(minus);
+        }
+        else {
+            return Rotation2d.fromDegrees(plus);
+        }
     }
 }

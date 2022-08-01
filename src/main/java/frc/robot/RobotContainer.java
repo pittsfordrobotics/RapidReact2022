@@ -10,9 +10,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
+import frc.robot.commands.DriveSnap.SnapPosition;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.compressor7.Compressor7;
 import frc.robot.subsystems.drive.Drive;
@@ -37,16 +40,27 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
   private final SendableChooser<Integer> ballChooser = new SendableChooser<>();
   private final SendableChooser<Pose2d> positionChooser = new SendableChooser<>();
+  public static SendableChooser<SnapPosition> snapChooser = new SendableChooser<>();
 
   public RobotContainer() {
     autoConfig();
+    driverDashboardSetup();
 
     configureButtonBindings();
 //    testButtons();
 
-    SmartDashboard.putData("Turn to hub", new DriveTurnSnap());
     drive.setDefaultCommand(new DriveXbox());
     compressor.setDefaultCommand(new CompressorSmart());
+  }
+
+  private void driverDashboardSetup() {
+    SmartDashboard.putBoolean("Intake Extended", intake.isExtended());
+    SmartDashboard.putBoolean("Able to Shoot", indexer.ableToShoot());
+    SmartDashboard.putBoolean("Is Empty", indexer.isEmpty());
+    SmartDashboard.putBoolean("1 Ball", indexer.getBallCount() == 1);
+    SmartDashboard.putBoolean("Fully Loaded", indexer.fullyLoaded());
+    SmartDashboard.putBoolean("Aligned", vision.getHorizontal() < 5);
+    SmartDashboard.putBoolean("Climber Enabled", RobotState.getInstance().isClimbing());
   }
 
   private void testButtons() {
@@ -60,20 +74,44 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    driverController.A.whenActive(new IntakeToggle());
-    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterHoodZero());
-//    driverController.Y.whileActiveOnce(new CG_LimeShot()).whenInactive(new ShooterHoodZero());
-    driverController.X.and(driverController.RB).whileActiveOnce(new ShooterHoodLow()).whenInactive(new ShooterHoodZero());
-    driverController.DUp.whenPressed(new DriveSetThrottle(1));
-    driverController.DLeft.whenPressed(new DriveSetThrottle(0.8));
-    driverController.DRight.whenPressed(new DriveSetThrottle(0.7));
-    driverController.DDown.whenPressed(new DriveSetThrottle(0.6));
+    JoystickButton driverShift = driverController.RB;
+    JoystickButton operatorShift = operatorController.RB;
 
-    operatorController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterHoodZero());
-    operatorController.Y.whileActiveOnce(new IndexerOverride(false));
-    operatorController.Y.and(operatorController.RB).whileActiveOnce(new SequentialCommandGroup(new IntakeReverse(), new IndexerOverride(true)));
-    operatorController.LB.and(operatorController.Start).whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
-    operatorController.LB.and(operatorController.Back).whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
+//    DRIVING
+    driverController.Start.whileActiveOnce(new DriveAutoSnap());
+
+    driverController.X.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_FAR));
+    driverController.Y.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_FAR));
+    driverController.B.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_CLOSE));
+    driverController.A.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_CLOSE));
+
+    driverController.X.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.LEFT));
+    driverController.Y.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.FORWARD));
+    driverController.B.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.RIGHT));
+    driverController.A.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.BACKWARD));
+
+    driverController.DUp.whenPressed(new DriveSetThrottle(1));
+    driverController.DLeft.whenPressed(new DriveSetThrottle(0.4));
+    driverController.DRight.whenPressed(new DriveSetThrottle(0.7));
+    driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
+
+//    SHOOTING
+    operatorController.X.whileActiveOnce(new CG_LimeShot());
+    operatorController.Y.whileActiveOnce(new CG_FenderShot());
+
+//    INDEXER
+    driverController.LB.and(operatorController.LB).whenActive(new InstantCommand(Indexer.getInstance()::resetEverything, indexer));
+    operatorController.B.whileActiveOnce(new IndexerOverride(false));
+    operatorController.B.and(operatorShift).whileActiveOnce(new SequentialCommandGroup(new IntakeReverse(), new IndexerOverride(true)));
+
+//    INTAKE
+    operatorController.A.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
+
+//    CLIMBING
+    driverController.Start.and(operatorController.Start).whenActive(new ClimberSetState(!RobotState.getInstance().isClimbing()));
+    operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
+    operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
+    operatorController.Back.whileActiveContinuous(new CG_ClimberAuto()).whenInactive(new ClimberStop());
   }
 
   private void autoConfig() {

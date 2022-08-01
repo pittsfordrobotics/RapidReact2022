@@ -1,6 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
@@ -42,7 +41,6 @@ public class Intake extends SubsystemBase {
             io.set(0);
             isExtended = false;
         }
-        SmartDashboard.putBoolean("Intake Extended", isExtended());
     }
 
     public void extend() {

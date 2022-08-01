@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,7 +12,7 @@ import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeDown;
-import frc.robot.commands.IntakeUpNoInterupt;
+import frc.robot.commands.IntakeUpNoInterrupt;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.IndexerIO.IndexerIOInputs;
 import frc.robot.subsystems.shooter.Shooter;
@@ -425,7 +424,7 @@ public class Indexer extends SubsystemBase {
                 towerMotorOff();
         }
         if (state == State.REJECT1 || state == State.REJECT1INTAKE1 || state == State.REJECT1TOWER1) {
-            Shooter.getInstance().setSetpoint(Constants.SHOOTER_REJECT_SPEED, true);
+            Shooter.getInstance().setSetpoint(Constants.SHOOTER_INDEXER_REJECT_SPEED, true);
             Hood.getInstance().setAngle(Constants.HOOD_ANGLE_MAX, true);
         }
         else {
@@ -436,7 +435,7 @@ public class Indexer extends SubsystemBase {
             CommandScheduler.getInstance().schedule(false, new IntakeDown());
         }
         else if (isFull() && !DriverStation.isAutonomous()) {
-            CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterupt());
+            CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterrupt());
         }
         Logger.getInstance().recordOutput("Indexer/Ball0Color", getBall0().getColor().toString());
         Logger.getInstance().recordOutput("Indexer/Ball0Location", getBall0().getLocation().toString());
@@ -445,7 +444,6 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
         Logger.getInstance().recordOutput("Indexer/NumberOfBalls", getBallCount());
         Logger.getInstance().recordOutput("Indexer/IsFull", isFull());
-        SmartDashboard.putBoolean("Fully Loaded", fullyLoaded());
     }
 
     public void getAllianceColor() {
