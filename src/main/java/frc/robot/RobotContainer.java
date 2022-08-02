@@ -84,10 +84,10 @@ public class RobotContainer {
     driverController.B.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_CLOSE));
     driverController.A.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_CLOSE));
 
-    driverController.X.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.LEFT));
-    driverController.Y.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.FORWARD));
-    driverController.B.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.RIGHT));
-    driverController.A.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.BACKWARD));
+    driverController.X.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.RIGHT));
+    driverController.Y.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.BACKWARD));
+    driverController.B.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.LEFT));
+    driverController.A.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.FORWARD));
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.4));

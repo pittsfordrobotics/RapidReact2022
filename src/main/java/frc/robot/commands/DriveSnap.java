@@ -17,7 +17,7 @@ public class DriveSnap extends CommandBase {
     private final SnapPosition position;
     public enum SnapPosition {
         LEFT_FENDER_CLOSE(338.5), RIGHT_FENDER_CLOSE(68.5), LEFT_FENDER_FAR(248.5), RIGHT_FENDER_FAR(158.5),
-        FORWARD(0), LEFT(270), RIGHT(90), BACKWARD(180);
+        FORWARD(0), LEFT(90), RIGHT(270), BACKWARD(180);
 
         private final double angle;
         SnapPosition(double angle) {
