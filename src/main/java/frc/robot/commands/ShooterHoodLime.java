@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.Vision;
@@ -23,10 +24,14 @@ public class ShooterHoodLime extends CommandBase {
     @Override
     public void execute() {
 //        TODO: Change this
-        shooter.setSetpoint(Constants.SHOOTER_SPEED_MAP.lookup(vision.getDistance()), false);
-        hood.setAngle(Constants.HOOD_ANGLE_MAP.lookup(vision.getDistance()), false);
-//        shooter.setSetpoint(Constants.SHOOTER_SPEED_MAP.lookup(RobotState.getInstance().getDistanceToHub()), false);
-//        hood.setAngle(Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()), false);
+        if (vision.hasTarget()) {
+            shooter.setSetpoint(Constants.SHOOTER_SPEED_MAP.lookup(vision.getDistance()), false);
+            hood.setAngle(Constants.HOOD_ANGLE_MAP.lookup(vision.getDistance()), false);
+        }
+        else {
+            shooter.setSetpoint(Constants.SHOOTER_SPEED_MAP.lookup(RobotState.getInstance().getDistanceToHub()), false);
+            hood.setAngle(Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()), false);
+        }
     }
 
     @Override
