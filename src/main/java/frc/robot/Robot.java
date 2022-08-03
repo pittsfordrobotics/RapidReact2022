@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CG_ClimberCalibrate;
@@ -37,6 +38,8 @@ public class Robot extends LoggedRobot {
   private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
 
   private Command autonomousCommand;
+
+  public static final Field2d field = new Field2d();
 
   private ByteLogReceiver logReceiver;
   private final Alert logReceiverQueueAlert = new Alert("Logging queue is full. Data will NOT be logged.", AlertType.ERROR);
@@ -92,6 +95,8 @@ public class Robot extends LoggedRobot {
       logOpenFileAlert.set(logReceiver.getOpenFault());
       logWriteAlert.set(logReceiver.getWriteFault());
     }
+
+    field.setRobotPose(RobotState.getInstance().getLatestPose());
 
     new BetterXboxController(0, BetterXboxController.Hand.LEFT, BetterXboxController.Humans.DRIVER);
     new BetterXboxController(1, BetterXboxController.Humans.OPERATOR);
