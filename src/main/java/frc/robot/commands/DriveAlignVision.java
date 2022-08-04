@@ -38,5 +38,6 @@ public class DriveAlignVision extends CommandBase {
     public void end(boolean interrupted) {
         drive.setVolts(0,0);
         drive.setThrottleWithTemp();
+        RobotState.getInstance().setSnapped(true);
     }
 }

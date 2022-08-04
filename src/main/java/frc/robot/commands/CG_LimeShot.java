@@ -7,7 +7,7 @@ import frc.robot.Constants;
 public class CG_LimeShot extends SequentialCommandGroup {
     public CG_LimeShot() {
         super(
-                new DriveAlignVision(),
+                new DriveCheckSnapped(),
                 new ShooterHoodLime(),
                 new ShooterHoodPrimed(),
                 new IndexerShoot(),

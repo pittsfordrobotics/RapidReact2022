@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -79,7 +78,7 @@ public class RobotContainer {
     JoystickButton operatorShift = operatorController.RB;
 
 //    DRIVING
-    driverController.Start.whileActiveOnce(new DriveAutoSnap());
+    driverController.Start.whileActiveOnce(new DriveAlignVision());
 
     driverController.X.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_FAR));
     driverController.Y.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_FAR));
