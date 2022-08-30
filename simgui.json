@@ -73,6 +73,7 @@
       "/Shuffleboard/Indexer/Reset": "Command",
       "/Shuffleboard/Indexer/Toggle Shooting": "Command",
       "/SmartDashboard/Auto Command": "String Chooser",
+      "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Position Chooser": "String Chooser",
       "/SmartDashboard/Starting Balls": "String Chooser",
       "/SmartDashboard/Turn to hub": "Command",
