@@ -10,7 +10,7 @@ import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 public class HoodIOSparkMax implements HoodIO {
-    private final LazySparkMax motor = new LazySparkMax(Constants.HOOD_CAN, IdleMode.kBrake, 30, false);
+    private final LazySparkMax motor = new LazySparkMax(Constants.HOOD_LEFT_CAN, IdleMode.kBrake, 30, false);
     private final RelativeEncoder encoder = motor.getEncoder();
     private final DutyCycleEncoder throughBore = new DutyCycleEncoder(Constants.HOOD_REV_THROUGH_BORE_DIO_PORT);
 
