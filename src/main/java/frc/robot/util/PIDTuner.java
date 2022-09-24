@@ -31,6 +31,11 @@ public class PIDTuner {
             SmartDashboard.putNumber("PIDTuner/" + name + " I", 0);
             SmartDashboard.putNumber("PIDTuner/" + name + " D", 0);
         }
+        else {
+            SmartDashboard.delete("PIDTuner/" + name + " P");
+            SmartDashboard.delete("PIDTuner/" + name + " I");
+            SmartDashboard.delete("PIDTuner/" + name + " D");
+        }
     }
 
     public PIDTuner(String name, ProfiledPIDController pidController) {
