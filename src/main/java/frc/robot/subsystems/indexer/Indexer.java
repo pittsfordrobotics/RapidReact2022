@@ -432,7 +432,7 @@ public class Indexer extends SubsystemBase {
             Hood.getInstance().setAngle(-1, true);
         }
         if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {
-            CommandScheduler.getInstance().schedule(true, new IntakeReverse());
+            CommandScheduler.getInstance().schedule(false, new IntakeReverse());
         }
         else if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterrupt());
