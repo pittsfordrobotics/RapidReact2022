@@ -12,6 +12,7 @@ import frc.robot.Ball.COLOR;
 import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeReverse;
+import frc.robot.commands.IntakeUp;
 import frc.robot.commands.IntakeUpNoInterrupt;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.IndexerIO.IndexerIOInputs;
@@ -431,10 +432,13 @@ public class Indexer extends SubsystemBase {
             Hood.getInstance().setAngle(-1, true);
         }
         if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {
-            CommandScheduler.getInstance().schedule(false, new IntakeReverse());
+            CommandScheduler.getInstance().schedule(true, new IntakeReverse());
         }
         else if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterrupt());
+        }
+        else {
+            CommandScheduler.getInstance().schedule(true, new IntakeUp());
         }
         Logger.getInstance().recordOutput("Indexer/Ball0Color", getBall0().getColor().toString());
         Logger.getInstance().recordOutput("Indexer/Ball0Location", getBall0().getLocation().toString());
@@ -443,6 +447,10 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
         Logger.getInstance().recordOutput("Indexer/NumberOfBalls", getBallCount());
         Logger.getInstance().recordOutput("Indexer/IsFull", isFull());
+    }
+
+    public boolean getRejection() {
+        return state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse);
     }
 
     public void getAllianceColorFMS() {
