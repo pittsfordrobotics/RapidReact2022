@@ -18,7 +18,7 @@ public class Hood extends SubsystemBase {
     private double position = 0;
     private double forcedPosition = -1;
 
-    private final ProfiledPIDController pid = new ProfiledPIDController(0,0,0, new Constraints(10, 1));
+    private final ProfiledPIDController pid = new ProfiledPIDController(0,0,0, new Constraints(1, 1));
     private final PIDTuner tuner = new PIDTuner("Hood", pid);
 
     private final static Hood INSTANCE = new Hood(Constants.ROBOT_HOOD_IO);
