@@ -2,8 +2,9 @@ package frc.robot.subsystems.hood;
 
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
@@ -18,7 +19,7 @@ public class Hood extends SubsystemBase {
     private double position = 0;
     private double forcedPosition = -1;
 
-    private final ProfiledPIDController pid = new ProfiledPIDController(0,0,0, new Constraints(1, 1));
+    private final PIDController pid = new PIDController(0,0,0);
     private final PIDTuner tuner = new PIDTuner("Hood", pid);
 
     private final static Hood INSTANCE = new Hood(Constants.ROBOT_HOOD_IO);
@@ -29,13 +30,20 @@ public class Hood extends SubsystemBase {
 
     private Hood(HoodIO io) {
         this.io = io;
+        ShuffleboardTab hoodTab = Shuffleboard.getTab("Hood");
+        hoodTab.addNumber("Encoder Angle Rad", () -> inputs.positionRad);
+        io.updateInputs(inputs);
+        io.setSoftLimit(true, (float)(0 - getAbsoluteWithOffset()), (float)(Constants.HOOD_ANGLE_MAX_RAD - getAbsoluteWithOffset()));
+        pid.setTolerance(3);
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Hood", inputs);
-        tuner.setPID(true, true, true);
+        Logger.getInstance().recordOutput("Hood/At Setpoint", atSetpoint());
+
+        tuner.setPID(); // tune hood
         if (RobotState.getInstance().isClimbing()) {
             moveHood(0);
         }
@@ -51,14 +59,20 @@ public class Hood extends SubsystemBase {
     }
 
     private double getAbsoluteWithOffset() {
-        return inputs.absolutePositionRad - Constants.HOOD_REV_THROUGH_BORE_OFFSET;
+        return Constants.HOOD_ANGLE_OFFSET_RAD - inputs.absolutePositionRad;
     }
 
-    private void moveHood(double degrees) {
-        io.setVoltage(pid.calculate(MathUtil.clamp(degrees-getAbsoluteWithOffset(), 0, Constants.HOOD_ANGLE_MAX)));
+    private void moveHood(double targetPosition) {
+        io.setVoltage(pid.calculate(MathUtil.clamp(targetPosition-getAbsoluteWithOffset(), Constants.HOOD_ANGLE_MIN_RAD, Constants.HOOD_ANGLE_MAX_RAD)));
     }
 
-    /** Min: 0, Max: UNKNOWN */
+    public void setVoltage(double voltage) {
+//        + is up
+//        - is down
+        io.setVoltage(voltage);
+    }
+
+    /** Min: 0, Max: 76.5 */
     public void setAngle(double angle, boolean forced) {
         if (!forced) {
             this.position = angle;
@@ -68,7 +82,7 @@ public class Hood extends SubsystemBase {
         }
     }
 
-    public boolean atAngle() {
-        return Math.abs(getAbsoluteWithOffset()-(forcedPosition != -1 ? forcedPosition : position)) < 5;
+    public boolean atSetpoint() {
+        return pid.atSetpoint();
     }
 }

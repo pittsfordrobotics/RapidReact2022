@@ -37,14 +37,17 @@ public interface HoodIO {
     }
 
     /** Updates the set of loggable inputs. */
-    public default void updateInputs(HoodIOInputs inputs) {}
+    default void updateInputs(HoodIOInputs inputs) {}
 
     /** Run open loop at the percentage of 12V from -1.0 to 1.0. */
     default void set(double percentage) {}
 
     /** Run open loop at the specified voltage. */
-    public default void setVoltage(double volts) {}
+    default void setVoltage(double volts) {}
+
+    /** Enabling and disabling the soft limit  */
+    default void setSoftLimit(boolean enabled, float reverse, float forward) {}
 
     /** Enable or disable brake mode. */
-    public default void setBrakeMode(boolean enable) {}
+    default void setBrakeMode(boolean enable) {}
 }

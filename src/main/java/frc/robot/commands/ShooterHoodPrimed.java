@@ -23,7 +23,7 @@ public class ShooterHoodPrimed extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return hood.atAngle() && shooter.isAtSetpoint();
+        return hood.atSetpoint() && shooter.isAtSetpoint();
     }
 
     @Override

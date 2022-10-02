@@ -21,7 +21,7 @@ public class ShooterHoodLow extends CommandBase {
     @Override
     public void execute() {
         shooter.setSetpoint(Constants.SHOOTER_LOW_SPEED, false);
-        hood.setAngle(Constants.HOOD_ANGLE_MAX, false);
+        hood.setAngle(Constants.HOOD_ANGLE_MAX_RAD, false);
     }
 
     @Override

@@ -8,13 +8,11 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.CG_ClimberCalibrate;
 import frc.robot.commands.ControllerRumble;
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.util.Alert;
@@ -28,23 +26,21 @@ import org.littletonrobotics.junction.inputs.LoggedSystemStats;
 import org.littletonrobotics.junction.io.ByteLogReceiver;
 import org.littletonrobotics.junction.io.LogSocketServer;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Robot extends LoggedRobot {
   private final Intake intake = Intake.getInstance();
   private final Indexer indexer = Indexer.getInstance();
 
-  private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
-
   private Command autonomousCommand;
-
-  public static final Field2d field = new Field2d();
 
   private ByteLogReceiver logReceiver;
   private final Alert logReceiverQueueAlert = new Alert("Logging queue is full. Data will NOT be logged.", AlertType.ERROR);
   private final Alert logOpenFileAlert = new Alert("Failed to open log file. Data will NOT be logged", AlertType.ERROR);
   private final Alert logWriteAlert = new Alert("Failed write to the log file. Data will NOT be logged", AlertType.ERROR);
+
+  private final Alert driverControllerAlert = new Alert("Driver Controller is NOT detected!", AlertType.ERROR);
+  private final Alert operatorControllerAlert = new Alert("Operator Controller is NOT detected!", AlertType.ERROR);
+
+  private final Timer disabledTimer = new Timer();
 
   private RobotContainer robotContainer;
 
@@ -54,8 +50,8 @@ public class Robot extends LoggedRobot {
     Logger logger = Logger.getInstance();
     setUseTiming(true);
     LoggedNetworkTables.getInstance().addTable("/SmartDashboard/");
-    LoggedNetworkTables.getInstance().addTable("/Shuffleboard/");
-    logger.recordMetadata("Date", new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss").format(new Date()));
+//    take up too much bandwidth and is logging mostly data that is already known
+//    LoggedNetworkTables.getInstance().addTable("/Shuffleboard/");
     logger.recordMetadata("PIDTuner", Boolean.toString(Constants.ROBOT_PID_TUNER_ENABLED));
     logger.recordMetadata("RuntimeType", getRuntimeType().toString());
     logger.recordMetadata("ProjectName", GitConstants.MAVEN_NAME);
@@ -76,7 +72,6 @@ public class Robot extends LoggedRobot {
 //    setup
     robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);
-    climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
     intake.retract();
     indexer.disable();
   }
@@ -96,18 +91,28 @@ public class Robot extends LoggedRobot {
       logWriteAlert.set(logReceiver.getWriteFault());
     }
 
-    field.setRobotPose(RobotState.getInstance().getLatestPose());
-
     new BetterXboxController(0, BetterXboxController.Hand.LEFT, BetterXboxController.Humans.DRIVER);
     new BetterXboxController(1, BetterXboxController.Humans.OPERATOR);
+
+    driverControllerAlert.set(!DriverStation.isJoystickConnected(0));
+    operatorControllerAlert.set(!DriverStation.isJoystickConnected(1));
   }
 
   @Override
   public void disabledInit() {
+    disabledTimer.start();
+    disabledTimer.reset();
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (disabledTimer.advanceIfElapsed(5) && Drive.getInstance().getAverageVelocity() == 0) {
+      Drive.getInstance().coastMode();
+    }
+    else {
+      Drive.getInstance().brakeMode();
+    }
+  }
 
   @Override
   public void autonomousInit() {

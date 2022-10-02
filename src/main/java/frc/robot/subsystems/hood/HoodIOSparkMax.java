@@ -1,6 +1,7 @@
 package frc.robot.subsystems.hood;
 
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
@@ -10,7 +11,7 @@ import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
 
 public class HoodIOSparkMax implements HoodIO {
-    private final LazySparkMax motor = new LazySparkMax(Constants.HOOD_LEFT_CAN, IdleMode.kBrake, 30, false);
+    private final LazySparkMax motor = new LazySparkMax(Constants.HOOD_LEFT_CAN, IdleMode.kBrake, 30, true);
     private final RelativeEncoder encoder = motor.getEncoder();
     private final DutyCycleEncoder throughBore = new DutyCycleEncoder(Constants.HOOD_REV_THROUGH_BORE_DIO_PORT);
 
@@ -19,7 +20,7 @@ public class HoodIOSparkMax implements HoodIO {
 
     @Override
     public void updateInputs(HoodIOInputs inputs) {
-        inputs.absolutePositionRad = Units.rotationsToRadians(throughBore.getAbsolutePosition()) * Constants.HOOD_REV_THROUGH_BORE_GEAR_RATIO;
+        inputs.absolutePositionRad = (Units.rotationsToRadians(throughBore.getAbsolutePosition()) * Constants.HOOD_REV_THROUGH_BORE_GEAR_RATIO);
         inputs.positionRad = Units.rotationsToRadians(encoder.getPosition()) / Constants.HOOD_550_GEAR_RATIO;
         inputs.velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity()) / Constants.HOOD_550_GEAR_RATIO;
         inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
@@ -40,5 +41,11 @@ public class HoodIOSparkMax implements HoodIO {
     @Override
     public void setBrakeMode(boolean enable) {
         motor.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
+    }
+
+    @Override
+    public void setSoftLimit(boolean enabled, float reverse, float forward) {
+        motor.setSoftLimit(SoftLimitDirection.kReverse, reverse);
+        motor.setSoftLimit(SoftLimitDirection.kForward, forward);
     }
 }

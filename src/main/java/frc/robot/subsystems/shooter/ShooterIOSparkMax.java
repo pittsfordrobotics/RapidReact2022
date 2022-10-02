@@ -8,21 +8,20 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
 import frc.robot.util.LazySparkMax;
-import frc.robot.util.PIDTuner;
 
 public class ShooterIOSparkMax implements ShooterIO {
     private final LazySparkMax motorLeft = new LazySparkMax(Constants.SHOOTER_CAN_LEFT, IdleMode.kCoast, 60, false);
     private final LazySparkMax motorRight = new LazySparkMax(Constants.SHOOTER_CAN_RIGHT, IdleMode.kCoast, 60, motorLeft, true);
     private final RelativeEncoder encoder = motorLeft.getEncoder();
     private final SparkMaxPIDController pid = motorLeft.getPIDController();
-    private final PIDTuner tuner = new PIDTuner("Shooter", pid);
 
-    public ShooterIOSparkMax() {}
+    public ShooterIOSparkMax() {
+        pid.setP(Constants.SHOOTER_P);
+    }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
@@ -45,7 +44,7 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     @Override
     public void setVelocity(double velocityRotPerMin, double ffVolts) {
-        pid.setReference(velocityRotPerMin, ControlType.kVelocity, 0, ffVolts, ArbFFUnits.kVoltage);
+        pid.setReference(velocityRotPerMin, ControlType.kVelocity, 0, ffVolts);
     }
 
     @Override
@@ -55,16 +54,11 @@ public class ShooterIOSparkMax implements ShooterIO {
     }
 
     @Override
-    public void configurePID(double kP, double kI, double kD, boolean PIDTuner) {
-        if (PIDTuner) {
-            tuner.setPID(true, true, true);
-        }
-        else {
-            pid.setP(kP, 0);
-            pid.setI(kI, 0);
-            pid.setD(kD, 0);
-            pid.setFF(0, 0);
-        }
+    public void configurePID(double kP, double kI, double kD) {
+        pid.setP(kP, 0);
+        pid.setI(kI, 0);
+        pid.setD(kD, 0);
+        pid.setFF(0, 0);
     }
 
 }

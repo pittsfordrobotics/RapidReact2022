@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
@@ -60,13 +59,6 @@ public class Drive extends SubsystemBase {
         Logger.getInstance().processInputs("Drive", inputs);
 
         pigeonAlert.set(!inputs.gyroConnected);
-
-        if (DriverStation.isDisabled() && getAverageVelocity() == 0) {
-            coastMode();
-        }
-        else {
-            brakeMode();
-        }
 
         Logger.getInstance().recordOutput("Drive/Throttle", throttle);
 

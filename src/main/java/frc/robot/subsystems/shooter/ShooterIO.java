@@ -44,5 +44,5 @@ public interface ShooterIO {
     default void setBrakeMode(boolean enable) {}
 
     /** Set velocity PID constants. */
-    default void configurePID(double kP, double kI, double kD, boolean PIDTuner) {}
+    default void configurePID(double kP, double kI, double kD) {}
 }

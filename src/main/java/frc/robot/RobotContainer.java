@@ -9,13 +9,17 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.commands.DriveSnap.SnapPosition;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.compressor7.Compressor7;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
@@ -42,7 +46,7 @@ public class RobotContainer {
     autoConfig();
     driverDashboardSetup();
 
-    configureButtonBindings();
+//    competitionButtons();
 //    testButtons();
 
     drive.setDefaultCommand(new DriveXbox());
@@ -57,20 +61,26 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Fully Loaded", indexer.fullyLoaded());
     SmartDashboard.putBoolean("Snapped", RobotState.getInstance().isSnapped());
     SmartDashboard.putBoolean("Climber Enabled", RobotState.getInstance().isClimbing());
-    SmartDashboard.putData("Field", Robot.field);
   }
 
   private void testButtons() {
-    driverController.A.whenActive(new IntakeToggle());
+//    + is up
+//    = is down
+    driverController.A.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(1), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
+    driverController.X.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(-1), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
+//    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setVoltage(7), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setVoltage(0), Shooter.getInstance()));
+    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(3000, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+    driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
+    operatorController.B.whileActiveOnce(new IndexerOverride(false));
 //    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterHoodZero());
-    driverController.X.whenActive(new CG_IntakeWiggle());
-    driverController.Y.whenActive(new ShooterHoodLime());
-
-    operatorController.Y.whenHeld(new IndexerOverride(false));
-    operatorController.B.whileActiveOnce(new IndexerOverride(true));
+//    driverController.X.whenActive(new CG_IntakeWiggle());
+//    driverController.Y.whenActive(new ShooterHoodLime());
+//
+//    operatorController.Y.whenHeld(new IndexerOverride(false));
+//    operatorController.B.whileActiveOnce(new IndexerOverride(true));
   }
 
-  private void configureButtonBindings() {
+  private void competitionButtons() {
     JoystickButton driverShift = driverController.RB;
     JoystickButton operatorShift = operatorController.RB;
 

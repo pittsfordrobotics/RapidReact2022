@@ -21,6 +21,7 @@ public class TimeKeeper extends CommandBase {
         }
         else {
             System.out.println(timer.get());
+            timer.stop();
         }
     }
 

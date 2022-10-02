@@ -19,6 +19,7 @@ import frc.robot.subsystems.indexer.IndexerIO.IndexerIOInputs;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
+import frc.robot.util.DisabledInstantCommand;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -46,6 +47,7 @@ public class Indexer extends SubsystemBase {
     private COLOR allianceColor = COLOR.UNKNOWN;
 
     private final Alert colorSensorAlert = new Alert("Color sensor not detected! Auto indexing will NOT work!", AlertType.ERROR);
+    private final Alert cargoRejectionAlert = new Alert("Cargo rejection has been disabled! Auto rejection will NOT work!", AlertType.WARNING);
 
     private final static Indexer INSTANCE = new Indexer(Constants.ROBOT_INDEXER_IO);
     public static Indexer getInstance() {
@@ -56,7 +58,7 @@ public class Indexer extends SubsystemBase {
         this.io = io;
         rejectionTimer.start();
         ShuffleboardTab indexerTab = Shuffleboard.getTab("Indexer");
-        indexerTab.add("Reset", new InstantCommand(this::resetEverything));
+        indexerTab.add("Reset", new DisabledInstantCommand(this::resetEverything));
         indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
         indexerTab.addString("Alliance Color", () -> allianceColor.toString());
         indexerTab.addString("Indexer state", () -> state.toString());
@@ -80,6 +82,7 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().processInputs("Indexer", inputs);
         Logger.getInstance().recordOutput("Indexer/State", state.toString());
         colorSensorAlert.set(!inputs.colorConnected);
+        cargoRejectionAlert.set(!rejectionEnabled);
         boolean ballCurrentlyAtIntake = getBallAtIntake();
         boolean ballCurrentlyAtTower = getBallAtTower();
         boolean ballCurrentlyAtShooter = getBallAtShooter();
@@ -296,11 +299,11 @@ public class Indexer extends SubsystemBase {
                     towerMotorOff();
                 }
                 stomachMotorOn();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atAngle() && !rejectionTimerStarted) {
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atSetpoint() && !rejectionTimerStarted) {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (ballCurrentlyAtTower && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                if (ballCurrentlyAtTower && rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     rejectionTimerStarted = false;
                     state = State.TOWER1;
@@ -309,7 +312,7 @@ public class Indexer extends SubsystemBase {
                     advanceToTower();
                     state = State.REJECT1TOWER1;
                 }
-                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                else if (rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     rejectionTimerStarted = false;
                     state = State.INTAKE1;
@@ -323,11 +326,11 @@ public class Indexer extends SubsystemBase {
                     towerMotorOff();
                 }
                 stomachMotorOff();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atAngle() && !rejectionTimerStarted) {
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atSetpoint() && !rejectionTimerStarted) {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (ballCurrentlyAtIntake && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                if (ballCurrentlyAtIntake && rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     intakeBall();
                     rejectionTimerStarted = false;
@@ -337,7 +340,7 @@ public class Indexer extends SubsystemBase {
                     intakeBall();
                     state = State.REJECT1INTAKE1;
                 }
-                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                else if (rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     rejectionTimerStarted = false;
                     state = State.FIELD2;
@@ -351,11 +354,11 @@ public class Indexer extends SubsystemBase {
                     towerMotorOff();
                 }
                 stomachMotorOff();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atAngle() && !rejectionTimerStarted) {
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atSetpoint() && !rejectionTimerStarted) {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                if (rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     rejectionTimerStarted = false;
                     state = State.TOWER1;
@@ -416,7 +419,7 @@ public class Indexer extends SubsystemBase {
                 else {
                     stomachMotorReverse();
                     towerMotorReverse();
-                    
+
                 }
                 break;
             default:
@@ -425,7 +428,7 @@ public class Indexer extends SubsystemBase {
         }
         if (state == State.REJECT1 || state == State.REJECT1INTAKE1 || state == State.REJECT1TOWER1) {
             Shooter.getInstance().setSetpoint(Constants.SHOOTER_INDEXER_REJECT_SPEED, true);
-            Hood.getInstance().setAngle(Constants.HOOD_ANGLE_MAX, true);
+            Hood.getInstance().setAngle(Constants.HOOD_ANGLE_MAX_RAD, true);
         }
         else {
             Shooter.getInstance().setSetpoint(-1, true);
@@ -444,7 +447,7 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/Ball0Location", getBall0().getLocation().toString());
         Logger.getInstance().recordOutput("Indexer/Ball1Color", getBall1().getColor().toString());
         Logger.getInstance().recordOutput("Indexer/Ball1Location", getBall1().getLocation().toString());
-        Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
+        Logger.getInstance().recordOutput("Indexer/Shooting", shooting);
         Logger.getInstance().recordOutput("Indexer/NumberOfBalls", getBallCount());
         Logger.getInstance().recordOutput("Indexer/IsFull", isFull());
     }
