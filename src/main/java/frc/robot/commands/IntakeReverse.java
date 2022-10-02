@@ -24,7 +24,7 @@ public class IntakeReverse extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !Indexer.getInstance().getRejection();
+        return !Indexer.getInstance().getRejecting();
     }
 
     @Override

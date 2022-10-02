@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ControllerRumble;
@@ -46,13 +47,19 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
+    LiveWindow.setEnabled(false);
+    LiveWindow.disableAllTelemetry();
+
 //    advantageKit
     Logger logger = Logger.getInstance();
     setUseTiming(true);
     LoggedNetworkTables.getInstance().addTable("/SmartDashboard/");
+
 //    take up too much bandwidth and is logging mostly data that is already known
 //    LoggedNetworkTables.getInstance().addTable("/Shuffleboard/");
+
     logger.recordMetadata("PIDTuner", Boolean.toString(Constants.ROBOT_PID_TUNER_ENABLED));
+    logger.recordMetadata("Demo Mode", Boolean.toString(Constants.ROBOT_DEMO_MODE));
     logger.recordMetadata("RuntimeType", getRuntimeType().toString());
     logger.recordMetadata("ProjectName", GitConstants.MAVEN_NAME);
     logger.recordMetadata("BuildDate", GitConstants.BUILD_DATE);

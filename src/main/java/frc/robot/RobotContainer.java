@@ -46,8 +46,13 @@ public class RobotContainer {
     autoConfig();
     driverDashboardSetup();
 
-//    competitionButtons();
-//    testButtons();
+    if (Constants.ROBOT_DEMO_MODE) {
+      demoButtons();
+    }
+    else {
+      competitionButtons();
+//      testButtons();
+    }
 
     drive.setDefaultCommand(new DriveXbox());
     compressor.setDefaultCommand(new CompressorSmart());
@@ -103,8 +108,8 @@ public class RobotContainer {
     driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
 
 //    SHOOTING
-    operatorController.X.whileActiveOnce(new CG_LimeShot());
-    operatorController.Y.whileActiveOnce(new CG_FenderShot());
+    operatorController.X.whileActiveOnce(new CG_LimeShot()).whenInactive(new ShooterHoodZero());
+    operatorController.Y.whileActiveOnce(new CG_FenderShot()).whenInactive(new ShooterHoodZero());
 
 //    INDEXER
     driverController.LB.and(operatorController.LB).whenActive(new InstantCommand(Indexer.getInstance()::resetEverything, indexer));
@@ -119,6 +124,15 @@ public class RobotContainer {
     operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
     operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
     operatorController.Back.whileActiveContinuous(new CG_ClimberAuto()).whenInactive(new ClimberStop());
+  }
+
+  private void demoButtons() {
+    driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
+    driverController.X.whileHeld(new CG_LowShot()).whenInactive(new ShooterHoodZero());
+    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(1500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+    driverController.A.whileActiveOnce(new IndexerOverride(false));
+    driverController.LB.whenPressed(new InstantCommand(() -> indexer.setRejectionEnabled(false)));
+    driverController.RB.whenPressed(new InstantCommand(() -> indexer.setRejectionEnabled(true)));
   }
 
   private void autoConfig() {
