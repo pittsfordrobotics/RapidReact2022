@@ -166,7 +166,6 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Command", autoChooser);
     SmartDashboard.putData("Starting Balls", ballChooser);
     SmartDashboard.putData("Position Chooser", positionChooser);
-    SmartDashboard.putNumber("Auto Delay", 0);
   }
 
   public Command getAutonomousCommand() {
@@ -174,9 +173,6 @@ public class RobotContainer {
       indexer.addBallToTower();
     }
     drive.resetOdometry(positionChooser.getSelected());
-    return new SequentialCommandGroup(
-            new WaitCommand(SmartDashboard.getNumber("Auto Delay", 0)),
-            autoChooser.getSelected()
-    );
+    return autoChooser.getSelected();
   }
 }
