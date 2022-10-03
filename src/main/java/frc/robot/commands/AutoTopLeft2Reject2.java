@@ -3,6 +3,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Trajectories;
 
@@ -25,6 +26,7 @@ public class AutoTopLeft2Reject2 extends SequentialCommandGroup {
             ),
             new ShooterHoodPrimed(),
             new IndexerShoot(),
+            new WaitCommand(1),
             new DriveTurn(180),
             new IntakeUp(),
             new IndexerRejection(true),
