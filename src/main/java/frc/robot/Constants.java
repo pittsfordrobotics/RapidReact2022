@@ -59,39 +59,6 @@ public final class Constants {
     public static final boolean ROBOT_IDLE_SHOOTER_ENABLED = false;
     public static final boolean ROBOT_DEMO_MODE = true;
 
-    static {
-        if (RobotBase.isReal() && ROBOT_DEMO_MODE) {
-            ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
-            ROBOT_COMPRESSOR_IO = new CompressorIORev();
-            ROBOT_DRIVE_IO = new DriveIOSparkMax();
-            ROBOT_HOOD_IO = new HoodIO() {};
-            ROBOT_INDEXER_IO = new IndexerIOSparkMax();
-            ROBOT_INTAKE_IO = new IntakeIOSparkMax();
-            ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
-            ROBOT_VISION_IO = new VisionIO() {};
-        }
-        else if (RobotBase.isReal()) {
-            ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
-            ROBOT_COMPRESSOR_IO = new CompressorIORev();
-            ROBOT_DRIVE_IO = new DriveIOSparkMax();
-            ROBOT_HOOD_IO = new HoodIOSparkMax();
-            ROBOT_INDEXER_IO = new IndexerIOSparkMax();
-            ROBOT_INTAKE_IO = new IntakeIOSparkMax();
-            ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
-            ROBOT_VISION_IO = new VisionIOLimelight();
-        }
-        else {
-            ROBOT_CLIMBER_IO = new ClimberIO() {};
-            ROBOT_COMPRESSOR_IO = new CompressorIO(){};
-            ROBOT_DRIVE_IO = new DriveIOSim();
-            ROBOT_HOOD_IO = new HoodIOSim();
-            ROBOT_INDEXER_IO = new IndexerIOSim();
-            ROBOT_INTAKE_IO = new IntakeIO(){};
-            ROBOT_SHOOTER_IO = new ShooterIOSim();
-            ROBOT_VISION_IO = new VisionIOSim();
-        }
-    }
-
     public static final int ROBOT_PDP_CAN = 1;
     public static final int ROBOT_PNEUMATIC_HUB_CAN = 1;
 
@@ -272,6 +239,39 @@ public final class Constants {
             this.cameraHeight = cameraHeight;
             this.verticalRotation = verticalRotation;
             this.vehicleToCamera = vehicleToCamera;
+        }
+    }
+
+    static {
+        if (RobotBase.isReal() && ROBOT_DEMO_MODE) {
+            ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
+            ROBOT_COMPRESSOR_IO = new CompressorIORev();
+            ROBOT_DRIVE_IO = new DriveIOSparkMax();
+            ROBOT_HOOD_IO = new HoodIO() {};
+            ROBOT_INDEXER_IO = new IndexerIOSparkMax();
+            ROBOT_INTAKE_IO = new IntakeIOSparkMax();
+            ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
+            ROBOT_VISION_IO = new VisionIO() {};
+        }
+        else if (RobotBase.isReal()) {
+            ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
+            ROBOT_COMPRESSOR_IO = new CompressorIORev();
+            ROBOT_DRIVE_IO = new DriveIOSparkMax();
+            ROBOT_HOOD_IO = new HoodIOSparkMax();
+            ROBOT_INDEXER_IO = new IndexerIOSparkMax();
+            ROBOT_INTAKE_IO = new IntakeIOSparkMax();
+            ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
+            ROBOT_VISION_IO = new VisionIOLimelight();
+        }
+        else {
+            ROBOT_CLIMBER_IO = new ClimberIO() {};
+            ROBOT_COMPRESSOR_IO = new CompressorIO(){};
+            ROBOT_DRIVE_IO = new DriveIOSim();
+            ROBOT_HOOD_IO = new HoodIOSim();
+            ROBOT_INDEXER_IO = new IndexerIOSim();
+            ROBOT_INTAKE_IO = new IntakeIO(){};
+            ROBOT_SHOOTER_IO = new ShooterIOSim();
+            ROBOT_VISION_IO = new VisionIOSim();
         }
     }
 }

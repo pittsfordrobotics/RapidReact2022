@@ -85,22 +85,18 @@
         "window": {
           "visible": true
         }
-      },
-      "/SmartDashboard/Turn to hub": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Turn to position": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/snapchooser": {
-        "window": {
-          "visible": true
-        }
       }
+    }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "Position Chooser": {
+        "open": true
+      },
+      "Starting Balls": {
+        "open": true
+      },
+      "open": true
     }
   }
 }

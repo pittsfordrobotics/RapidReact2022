@@ -83,7 +83,6 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return true;
-//        return pid.atSetpoint();
+        return pid.atSetpoint() || Constants.ROBOT_DEMO_MODE;
     }
 }

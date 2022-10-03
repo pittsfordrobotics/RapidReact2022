@@ -440,7 +440,7 @@ public class Indexer extends SubsystemBase {
         else if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterrupt());
         }
-        else {
+        else if (!DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(true, new IntakeUp());
         }
         Logger.getInstance().recordOutput("Indexer/Ball0Color", getBall0().getColor().toString());
