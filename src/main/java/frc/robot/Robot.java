@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.CG_ClimberCalibrate;
 import frc.robot.commands.ControllerRumble;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
@@ -66,7 +68,9 @@ public class Robot extends LoggedRobot {
       logger.addDataReceiver(logReceiver);
       LoggedSystemStats.getInstance().setPowerDistributionConfig(Constants.ROBOT_PDP_CAN, ModuleType.kRev);
     }
-    if (Constants.ROBOT_LOGGING_ENABLED) logger.start();
+    if (Constants.ROBOT_LOGGING_ENABLED) {
+      logger.start();
+    }
     PIDTuner.enable(Constants.ROBOT_PID_TUNER_ENABLED);
 
 //    setup
@@ -74,6 +78,8 @@ public class Robot extends LoggedRobot {
     DriverStation.silenceJoystickConnectionWarning(true);
     intake.retract();
     indexer.disable();
+    // this has to be here because of initialization order
+    Shuffleboard.getTab("Climber").add("Calibrate Climber", new CG_ClimberCalibrate());
   }
 
   @Override

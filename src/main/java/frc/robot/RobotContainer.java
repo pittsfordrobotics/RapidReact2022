@@ -9,10 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.commands.DriveSnap.SnapPosition;
@@ -46,7 +43,7 @@ public class RobotContainer {
     autoConfig();
     driverDashboardSetup();
 
-//    competitionButtons();
+    competitionButtons();
 //    testButtons();
 
     drive.setDefaultCommand(new DriveXbox());
@@ -151,8 +148,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Command", autoChooser);
     SmartDashboard.putData("Starting Balls", ballChooser);
-    SmartDashboard.putData("Position Chooser", positionChooser);
-    SmartDashboard.putNumber("Auto Delay", 0);
+    SmartDashboard.putData("Position Chooser (Hanger opposite view)", positionChooser);
   }
 
   public Command getAutonomousCommand() {
@@ -160,9 +156,6 @@ public class RobotContainer {
       indexer.addBallToTower();
     }
     drive.resetOdometry(positionChooser.getSelected());
-    return new SequentialCommandGroup(
-            new WaitCommand(SmartDashboard.getNumber("Auto Delay", 0)),
-            autoChooser.getSelected()
-    );
+    return autoChooser.getSelected();
   }
 }
