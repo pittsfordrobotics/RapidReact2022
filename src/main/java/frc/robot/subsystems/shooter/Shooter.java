@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -80,7 +81,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isAtSetpoint() {
-        return pidController.atSetpoint();
+        return pidController.atSetpoint() || (Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation());
     }
 
 }

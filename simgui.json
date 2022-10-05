@@ -73,5 +73,16 @@
         }
       }
     }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "Position Chooser": {
+        "open": true
+      },
+      "Starting Balls": {
+        "open": true
+      },
+      "open": true
+    }
   }
 }

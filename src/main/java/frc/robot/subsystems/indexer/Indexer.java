@@ -452,7 +452,7 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/IsFull", isFull());
     }
 
-    public boolean getRejection() {
+    public boolean getRejecting() {
         return state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse);
     }
 

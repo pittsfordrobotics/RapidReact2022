@@ -53,10 +53,11 @@ public final class Constants {
     public static final ShooterIO ROBOT_SHOOTER_IO;
     public static final VisionIO ROBOT_VISION_IO;
 
-    public static final boolean ROBOT_PID_TUNER_ENABLED = false;
     public static final boolean ROBOT_LOGGING_ENABLED = true;
-    public static final boolean ROBOT_IDLE_SHOOTER_ENABLED = false;
     public static final String ROBOT_LOGGING_PATH = "/media/sda2/";
+    public static final boolean ROBOT_PID_TUNER_ENABLED = false;
+    public static final boolean ROBOT_IDLE_SHOOTER_ENABLED = false;
+    public static final boolean ROBOT_DEMO_MODE = true;
 
     public static final int ROBOT_PDP_CAN = 1;
     public static final int ROBOT_PNEUMATIC_HUB_CAN = 1;
@@ -165,7 +166,7 @@ public final class Constants {
 
     public static final double SHOOTER_SHOT_CALM_DELAY = 0.5;
 
-    public static final int SHOOTER_LOW_SPEED = 1800;
+    public static final int SHOOTER_LOW_SPEED = 1500;
     public static final int SHOOTER_AUTO_REJECT_SPEED = 2200;
     public static final int SHOOTER_INDEXER_REJECT_SPEED = 1000;
     public static final double SHOOTER_FENDER_SPEED = 3000;
@@ -242,7 +243,17 @@ public final class Constants {
     }
 
     static {
-        if (RobotBase.isReal()) {
+        if (RobotBase.isReal() && ROBOT_DEMO_MODE) {
+            ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
+            ROBOT_COMPRESSOR_IO = new CompressorIORev();
+            ROBOT_DRIVE_IO = new DriveIOSparkMax();
+            ROBOT_HOOD_IO = new HoodIO() {};
+            ROBOT_INDEXER_IO = new IndexerIOSparkMax();
+            ROBOT_INTAKE_IO = new IntakeIOSparkMax();
+            ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
+            ROBOT_VISION_IO = new VisionIO() {};
+        }
+        else if (RobotBase.isReal()) {
             ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
             ROBOT_COMPRESSOR_IO = new CompressorIORev();
             ROBOT_DRIVE_IO = new DriveIOSparkMax();
