@@ -120,7 +120,8 @@ public class RobotContainer {
     driverController.Start.and(operatorController.Start).whenActive(new ClimberSetState(!RobotState.getInstance().isClimbing()));
     operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
     operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
-    operatorController.Back.whileActiveContinuous(new CG_ClimberAuto()).whenInactive(new ClimberStop());
+//    might not have time for auto implementation
+//    operatorController.Back.whileActiveContinuous(new CG_ClimberAuto()).whenInactive(new ClimberStop());
   }
 
   private void demoButtons() {

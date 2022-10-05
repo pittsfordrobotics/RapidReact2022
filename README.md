@@ -8,7 +8,6 @@
 - Auto Indexing and Cargo Rejection
 - Full Field Odometry
 - Auto and Manual Snapping
-- Automated Climb
 
 ## Credits and References:
 - FRC 254's [Util File](https://raw.githubusercontent.com/Team254/FRC-2020-Public/master/src/main/java/com/team254/lib/util/Util.java)
