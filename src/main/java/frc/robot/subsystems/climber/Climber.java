@@ -23,7 +23,6 @@ public class Climber extends SubsystemBase {
     private Climber(ClimberIO io) {
         this.io = io;
         ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
-//        climberTab.add("Calibrate Climber", new CG_ClimberCalibrate());
         climberTab.addNumber("Encoder", () -> Units.radiansToRotations(inputs.positionRad));
         climberTab.addBoolean("Right Front Limit Switch", () -> inputs.rightForwardSwitch);
         climberTab.addBoolean("Right Reverse Limit Switch", () -> inputs.rightReverseSwitch);

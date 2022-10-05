@@ -81,7 +81,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isAtSetpoint() {
-        return pidController.atSetpoint() || Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation();
+        return pidController.atSetpoint() || (Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation());
     }
 
 }
