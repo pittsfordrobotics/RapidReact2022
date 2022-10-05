@@ -147,7 +147,7 @@ public final class Constants {
     public static final double INDEXER_LOADING_WAIT = 0.5;
     public static final double INDEXER_HUMAN_LOADING_WAIT = 1;
 
-    public static final double INDEXER_SHOOTER_REJECTION_TIME = 1;
+    public static final double INDEXER_SHOOTER_REJECTION_TIME = 0.5;
     public static final double INDEXER_INTAKE_REJECTION_TIME = 1;
 
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
@@ -164,7 +164,7 @@ public final class Constants {
     public static final int SHOOTER_CAN_LEFT = 11;
     public static final int SHOOTER_CAN_RIGHT = 12;
 
-    public static final double SHOOTER_SHOT_CALM_DELAY = 0.5;
+    public static final double SHOOTER_SHOT_CALM_DELAY = 0.2;
 
     public static final int SHOOTER_LOW_SPEED = 1500;
     public static final int SHOOTER_AUTO_REJECT_SPEED = 2200;
