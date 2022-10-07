@@ -57,7 +57,7 @@ public final class Constants {
     public static final String ROBOT_LOGGING_PATH = "/media/sda2/";
     public static final boolean ROBOT_PID_TUNER_ENABLED = false;
     public static final boolean ROBOT_IDLE_SHOOTER_ENABLED = false;
-    public static final boolean ROBOT_DEMO_MODE = true;
+    public static final boolean ROBOT_DEMO_MODE = false;
 
     public static final int ROBOT_PDP_CAN = 1;
     public static final int ROBOT_PNEUMATIC_HUB_CAN = 1;

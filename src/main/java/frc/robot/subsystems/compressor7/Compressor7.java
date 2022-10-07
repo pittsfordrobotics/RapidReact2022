@@ -38,7 +38,7 @@ public class Compressor7 extends SubsystemBase {
         else {
             pressureTimer.stop();
         }
-        if (pressureTimer.advanceIfElapsed(5)) {
+        if (pressureTimer.hasElapsed(5)) {
             pressureNotIncreasing.set(inputs.pressurePsi < 5);
         }
     }

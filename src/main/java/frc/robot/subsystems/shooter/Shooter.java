@@ -1,6 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -8,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
-import frc.robot.util.PIDTuner;
+import frc.robot.util.BetterMath;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -18,9 +17,6 @@ public class Shooter extends SubsystemBase {
     private double setpoint = 0;
     private double forcedSetpoint = -1;
 
-    private final PIDController pidController = new PIDController(0,0,0);
-    private final PIDTuner tuner = new PIDTuner("Shooter", pidController);
-
     private final static Shooter INSTANCE = new Shooter(Constants.ROBOT_SHOOTER_IO);
     public static Shooter getInstance() {
         return INSTANCE;
@@ -28,7 +24,6 @@ public class Shooter extends SubsystemBase {
 
     private Shooter(ShooterIO io) {
         this.io = io;
-        pidController.setTolerance(50);
 
         ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
         shooterTab.addNumber("Shooter Target RPM", () -> setpoint);
@@ -51,7 +46,7 @@ public class Shooter extends SubsystemBase {
         else if (forcedSetpoint != -1) {
             io.setVelocity(forcedSetpoint, Constants.SHOOTER_FEEDFORWARD * forcedSetpoint);
         }
-        else if (setpoint != 0) {
+        else if (setpoint != -1) {
             io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
         }
         else if (Constants.ROBOT_IDLE_SHOOTER_ENABLED) {
@@ -81,7 +76,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isAtSetpoint() {
-        return pidController.atSetpoint() || (Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation());
+        return BetterMath.epsilonEquals(inputs.velocityRotPerMin, 100) || (Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation());
     }
 
 }

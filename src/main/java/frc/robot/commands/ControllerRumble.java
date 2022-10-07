@@ -35,7 +35,7 @@ public class ControllerRumble extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.advanceIfElapsed(time);
+        return timer.hasElapsed(time);
     }
 
     @Override

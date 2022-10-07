@@ -30,7 +30,7 @@ public class IndexerLoaded extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return indexer.getBallCount() == num || timer.advanceIfElapsed(waitSec);
+        return indexer.getBallCount() == num || timer.hasElapsed(waitSec);
     }
 
     @Override

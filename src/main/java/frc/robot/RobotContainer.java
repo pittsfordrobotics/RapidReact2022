@@ -127,10 +127,19 @@ public class RobotContainer {
   private void demoButtons() {
     driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.X.whileHeld(new CG_LowShot()).whenInactive(new ShooterHoodZero());
-    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(1500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(3000, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
     driverController.A.whileActiveOnce(new IndexerOverride(false));
     driverController.LB.whenPressed(new InstantCommand(() -> indexer.setRejectionEnabled(false)));
     driverController.RB.whenPressed(new InstantCommand(() -> indexer.setRejectionEnabled(true)));
+
+    driverController.DUp.whenPressed(new DriveSetThrottle(1));
+    driverController.DLeft.whenPressed(new DriveSetThrottle(0.4));
+    driverController.DRight.whenPressed(new DriveSetThrottle(0.7));
+    driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
+
+    driverController.Start.and(operatorController.Start).whenActive(new ClimberSetState(!RobotState.getInstance().isClimbing()));
+    operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
+    operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
   }
 
   private void autoConfig() {

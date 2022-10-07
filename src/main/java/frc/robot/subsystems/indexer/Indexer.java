@@ -137,7 +137,7 @@ public class Indexer extends SubsystemBase {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
+                if (rejectionTimer.hasElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
                     intakeReject();
                     rejectionTimerStarted = false;
                     state = State.INTAKE1;
@@ -173,7 +173,7 @@ public class Indexer extends SubsystemBase {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (ballCurrentlyAtShooter && rejectionTimer.advanceIfElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
+                if (ballCurrentlyAtShooter && rejectionTimer.hasElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
                     intakeReject();
                     advanceToShooter();
                     rejectionTimerStarted = false;
@@ -183,7 +183,7 @@ public class Indexer extends SubsystemBase {
                     advanceToShooter();
                     state = State.ARMED1REJECT1;
                 }
-                else if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
+                else if (rejectionTimer.hasElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
                     intakeReject();
                     rejectionTimerStarted = false;
                     state = State.TOWER1;
@@ -250,7 +250,7 @@ public class Indexer extends SubsystemBase {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (rejectionTimer.advanceIfElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
+                if (rejectionTimer.hasElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
                     intakeReject();
                     rejectionTimerStarted = false;
                     state = State.ARMED1;
@@ -303,7 +303,7 @@ public class Indexer extends SubsystemBase {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (ballCurrentlyAtTower && rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                if (ballCurrentlyAtTower && rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     rejectionTimerStarted = false;
                     state = State.TOWER1;
@@ -312,7 +312,7 @@ public class Indexer extends SubsystemBase {
                     advanceToTower();
                     state = State.REJECT1TOWER1;
                 }
-                else if (rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                else if (rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     rejectionTimerStarted = false;
                     state = State.INTAKE1;
@@ -330,7 +330,7 @@ public class Indexer extends SubsystemBase {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (ballCurrentlyAtIntake && rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                if (ballCurrentlyAtIntake && rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     intakeBall();
                     rejectionTimerStarted = false;
@@ -340,7 +340,7 @@ public class Indexer extends SubsystemBase {
                     intakeBall();
                     state = State.REJECT1INTAKE1;
                 }
-                else if (rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                else if (rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     rejectionTimerStarted = false;
                     state = State.FIELD2;
@@ -358,7 +358,7 @@ public class Indexer extends SubsystemBase {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
-                if (rejectionTimerStarted && rejectionTimer.advanceIfElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                if (rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     rejectionTimerStarted = false;
                     state = State.TOWER1;

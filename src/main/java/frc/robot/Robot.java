@@ -119,7 +119,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if (disabledTimer.advanceIfElapsed(5) && Drive.getInstance().getAverageVelocity() == 0) {
+    if (disabledTimer.hasElapsed(5) && Drive.getInstance().getAverageVelocity() == 0) {
       Drive.getInstance().coastMode();
     }
     else {
