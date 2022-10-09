@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -26,10 +27,11 @@ public class Drive extends SubsystemBase {
     private final DriveIOInputs inputs = new DriveIOInputs();
 
     private double throttle;
-    private double tempThrottle;
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
+    private final SlewRateLimiter speedRateLimiter = new SlewRateLimiter(0.5,0);
+    private final SlewRateLimiter rotRateLimiter = new SlewRateLimiter(0.5,0);
 
     private double lastLeftPositionMeters = 0.0;
     private double lastRightPositionMeters = 0.0;
@@ -101,14 +103,24 @@ public class Drive extends SubsystemBase {
         wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
     }
 
-    public void driveArcade(double speed, double rotation, boolean squared) {
-        WheelSpeeds speeds = DifferentialDrive.arcadeDriveIK(MathUtil.applyDeadband(speed,0.05), MathUtil.applyDeadband(rotation,0.05), squared);
-        io.set(speeds.left * throttle, speeds.right * throttle);
+    // this should be removed in favor of setVolts for future
+    @Deprecated(forRemoval = true)
+    public void rotate(double rotation) {
+        WheelSpeeds speeds = DifferentialDrive.arcadeDriveIK(0, rotation, false);
+        io.set(speeds.left * 0.6, speeds.right * 0.6);
     }
 
     public void driveCurve(double speed, double rotation) {
-        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(speed,0.05), MathUtil.applyDeadband(rotation,0.05), Math.abs(speed) < 0.15);
-        io.set(speeds.left * throttle, speeds.right * throttle);
+//        TODO: implement this
+        double limitedSpeed = speedRateLimiter.calculate(speed);
+        double limitedRot = rotRateLimiter.calculate(rotation);
+        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(limitedSpeed,0.05), MathUtil.applyDeadband(limitedRot,0.05), Math.abs(speed) < 0.15);
+        if (Math.abs(speed) < 0.15) {
+            io.set(speeds.left * Constants.DRIVE_TURNING_THROTTLE, speeds.right * Constants.DRIVE_TURNING_THROTTLE);
+        }
+        else {
+            io.set(speeds.left * throttle, speeds.right * throttle);
+        }
     }
 
     public void setVolts(double left, double right) {
@@ -117,15 +129,6 @@ public class Drive extends SubsystemBase {
 
     public void setThrottle(double throttle) {
         this.throttle = throttle;
-    }
-
-    public void setTempThrottle(double throttle) {
-        tempThrottle = this.throttle;
-        setThrottle(throttle);
-    }
-
-    public void setThrottleWithTemp() {
-        setThrottle(tempThrottle);
     }
 
     public double getThrottle() {

@@ -299,7 +299,7 @@ public class Indexer extends SubsystemBase {
                     towerMotorOff();
                 }
                 stomachMotorOn();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atSetpoint() && !rejectionTimerStarted) {
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atGoal() && !rejectionTimerStarted) {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
@@ -326,7 +326,7 @@ public class Indexer extends SubsystemBase {
                     towerMotorOff();
                 }
                 stomachMotorOff();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atSetpoint() && !rejectionTimerStarted) {
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atGoal() && !rejectionTimerStarted) {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }
@@ -354,7 +354,7 @@ public class Indexer extends SubsystemBase {
                     towerMotorOff();
                 }
                 stomachMotorOff();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atSetpoint() && !rejectionTimerStarted) {
+                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atGoal() && !rejectionTimerStarted) {
                     rejectionTimer.reset();
                     rejectionTimerStarted = true;
                 }

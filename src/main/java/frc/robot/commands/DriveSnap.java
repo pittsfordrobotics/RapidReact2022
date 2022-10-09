@@ -38,7 +38,6 @@ public class DriveSnap extends CommandBase {
     public void initialize() {
         hasDriveSetpoint = false;
         hasVisionSetpoint = false;
-        drive.setTempThrottle(0.6);
         pidController.setTolerance(5);
     }
 
@@ -51,14 +50,14 @@ public class DriveSnap extends CommandBase {
                 pidController.setSetpoint(rot);
                 hasDriveSetpoint = true;
             }
-            drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(realRot) + Math.signum(BetterMath.getShortestRotation(realRot, position.getAngle()).getDegrees()) * 0.1, -0.5, 0.5), false);
+            drive.rotate(-MathUtil.clamp(pidController.calculate(realRot) + Math.signum(BetterMath.getShortestRotation(realRot, position.getAngle()).getDegrees()) * 0.1, -0.5, 0.5));
         }
         else {
             if (!hasVisionSetpoint) {
                 pidController.setSetpoint(0);
                 hasVisionSetpoint = true;
             }
-            drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(vision.getHorizontal()) + Math.signum(vision.getHorizontal()) * 0.1, -0.5, 0.5), false);
+            drive.rotate(-MathUtil.clamp(pidController.calculate(vision.getHorizontal()) + Math.signum(vision.getHorizontal()) * 0.1, -0.5, 0.5));
         }
     }
 
@@ -71,6 +70,5 @@ public class DriveSnap extends CommandBase {
     public void end(boolean interrupted) {
         RobotState.getInstance().setSnapped(true);
         drive.setVolts(0,0);
-        drive.setThrottleWithTemp();
     }
 }

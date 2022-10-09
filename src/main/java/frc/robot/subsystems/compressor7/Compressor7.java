@@ -30,7 +30,7 @@ public class Compressor7 extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Compressor", inputs);
-        notPressurized.set(!(inputs.pressurePsi > 120));
+        notPressurized.set(!(inputs.pressurePsi > 100));
         if (inputs.compressorActive) {
             pressureTimer.reset();
             pressureTimer.start();

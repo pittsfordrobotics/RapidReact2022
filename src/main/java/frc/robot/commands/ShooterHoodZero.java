@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
@@ -23,8 +24,8 @@ public class ShooterHoodZero extends CommandBase {
 
     @Override
     public void execute() {
-        hood.setAngle(0, false);
-        shooter.setSetpoint(0, false);
+        hood.setAngle(Constants.ROBOT_IDLE_SHOOTER_ENABLED ? -1 : 0, false);
+        shooter.setSetpoint(Constants.ROBOT_IDLE_SHOOTER_ENABLED ? -1 : 0, false);
         indexer.setStateStopShoot();
     }
 

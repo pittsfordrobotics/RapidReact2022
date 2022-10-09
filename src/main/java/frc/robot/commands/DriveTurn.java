@@ -29,7 +29,6 @@ public class DriveTurn extends CommandBase {
 
   @Override
   public void initialize() {
-    drive.setTempThrottle(0.6); // this should not be needed
 //    pidController.setGoal(drive.getAngle() + angle);
     pidController.setSetpoint(drive.getAngle() + angle);
     pidController.setTolerance(5);
@@ -38,13 +37,12 @@ public class DriveTurn extends CommandBase {
   @Override
   public void execute() {
 //    drive.driveVolts();
-    drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(drive.getAngle()) + Math.signum(angle) * 0.1, -0.5, 0.5), false);
+    drive.rotate(-MathUtil.clamp(pidController.calculate(drive.getAngle()) + Math.signum(angle) * 0.1, -0.5, 0.5));
   }
 
   @Override
   public void end(boolean interrupted) {
     drive.setVolts(0,0);
-    drive.setThrottleWithTemp();
   }
 
   @Override

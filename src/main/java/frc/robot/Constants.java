@@ -100,6 +100,8 @@ public final class Constants {
     public static final double DRIVE_GEAR_RATIO = 6.818;
     public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
 
+    public static final double DRIVE_TURNING_THROTTLE = 0.2;
+
     public static final double DRIVE_POSITION_GAIN = 2.3546;
     public static final double DRIVE_INTEGRAL_GAIN = 0;
     public static final double DRIVE_DERIVATIVE_GAIN = 0;
@@ -173,6 +175,8 @@ public final class Constants {
     public static final double SHOOTER_P = 0.00001;
     public static final double SHOOTER_FEEDFORWARD = 0.00209;
 
+    public static final double SHOOTER_TOLERANCE = 100;
+
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
     static {
         SHOOTER_SPEED_MAP.put(0, 3000);
@@ -195,6 +199,8 @@ public final class Constants {
 
     public static final double HOOD_FENDER_ANGLE = 0;
     public static final double HOOD_AUTO_REJECT_ANGLE = 0;
+
+    public static final double HOOD_TOLERANCE = 1;
 
     public static final InterpolatingTreeMap HOOD_ANGLE_MAP = new InterpolatingTreeMap();
     static {

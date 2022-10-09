@@ -19,14 +19,13 @@ public class DriveAlignVision extends CommandBase {
     @Override
     public void initialize() {
         RobotState.getInstance().setSnapped(false);
-        drive.setTempThrottle(0.6);
         pidController.setSetpoint(0);
         pidController.setTolerance(5);
     }
 
     @Override
     public void execute() {
-        drive.driveArcade(0, -MathUtil.clamp(pidController.calculate(vision.getHorizontal()) + Math.signum(vision.getHorizontal()) * 0.1, -0.5, 0.5), false);
+        drive.rotate(-MathUtil.clamp(pidController.calculate(vision.getHorizontal()) + Math.signum(vision.getHorizontal()) * 0.1, -0.5, 0.5));
     }
 
     @Override
@@ -37,7 +36,6 @@ public class DriveAlignVision extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         drive.setVolts(0,0);
-        drive.setThrottleWithTemp();
         RobotState.getInstance().setSnapped(true);
     }
 }

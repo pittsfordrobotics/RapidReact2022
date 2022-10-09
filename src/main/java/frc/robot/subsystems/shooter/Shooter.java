@@ -14,7 +14,7 @@ public class Shooter extends SubsystemBase {
     private final ShooterIO io;
     private final ShooterIOInputs inputs = new ShooterIOInputs();
 
-    private double setpoint = 0;
+    private double setpoint = -1;
     private double forcedSetpoint = -1;
 
     private final static Shooter INSTANCE = new Shooter(Constants.ROBOT_SHOOTER_IO);
@@ -76,7 +76,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isAtSetpoint() {
-        return BetterMath.epsilonEquals(inputs.velocityRotPerMin, 100) || (Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation());
+        return BetterMath.epsilonEquals(inputs.velocityRotPerMin, Constants.SHOOTER_TOLERANCE) || (Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation());
     }
 
 }
