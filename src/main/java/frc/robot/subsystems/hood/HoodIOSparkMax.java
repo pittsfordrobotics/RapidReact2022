@@ -1,7 +1,6 @@
 package frc.robot.subsystems.hood;
 
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
@@ -41,11 +40,5 @@ public class HoodIOSparkMax implements HoodIO {
     @Override
     public void setBrakeMode(boolean enable) {
         motor.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
-    }
-
-    @Override
-    public void setSoftLimit(boolean enabled, float reverse, float forward) {
-        motor.setSoftLimit(SoftLimitDirection.kReverse, reverse);
-        motor.setSoftLimit(SoftLimitDirection.kForward, forward);
     }
 }

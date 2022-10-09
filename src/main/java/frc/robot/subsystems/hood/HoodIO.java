@@ -45,9 +45,6 @@ public interface HoodIO {
     /** Run open loop at the specified voltage. */
     default void setVoltage(double volts) {}
 
-    /** Enabling and disabling the soft limit  */
-    default void setSoftLimit(boolean enabled, float reverse, float forward) {}
-
     /** Enable or disable brake mode. */
     default void setBrakeMode(boolean enable) {}
 }

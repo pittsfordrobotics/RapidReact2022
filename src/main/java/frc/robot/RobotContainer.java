@@ -47,8 +47,8 @@ public class RobotContainer {
       demoButtons();
     }
     else {
-      competitionButtons();
-//      testButtons();
+//      competitionButtons();
+      testButtons();
     }
 
     drive.setDefaultCommand(new DriveXbox());
@@ -68,12 +68,12 @@ public class RobotContainer {
   private void testButtons() {
 //    + is up
 //    = is down
-    driverController.A.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(1), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
-    driverController.X.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(-1), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
+    driverController.A.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(0.5), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
+    driverController.X.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(-0.5), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
 //    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setVoltage(7), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setVoltage(0), Shooter.getInstance()));
-    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(3000, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(1000, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
     driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
-    operatorController.B.whileActiveOnce(new IndexerOverride(false));
+    driverController.RB.whileActiveOnce(new IndexerOverride(false));
 //    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterHoodZero());
 //    driverController.X.whenActive(new CG_IntakeWiggle());
 //    driverController.Y.whenActive(new ShooterHoodLime());

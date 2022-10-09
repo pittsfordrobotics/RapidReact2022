@@ -151,7 +151,7 @@ public final class Constants {
     public static final double INDEXER_INTAKE_REJECTION_TIME = 1;
 
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
-    public static final int INDEXER_COLOR_PROXIMITY = 300;
+    public static final int INDEXER_COLOR_PROXIMITY = 200;
 
     public static final int INDEXER_SENSOR_TOWER_DIO_PORT = 9;
     public static final int INDEXER_SENSOR_SHOOTER_DIO_PORT = 8;
@@ -186,11 +186,11 @@ public final class Constants {
     public static final int HOOD_LEFT_CAN = 13;
 //    public static final int HOOD_RIGHT_CAN = 12;
     public static final int HOOD_REV_THROUGH_BORE_DIO_PORT = 0;
-    public static final double HOOD_ANGLE_OFFSET_RAD = 110.7;
+    public static final double HOOD_ANGLE_OFFSET_RAD = 113;
     public static final double HOOD_ANGLE_MIN_RAD = 0;
-    public static final double HOOD_ANGLE_MAX_RAD = 75.7; // 36.6 after offset calibration
+    public static final double HOOD_ANGLE_MAX_RAD = 29; // 36.6 after offset calibration
 
-    public static final double HOOD_550_GEAR_RATIO =  (1.0 / 3.0) * 24.0 / 18.0;
+    public static final double HOOD_550_GEAR_RATIO = 20;
     public static final double HOOD_REV_THROUGH_BORE_GEAR_RATIO = 18.0;
 
     public static final double HOOD_FENDER_ANGLE = 0;

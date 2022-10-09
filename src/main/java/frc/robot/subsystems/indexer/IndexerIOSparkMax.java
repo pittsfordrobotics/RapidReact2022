@@ -18,7 +18,7 @@ public class IndexerIOSparkMax implements IndexerIO {
     private final RelativeEncoder encoderRight = motorRight.getEncoder();
     private final RelativeEncoder encoderTower = motorTower.getEncoder();
 
-    private final ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
+    private ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
     private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER_DIO_PORT);
     private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER_DIO_PORT);
 
@@ -53,6 +53,10 @@ public class IndexerIOSparkMax implements IndexerIO {
 
         inputs.towerDetected = sensorTower.get();
         inputs.shooterDetected = sensorShooter.get();
+
+        if (inputs.colorBlue == 0 && inputs.colorRed == 0 && inputs.colorGreen == 0) {
+            colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
+        }
     }
 
     @Override

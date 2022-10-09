@@ -31,9 +31,9 @@ public class Hood extends SubsystemBase {
     private Hood(HoodIO io) {
         this.io = io;
         ShuffleboardTab hoodTab = Shuffleboard.getTab("Hood");
-        hoodTab.addNumber("Encoder Angle Rad", () -> inputs.positionRad);
+        hoodTab.addNumber("Absolute with Offset Angle Rad", this::getAbsoluteWithOffset);
+        hoodTab.addNumber("Absolute Encoder Angle Rad", () -> inputs.absolutePositionRad);
         io.updateInputs(inputs);
-        io.setSoftLimit(true, (float)(0 - getAbsoluteWithOffset()), (float)(Constants.HOOD_ANGLE_MAX_RAD - getAbsoluteWithOffset()));
         pid.setTolerance(3);
     }
 
@@ -69,7 +69,15 @@ public class Hood extends SubsystemBase {
     public void setVoltage(double voltage) {
 //        + is up
 //        - is down
-        io.setVoltage(voltage);
+        if (getAbsoluteWithOffset() <= 0) {
+            io.setVoltage(voltage < 0 ? 0 : voltage);
+        }
+        else if (getAbsoluteWithOffset() >= Constants.HOOD_ANGLE_OFFSET_RAD - Constants.HOOD_ANGLE_MAX_RAD) {
+            io.setVoltage(voltage > 0 ? 0 : voltage);
+        }
+        else {
+            io.setVoltage(voltage);
+        }
     }
 
     /** Min: 0, Max: 76.5 */
