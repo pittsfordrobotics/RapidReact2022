@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CG_ClimberCalibrate;
-import frc.robot.commands.ControllerRumble;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -153,9 +152,9 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (RobotState.getInstance().isSnapped()) {
-      CommandScheduler.getInstance().schedule(new ControllerRumble(0, new boolean[] {false, true}));
-    }
+//    if (RobotState.getInstance().isSnapped()) {
+//      CommandScheduler.getInstance().schedule(new ControllerRumble(0, new boolean[] {false, true}));
+//    }
   }
 
   @Override

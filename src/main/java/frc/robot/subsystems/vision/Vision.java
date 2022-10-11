@@ -82,11 +82,9 @@ public class Vision extends SubsystemBase {
 
         if (DriverStation.isDisabled() || RobotState.getInstance().isClimbing()) {
             led = LED.OFF;
-            camera = CameraMode.DRIVER_CAMERA;
         }
         else {
             led = LED.ON;
-            camera = CameraMode.VISION_PROCESSING;
         }
 
         if (!inputs.hasTarget) {

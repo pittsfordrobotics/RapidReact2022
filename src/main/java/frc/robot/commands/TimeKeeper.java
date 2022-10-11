@@ -20,8 +20,8 @@ public class TimeKeeper extends CommandBase {
             timer.reset();
         }
         else {
-            System.out.println(timer.get());
             timer.stop();
+            System.out.println(timer.get());
         }
     }
 
