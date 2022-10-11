@@ -29,6 +29,7 @@ public class Shooter extends SubsystemBase {
         shooterTab.addNumber("Shooter Target RPM", () -> setpoint);
         shooterTab.addNumber("Shooter Actual", this::getVelocity);
         shooterTab.addBoolean("Shooter up to Speed", this::isAtSetpoint);
+//        SmartDashboard.putNumber("Shooter Speed", 0);
     }
 
     @Override
@@ -40,6 +41,8 @@ public class Shooter extends SubsystemBase {
         Logger.getInstance().recordOutput("Shooter/ActualRMP", getVelocity());
         Logger.getInstance().recordOutput("Shooter/AtSetpoint", isAtSetpoint());
 
+//        double num = SmartDashboard.getNumber("Shooter Speed", 0);
+//        io.setVelocity(num, Constants.SHOOTER_FEEDFORWARD * num);
         if (RobotState.getInstance().isClimbing()) {
             io.setVelocity(0, 0);
         }

@@ -36,6 +36,7 @@ public class Hood extends SubsystemBase {
         hoodTab.addNumber("Absolute with Offset Angle Rad", this::getAbsoluteWithOffset);
         hoodTab.addNumber("Absolute Encoder Angle Rad", () -> inputs.absolutePositionRad);
         io.updateInputs(inputs);
+//        SmartDashboard.putNumber("Hood Angle", 0);
     }
 
     @Override
@@ -48,6 +49,7 @@ public class Hood extends SubsystemBase {
         Logger.getInstance().recordOutput("Hood/At Goal", atGoal());
 
         tuner.setPID(); // tune hood
+//        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
         if (RobotState.getInstance().isClimbing()) {
             moveHood(0);
         }
