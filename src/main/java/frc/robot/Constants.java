@@ -8,8 +8,6 @@ import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -109,8 +107,6 @@ public final class Constants {
     public static final double DRIVE_STATIC_GAIN = 0.26981;
     public static final double DRIVE_VELOCITY_GAIN = 0.046502;
     public static final double DRIVE_ACCELERATION_GAIN = 0.0093369;
-
-    public static final TrapezoidProfile.Constraints DRIVE_TURNING_CONSTRAINTS = new Constraints(10, 5);
 
     public static final double DRIVE_TRACK_WIDTH_METERS = 0.644;
 

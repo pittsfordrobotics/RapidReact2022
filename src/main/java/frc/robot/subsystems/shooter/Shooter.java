@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -52,9 +53,12 @@ public class Shooter extends SubsystemBase {
         else if (setpoint != -1) {
             io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
         }
-        else if (Constants.ROBOT_IDLE_SHOOTER_ENABLED) {
+        else if (Constants.ROBOT_IDLE_SHOOTER_ENABLED && !DriverStation.isAutonomous()) {
 //            TODO: use robot pose to estimate speed
             io.setVelocity(Constants.SHOOTER_SPEED_MAP.lookup(RobotState.getInstance().getDistanceToHub()), Constants.SHOOTER_FEEDFORWARD * forcedSetpoint);
+        }
+        else {
+            io.setVelocity(0, 0);
         }
     }
 

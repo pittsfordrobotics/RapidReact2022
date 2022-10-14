@@ -62,6 +62,9 @@ public class Hood extends SubsystemBase {
         else if (Constants.ROBOT_IDLE_SHOOTER_ENABLED && !DriverStation.isAutonomous()) {
             moveHood(Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()));
         }
+        else {
+//            moveHood(Constants.HOOD_ANGLE_MAX_RAD/2);
+        }
 //        TODO: this
 //        io.setVoltage(pid.calculate(getAbsoluteWithOffset()));
     }
