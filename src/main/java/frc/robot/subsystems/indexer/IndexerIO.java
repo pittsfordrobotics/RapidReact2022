@@ -4,8 +4,8 @@ import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public interface IndexerIO {
-    /** Contains all of the input data received from hardware. */
-    public static class IndexerIOInputs implements LoggableInputs {
+    /** Contains all the input data received from hardware. */
+    class IndexerIOInputs implements LoggableInputs {
         public double leftStomachPositionRad = 0.0;
         public double leftStomachVelocityRadPerSec = 0.0;
         public double leftStomachAppliedVolts = 0.0;

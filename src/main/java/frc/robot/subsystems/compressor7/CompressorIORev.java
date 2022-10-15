@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class CompressorIORev implements CompressorIO {
-//    private final PneumaticHub pneumatics = new PneumaticHub(Constants.ROBOT_PNEUMATIC_HUB_CAN);
+//    private final PneumaticHub pneumaticHub = new PneumaticHub(Constants.ROBOT_PNEUMATIC_HUB_CAN);
     private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
 
         public CompressorIORev() {}
 
         @Override
         public void updateInputs(CompressorIOInputs inputs) {
-            inputs.pressurePsi = compressor.getPressure();
+            inputs.lowPressure = compressor.getPressureSwitchValue();
             inputs.compressorActive = compressor.enabled();
             inputs.compressorCurrentAmps = compressor.getCurrent();
         }

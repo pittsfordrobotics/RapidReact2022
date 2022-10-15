@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -61,6 +62,7 @@ public class Robot extends LoggedRobot {
 
     logger.recordMetadata("PIDTuner", Boolean.toString(Constants.ROBOT_PID_TUNER_ENABLED));
     logger.recordMetadata("Demo Mode", Boolean.toString(Constants.ROBOT_DEMO_MODE));
+    logger.recordMetadata("Idle Shooter", Boolean.toString(Constants.ROBOT_IDLE_SHOOTER_ENABLED));
     logger.recordMetadata("RuntimeType", getRuntimeType().toString());
     logger.recordMetadata("ProjectName", GitConstants.MAVEN_NAME);
     logger.recordMetadata("BuildDate", GitConstants.BUILD_DATE);
@@ -84,6 +86,7 @@ public class Robot extends LoggedRobot {
     DriverStation.silenceJoystickConnectionWarning(true);
     intake.retract();
     indexer.disable();
+
     // this has to be here because of initialization order
     Shuffleboard.getTab("Climber").add("Calibrate Climber", new CG_ClimberCalibrate());
   }

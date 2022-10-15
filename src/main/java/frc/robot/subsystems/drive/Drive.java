@@ -115,11 +115,11 @@ public class Drive extends SubsystemBase {
         double limitedSpeed = speedRateLimiter.calculate(speed);
         double limitedRot = rotRateLimiter.calculate(rotation);
         WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(limitedSpeed,0.05), MathUtil.applyDeadband(limitedRot,0.05), Math.abs(speed) < 0.15);
-        if (Math.abs(speed) < 0.15) {
+        if (Math.abs(speed) < 0.1) {
             io.set(speeds.left * Constants.DRIVE_TURNING_THROTTLE, speeds.right * Constants.DRIVE_TURNING_THROTTLE);
         }
         else {
-            io.set(speeds.left * throttle, speeds.right * throttle);
+            io.set(speeds.left * throttle, speeds.right * Constants.DRIVE_CURVE_TURNING_THROTTLE);
         }
     }
 

@@ -1,6 +1,5 @@
 package frc.robot.subsystems.compressor7;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.compressor7.CompressorIO.CompressorIOInputs;
@@ -12,12 +11,12 @@ public class Compressor7 extends SubsystemBase {
     private final CompressorIO io;
     private final CompressorIOInputs inputs = new CompressorIOInputs();
 
-    private final Timer pressureTimer = new Timer();
+//    private final Timer pressureTimer = new Timer();
 
     private final Alert notPressurized = new Alert("Air tanks are not fully pressurized!", AlertType.INFO);
-    private final Alert pressureNotIncreasing = new Alert("Air pressure isn't increasing! Check if quick release value is open!", AlertType.WARNING);
 
     private final static Compressor7 INSTANCE = new Compressor7(Constants.ROBOT_COMPRESSOR_IO);
+
     public static Compressor7 getInstance() {
         return INSTANCE;
     }
@@ -30,17 +29,17 @@ public class Compressor7 extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Compressor", inputs);
-        notPressurized.set(!(inputs.pressurePsi > 100));
-        if (inputs.compressorActive) {
-            pressureTimer.reset();
-            pressureTimer.start();
-        }
-        else {
-            pressureTimer.stop();
-        }
-        if (pressureTimer.hasElapsed(5)) {
-            pressureNotIncreasing.set(inputs.pressurePsi < 5);
-        }
+        notPressurized.set(inputs.lowPressure);
+//        if (inputs.compressorActive) {
+//            pressureTimer.reset();
+//            pressureTimer.start();
+//        }
+//        else {
+//            pressureTimer.stop();
+//        }
+//        if (pressureTimer.hasElapsed(5)) {
+//            pressureNotIncreasing.set(inputs.pressurePsi < 5);
+//        }
     }
 
     public void enable() {

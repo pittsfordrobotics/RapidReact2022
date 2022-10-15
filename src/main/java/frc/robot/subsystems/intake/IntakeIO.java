@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 /** Intake subsystem hardware interface. */
 public interface IntakeIO {
-    /** Contains all of the input data received from hardware. */
+    /** Contains all the input data received from hardware. */
     class IntakeIOInputs implements LoggableInputs {
         public boolean extended = false;
 

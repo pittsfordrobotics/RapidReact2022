@@ -99,6 +99,7 @@ public final class Constants {
     public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
 
     public static final double DRIVE_TURNING_THROTTLE = 0.2;
+    public static final double DRIVE_CURVE_TURNING_THROTTLE = 0.2;
 
     public static final double DRIVE_POSITION_GAIN = 2.3546;
     public static final double DRIVE_INTEGRAL_GAIN = 0;

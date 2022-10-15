@@ -4,23 +4,22 @@ import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public interface CompressorIO {
-    /** Contains all of the input data received from hardware. */
+    /** Contains all the input data received from hardware. */
     class CompressorIOInputs implements LoggableInputs {
-        public double pressurePsi = 0.0;
         public boolean compressorActive = false;
         public double compressorCurrentAmps = 0.0;
+        public boolean lowPressure = false;
 
         public void toLog(LogTable table) {
-            table.put("PressurePsi", pressurePsi);
+            table.put("LowPressure", lowPressure);
             table.put("CompressorActive", compressorActive);
             table.put("CompressorCurrentAmps", compressorCurrentAmps);
         }
 
         public void fromLog(LogTable table) {
-            pressurePsi = table.getDouble("PressurePsi", pressurePsi);
+            lowPressure = table.getBoolean("LowPressure", lowPressure);
             compressorActive = table.getBoolean("CompressorActive", compressorActive);
-            compressorCurrentAmps =
-                    table.getDouble("CompressorCurrentAmps", compressorCurrentAmps);
+            compressorCurrentAmps = table.getDouble("CompressorCurrentAmps", compressorCurrentAmps);
         }
     }
 

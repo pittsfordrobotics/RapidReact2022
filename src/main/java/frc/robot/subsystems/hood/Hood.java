@@ -102,6 +102,6 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean atGoal() {
-        return (pid.getGoal().position - pid.getSetpoint().position < Constants.HOOD_TOLERANCE) || Constants.ROBOT_DEMO_MODE;
+        return (pid.getGoal().position - pid.getSetpoint().position < Constants.HOOD_TOLERANCE);
     }
 }

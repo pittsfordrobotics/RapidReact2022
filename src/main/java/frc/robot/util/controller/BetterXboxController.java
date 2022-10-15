@@ -100,6 +100,7 @@ public class BetterXboxController extends XboxController {
                 return 0;
         }
     }
+
     /** @param value between 0 and 1 */
     public void setRumble(double value) {
         setRumble(RumbleType.kLeftRumble, value);

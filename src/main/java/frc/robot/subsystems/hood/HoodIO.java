@@ -9,8 +9,8 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 /** Hood subsystem hardware interface. */
 public interface HoodIO {
-    /** Contains all of the input data received from hardware. */
-    public static class HoodIOInputs implements LoggableInputs {
+    /** Contains all the input data received from hardware. */
+    class HoodIOInputs implements LoggableInputs {
         public double absolutePositionRad = 0.0;
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
