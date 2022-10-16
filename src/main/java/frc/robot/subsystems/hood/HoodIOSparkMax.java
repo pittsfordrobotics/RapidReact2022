@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
@@ -16,6 +17,7 @@ public class HoodIOSparkMax implements HoodIO {
     private double lastPos = 0;
     private double counter = 0;
     private double offset = 0;
+    private final DigitalInput input = new DigitalInput(Constants.HOOD_DIO_PORT);
 //    private double timer = Timer;
 
     public HoodIOSparkMax() {
@@ -38,6 +40,7 @@ public class HoodIOSparkMax implements HoodIO {
         inputs.positionRad = Units.rotationsToRadians(encoder.getPosition()) / Constants.HOOD_550_GEAR_RATIO - offset;
         inputs.velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity()) / Constants.HOOD_550_GEAR_RATIO;
         inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
+        inputs.limit = input.get();
         inputs.currentAmps = new double[] {motor.getOutputCurrent()};
         inputs.tempCelcius = new double[] {motor.getMotorTemperature()};
     }

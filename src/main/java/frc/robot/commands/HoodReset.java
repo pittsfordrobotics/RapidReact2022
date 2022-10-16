@@ -28,7 +28,7 @@ public class HoodReset extends CommandBase {
     public boolean isFinished() {
          if (timer.hasElapsed(1)) {
              timer.reset();
-             return Math.abs(hood.getAbsoluteVelocity()) < 0.3 && hood.getAbsolutePosition() > 0.73;
+             return (Math.abs(hood.getAbsoluteVelocity()) < 0.3 && hood.getAbsolutePosition() > 0.73) || hood.getLimit();
          }
          return false;
     }

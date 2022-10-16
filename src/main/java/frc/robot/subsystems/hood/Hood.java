@@ -7,6 +7,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
@@ -51,7 +52,7 @@ public class Hood extends SubsystemBase {
         Logger.getInstance().recordOutput("Hood/At Goal", atGoal());
 
 //        tuner.setPID(); // tune hood
-//        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
+        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
         if (RobotState.getInstance().isClimbing()) {
             moveHood(0);
         }
@@ -75,6 +76,10 @@ public class Hood extends SubsystemBase {
 
     public double getAbsolutePosition() {
         return inputs.absolutePosition;
+    }
+
+    public boolean getLimit() {
+        return !inputs.limit;
     }
 
     public void resetCounter() {

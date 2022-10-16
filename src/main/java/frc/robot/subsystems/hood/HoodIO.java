@@ -16,6 +16,7 @@ public interface HoodIO {
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
         public double appliedVolts = 0.0;
+        public boolean limit = false;
         public double[] currentAmps = new double[] {};
         public double[] tempCelcius = new double[] {};
 
@@ -25,6 +26,7 @@ public interface HoodIO {
             table.put("PositionRad", positionRad);
             table.put("VelocityRadPerSec", velocityRadPerSec);
             table.put("AppliedVolts", appliedVolts);
+            table.put("LimitSwitch", limit);
             table.put("CurrentAmps", currentAmps);
             table.put("TempCelcius", tempCelcius);
         }
@@ -34,6 +36,7 @@ public interface HoodIO {
             absoluteVelocity = table.getDouble("AbsoluteVelocity", absoluteVelocity);
             velocityRadPerSec = table.getDouble("VelocityRadPerSec", velocityRadPerSec);
             appliedVolts = table.getDouble("AppliedVolts", appliedVolts);
+            limit = table.getBoolean("Limit", limit);
             currentAmps = table.getDoubleArray("CurrentAmps", currentAmps);
             tempCelcius = table.getDoubleArray("TempCelcius", tempCelcius);
         }
