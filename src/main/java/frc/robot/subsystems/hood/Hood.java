@@ -73,6 +73,10 @@ public class Hood extends SubsystemBase {
         return inputs.absoluteVelocity;
     }
 
+    public double getAbsolutePosition() {
+        return inputs.absolutePosition;
+    }
+
     public void resetCounter() {
         io.resetCounter();
     }

@@ -21,14 +21,14 @@ public class HoodReset extends CommandBase {
 
     @Override
     public void execute() {
-        hood.setVoltage(-1, true);
+        hood.setVoltage(-2, true);
     }
 
     @Override
     public boolean isFinished() {
-         if (timer.hasElapsed(5)) {
+         if (timer.hasElapsed(1)) {
              timer.reset();
-             return hood.getAbsoluteVelocity() < 0.1;
+             return Math.abs(hood.getAbsoluteVelocity()) < 0.3 && hood.getAbsolutePosition() > 0.73;
          }
          return false;
     }
