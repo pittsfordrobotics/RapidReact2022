@@ -1,9 +1,7 @@
 package frc.robot.subsystems.hood;
 
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -23,7 +21,7 @@ public class Hood extends SubsystemBase {
     private double position = Constants.ROBOT_IDLE_SHOOTER_ENABLED ? -1 : 0;
     private double forcedPosition = -1;
 
-    private final ProfiledPIDController pid = new ProfiledPIDController(1,0,0, new TrapezoidProfile.Constraints(10,2));
+    private final PIDController pid = new PIDController(4,0,0);
     private final PIDTuner tuner = new PIDTuner("Hood", pid);
 
     private final static Hood INSTANCE = new Hood(Constants.ROBOT_HOOD_IO);
@@ -34,12 +32,14 @@ public class Hood extends SubsystemBase {
 
     private Hood(HoodIO io) {
         this.io = io;
+        pid.setTolerance(0.1);
         ShuffleboardTab hoodTab = Shuffleboard.getTab("Hood");
         hoodTab.addNumber("Absolute with Offset Angle", this::getAbsoluteWithOffset);
         hoodTab.addNumber("Absolute Encoder Angle", () -> inputs.absolutePosition);
         hoodTab.addNumber("Absolute Velocity", () -> inputs.absoluteVelocity);
+        hoodTab.addBoolean("Limit Switch", this::getLimit);
         io.updateInputs(inputs);
-//        SmartDashboard.putNumber("Hood Angle", 0);
+        SmartDashboard.putNumber("Hood Angle", 0);
     }
 
     @Override
@@ -52,22 +52,38 @@ public class Hood extends SubsystemBase {
         Logger.getInstance().recordOutput("Hood/At Goal", atGoal());
 
 //        tuner.setPID(); // tune hood
-        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
-        if (RobotState.getInstance().isClimbing()) {
-            moveHood(0);
-        }
-        else if (forcedPosition != -1) {
-            moveHood(forcedPosition);
-        }
-        else if (position != -1) {
-            moveHood(position);
-        }
-        else {
-//            idle hood position is in center
-//            moveHood(Constants.HOOD_ANGLE_MAX/2);
-        }
-//        TODO: this sucks
-//        io.setVoltage(pid.calculate(getAbsoluteWithOffset()), false);
+//        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
+//        double targetAngle = SmartDashboard.getNumber("Hood Angle", 0);
+//        if (RobotState.getInstance().isClimbing()) {
+//            moveHood(0);
+//        }
+//        else if (forcedPosition != -1) {
+//            moveHood(forcedPosition);
+//        }
+//        else if (position != -1) {
+//            moveHood(position);
+//        }
+//        else {
+////            idle hood position is in center
+////            moveHood(Constants.HOOD_ANGLE_MAX/2);
+//        }
+//        if (RobotState.getInstance().isClimbing()) {
+//            if (MathUtil.applyDeadband(getAbsoluteWithOffset(), 0.1) > Constants.HOOD_ANGLE_MIN) {
+//                setVoltage(-2, false);
+//            }
+//        }
+//        if ((getAbsoluteWithOffset() < position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
+//            setVoltage(2, false);
+//        }
+//        else if ((getAbsoluteWithOffset() > position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
+//            setVoltage(-2, false);
+//        }
+//        else{
+//            setVoltage(0, false);
+//        }
+//        double number = pid.calculate(getAbsoluteWithOffset());
+//        SmartDashboard.putNumber("number not working", number);
+//        setVoltage(number, false);
     }
 
     public double getAbsoluteVelocity() {
@@ -91,7 +107,8 @@ public class Hood extends SubsystemBase {
     }
 
     private void moveHood(double targetPosition) {
-        pid.setGoal(MathUtil.clamp(targetPosition, Constants.HOOD_ANGLE_MIN, Constants.HOOD_ANGLE_MAX));
+        position = targetPosition;
+//        pid.setSetpoint(MathUtil.clamp(targetPosition, Constants.HOOD_ANGLE_MIN, Constants.HOOD_ANGLE_MAX));
     }
 
     public void setVoltage(double voltage, boolean reset) {
@@ -100,7 +117,7 @@ public class Hood extends SubsystemBase {
         if (reset) {
             io.setVoltage(voltage);
         }
-        else if (getAbsoluteWithOffset() <= 0) {
+        else if (getLimit() || getAbsoluteWithOffset() <= 0) {
             io.setVoltage(voltage < 0 ? 0 : voltage);
         }
         else if (getAbsoluteWithOffset() >= Constants.HOOD_ANGLE_MAX) {
@@ -122,6 +139,6 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean atGoal() {
-        return (pid.getGoal().position - pid.getSetpoint().position < Constants.HOOD_TOLERANCE);
+        return (pid.atSetpoint());
     }
 }

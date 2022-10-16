@@ -20,7 +20,6 @@ import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOSparkMax;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
-import frc.robot.subsystems.hood.HoodIOSparkMax;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSparkMax;
@@ -53,7 +52,7 @@ public final class Constants {
 
     public static final boolean ROBOT_LOGGING_ENABLED = true;
     public static final String ROBOT_LOGGING_PATH = "/media/sda2/";
-    public static final boolean ROBOT_PID_TUNER_ENABLED = true;
+    public static final boolean ROBOT_PID_TUNER_ENABLED = false;
     public static final boolean ROBOT_IDLE_SHOOTER_ENABLED = false;
     public static final boolean ROBOT_DEMO_MODE = false;
 
@@ -188,7 +187,7 @@ public final class Constants {
 //    public static final int HOOD_RIGHT_CAN = 12;
     public static final int HOOD_REV_THROUGH_BORE_DIO_PORT = 0;
     public static final int HOOD_DIO_PORT = 1;
-    public static final double HOOD_ANGLE_OFFSET = 0.81;
+    public static final double HOOD_ANGLE_OFFSET = 0.82;
     public static final double HOOD_ANGLE_MIN = 0;
     public static final double HOOD_ANGLE_MAX = 1.248; // 0.880 after offset calibration
 
@@ -261,7 +260,7 @@ public final class Constants {
             ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
             ROBOT_COMPRESSOR_IO = new CompressorIORev();
             ROBOT_DRIVE_IO = new DriveIOSparkMax();
-            ROBOT_HOOD_IO = new HoodIOSparkMax();
+            ROBOT_HOOD_IO = new HoodIO() {};
             ROBOT_INDEXER_IO = new IndexerIOSparkMax();
             ROBOT_INTAKE_IO = new IntakeIOSparkMax();
             ROBOT_SHOOTER_IO = new ShooterIOSparkMax();

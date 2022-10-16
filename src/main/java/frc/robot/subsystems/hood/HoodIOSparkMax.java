@@ -54,7 +54,6 @@ public class HoodIOSparkMax implements HoodIO {
         offset = encoder.getPosition();
     }
 
-
     @Override
     public void set(double percentage) {
         motor.setVoltage(MathUtil.clamp(percentage,-1, 1) * 12);

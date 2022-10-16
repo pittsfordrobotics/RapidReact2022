@@ -9,10 +9,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
-import frc.robot.commands.DriveSnap.SnapPosition;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.compressor7.Compressor7;
 import frc.robot.subsystems.drive.Drive;
@@ -47,8 +49,8 @@ public class RobotContainer {
       demoButtons();
     }
     else {
-//      competitionButtons();
-      testButtons();
+      competitionButtons();
+//      testButtons();
     }
 
     drive.setDefaultCommand(new DriveXbox());
@@ -72,9 +74,9 @@ public class RobotContainer {
     driverController.A.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(2, false), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance() .setVoltage(0, false), Hood.getInstance()));
     driverController.X.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(-2, false), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0, false), Hood.getInstance()));
 //    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setVoltage(7), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setVoltage(0), Shooter.getInstance()));
-    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(6000, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+    driverController.B.whenPressed(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
     driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
-//    driverController.RB.whileActiveOnce(new IndexerOverride(false));
+    driverController.RB.whileActiveOnce(new IndexerOverride(false));
 //    driverController.RB.whenHeld(new DriveTurn(45));
 
     operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
@@ -97,15 +99,18 @@ public class RobotContainer {
 //    DRIVING
     driverController.Start.whileActiveOnce(new DriveAlignVision());
 
-    driverController.X.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_FAR));
-    driverController.Y.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_FAR));
-    driverController.B.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_CLOSE));
-    driverController.A.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_CLOSE));
+//    driverController.B.whenPressed(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+//    driverController.B.whenPressed(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
 
-    driverController.X.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.RIGHT));
-    driverController.Y.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.BACKWARD));
-    driverController.B.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.LEFT));
-    driverController.A.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.FORWARD));
+//    driverController.X.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_FAR));
+//    driverController.Y.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_FAR));
+//    driverController.B.whileActiveOnce(new DriveSnap(SnapPosition.RIGHT_FENDER_CLOSE));
+//    driverController.A.whileActiveOnce(new DriveSnap(SnapPosition.LEFT_FENDER_CLOSE));
+//
+//    driverController.X.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.RIGHT));
+//    driverController.Y.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.BACKWARD));
+//    driverController.B.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.LEFT));
+//    driverController.A.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.FORWARD));
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.4));
@@ -113,22 +118,24 @@ public class RobotContainer {
     driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
 
 //    SHOOTING
-    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+    operatorController.X.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
 //    operatorController.X.whileActiveOnce(new CG_LimeShot()).whenInactive(new ShooterHoodZero());
 //    operatorController.Y.whileActiveOnce(new CG_FenderShot()).whenInactive(new ShooterHoodZero());
 
 //    INDEXER
     driverController.LB.and(operatorController.LB).whenActive(new InstantCommand(Indexer.getInstance()::resetEverything, indexer));
     operatorController.B.whileActiveOnce(new IndexerOverride(false));
-    operatorController.B.and(operatorShift).whileActiveOnce(new SequentialCommandGroup(new IntakeReverse(), new IndexerOverride(true)));
+    operatorController.A.and(operatorShift).whileActiveOnce(new SequentialCommandGroup(new IntakeReverse(), new IndexerOverride(true)));
 
 //    INTAKE
-    operatorController.A.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
+    operatorController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
 
 //    CLIMBING
-    driverController.Start.and(operatorController.Start).whenActive(new ClimberSetState(!RobotState.getInstance().isClimbing()));
-    operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
-    operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
+//    driverController.Start.and(operatorController.Start).whenActive(new ClimberSetState(!RobotState.getInstance().isClimbing()));
+//    operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
+//    operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
+    operatorController.RT.and(operatorController.Start).whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
+    operatorController.LT.and(operatorController.Start).whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
 //    might not have time for auto implementation
 //    operatorController.Back.whileActiveContinuous(new CG_ClimberAuto()).whenInactive(new ClimberStop());
   }
