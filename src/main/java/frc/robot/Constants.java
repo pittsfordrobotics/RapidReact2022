@@ -187,9 +187,9 @@ public final class Constants {
     public static final int HOOD_LEFT_CAN = 13;
 //    public static final int HOOD_RIGHT_CAN = 12;
     public static final int HOOD_REV_THROUGH_BORE_DIO_PORT = 0;
-    public static final double HOOD_ANGLE_OFFSET = 0.258;
+    public static final double HOOD_ANGLE_OFFSET = 0.81;
     public static final double HOOD_ANGLE_MIN = 0;
-    public static final double HOOD_ANGLE_MAX = 0.880 - HOOD_ANGLE_OFFSET; // 0.880 after offset calibration
+    public static final double HOOD_ANGLE_MAX = 1.248; // 0.880 after offset calibration
 
     public static final double HOOD_550_GEAR_RATIO = 20;
     public static final double HOOD_REV_THROUGH_BORE_GEAR_RATIO = 18.0;

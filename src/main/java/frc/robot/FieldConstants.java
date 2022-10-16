@@ -32,7 +32,7 @@ public final class FieldConstants {
     public static final Rotation2d centerLineAngle = Rotation2d.fromDegrees(66.0);
     public static final Translation2d hubCenter =
             new Translation2d(fieldLength / 2.0, fieldWidth / 2.0);
-    public static final double hubRadius = 33.91; // inches
+    public static final double hubRadius = Units.inchesToMeters(33.91); // inches
     public static final double tarmacInnerDiameter = Units.inchesToMeters(219.25);
     public static final double tarmacOuterDiameter = Units.inchesToMeters(237.31);
     public static final double tarmacFenderToTip = Units.inchesToMeters(84.75);

@@ -22,7 +22,7 @@ public class Hood extends SubsystemBase {
     private double position = Constants.ROBOT_IDLE_SHOOTER_ENABLED ? -1 : 0;
     private double forcedPosition = -1;
 
-    private final ProfiledPIDController pid = new ProfiledPIDController(0,0,0, new TrapezoidProfile.Constraints(10,2));
+    private final ProfiledPIDController pid = new ProfiledPIDController(1,0,0, new TrapezoidProfile.Constraints(10,2));
     private final PIDTuner tuner = new PIDTuner("Hood", pid);
 
     private final static Hood INSTANCE = new Hood(Constants.ROBOT_HOOD_IO);
@@ -50,7 +50,7 @@ public class Hood extends SubsystemBase {
         Logger.getInstance().recordOutput("Hood/Idle Position", Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()));
         Logger.getInstance().recordOutput("Hood/At Goal", atGoal());
 
-        tuner.setPID(); // tune hood
+//        tuner.setPID(); // tune hood
 //        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
         if (RobotState.getInstance().isClimbing()) {
             moveHood(0);
@@ -66,7 +66,7 @@ public class Hood extends SubsystemBase {
 //            moveHood(Constants.HOOD_ANGLE_MAX/2);
         }
 //        TODO: this sucks
-//        io.setVoltage(pid.calculate(getAbsoluteWithOffset()));
+//        io.setVoltage(pid.calculate(getAbsoluteWithOffset()), false);
     }
 
     public double getAbsoluteVelocity() {
@@ -78,25 +78,28 @@ public class Hood extends SubsystemBase {
     }
 
     private double getAbsoluteWithOffset() {
-        return inputs.absolutePosition - Constants.HOOD_ANGLE_OFFSET;
+        return Constants.HOOD_ANGLE_OFFSET - inputs.absolutePosition;
     }
 
     private void moveHood(double targetPosition) {
         pid.setGoal(MathUtil.clamp(targetPosition, Constants.HOOD_ANGLE_MIN, Constants.HOOD_ANGLE_MAX));
     }
 
-    public void setVoltage(double voltage) {
+    public void setVoltage(double voltage, boolean reset) {
 //        + is up
 //        - is down
-//        if (getAbsoluteWithOffset() <= 0) {
-//            io.setVoltage(voltage < 0 ? 0 : voltage);
-//        }
-//        else if (getAbsoluteWithOffset() >= Constants.HOOD_ANGLE_OFFSET - Constants.HOOD_ANGLE_MAX) {
-//            io.setVoltage(voltage > 0 ? 0 : voltage);
-//        }
-//        else {
+        if (reset) {
             io.setVoltage(voltage);
-//        }
+        }
+        else if (getAbsoluteWithOffset() <= 0) {
+            io.setVoltage(voltage < 0 ? 0 : voltage);
+        }
+        else if (getAbsoluteWithOffset() >= Constants.HOOD_ANGLE_MAX) {
+            io.setVoltage(voltage > 0 ? 0 : voltage);
+        }
+        else {
+            io.setVoltage(voltage);
+        }
     }
 
     /** Min: 0, Max: 76.5 */

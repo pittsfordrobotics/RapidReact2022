@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -14,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CG_ClimberCalibrate;
+import frc.robot.commands.HoodReset;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -89,6 +89,7 @@ public class Robot extends LoggedRobot {
 
     // this has to be here because of initialization order
     Shuffleboard.getTab("Climber").add("Calibrate Climber", new CG_ClimberCalibrate());
+    Shuffleboard.getTab("Hood").add("Reset Hood", new HoodReset());
   }
 
   @Override

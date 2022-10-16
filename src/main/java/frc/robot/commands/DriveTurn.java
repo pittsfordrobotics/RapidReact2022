@@ -31,13 +31,14 @@ public class DriveTurn extends CommandBase {
   public void initialize() {
 //    pidController.setGoal(drive.getAngle() + angle);
     pidController.setSetpoint(drive.getAngle() + angle);
-    pidController.setTolerance(5);
+    pidController.setTolerance(1);
   }
 
   @Override
   public void execute() {
 //    drive.driveVolts();
-    drive.rotate(-MathUtil.clamp(pidController.calculate(drive.getAngle()) + Math.signum(angle) * 0.1, -0.5, 0.5));
+    drive.rotate(-MathUtil.clamp(pidController.calculate(drive.getAngle()), -0.25, 0.25));
+//    drive.rotate(-MathUtil.clamp(pidController.calculate(drive.getAngle()) + Math.signum(angle) * 0.1, -0.3, 0.3));
   }
 
   @Override

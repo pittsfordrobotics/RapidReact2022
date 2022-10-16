@@ -10,7 +10,7 @@ import frc.robot.subsystems.vision.Vision;
 public class DriveAlignVision extends CommandBase {
     private final Drive drive = Drive.getInstance();
     private final Vision vision = Vision.getInstance();
-    private final PIDController pidController = new PIDController(0.01,0,0);
+    private final PIDController pidController = new PIDController(0.02,0,0);
 
     public DriveAlignVision() {
         addRequirements(this.drive, this.vision);
@@ -20,7 +20,7 @@ public class DriveAlignVision extends CommandBase {
     public void initialize() {
         RobotState.getInstance().setSnapped(false);
         pidController.setSetpoint(0);
-        pidController.setTolerance(5);
+        pidController.setTolerance(2.5);
     }
 
     @Override

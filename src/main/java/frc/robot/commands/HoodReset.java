@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.hood.Hood;
 
 // TODO: someone do this i no want to
-public class HoodZero extends CommandBase {
+public class HoodReset extends CommandBase {
     private final Hood hood = Hood.getInstance();
     public final Timer timer = new Timer();
 
-    public HoodZero() {
+    public HoodReset() {
         addRequirements(this.hood);
     }
 
@@ -21,19 +21,22 @@ public class HoodZero extends CommandBase {
 
     @Override
     public void execute() {
-        hood.setVoltage(-1);
+        hood.setVoltage(-1, true);
     }
 
     @Override
     public boolean isFinished() {
-//        if
-//        timer.hasElapsed()
-        return true;
+         if (timer.hasElapsed(5)) {
+             timer.reset();
+             return hood.getAbsoluteVelocity() < 0.1;
+         }
+         return false;
     }
 
     @Override
     public void end(boolean interrupted) {
         hood.resetCounter();
+        hood.setVoltage(0, true);
         timer.reset();
     }
 }
