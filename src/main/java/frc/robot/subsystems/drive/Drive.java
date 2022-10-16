@@ -1,6 +1,5 @@
 package frc.robot.subsystems.drive;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -37,6 +36,7 @@ public class Drive extends SubsystemBase {
     private double lastRightPositionMeters = 0.0;
     private boolean lastGyroConnected = false;
     private Rotation2d lastGyroRotation = new Rotation2d();
+    private static double quickStopAccumulator = 0.0;
 
     private final Alert pigeonAlert = new Alert("Pigeon not detected! Many functions of the robot will FAIL!", AlertType.ERROR);
 
@@ -117,18 +117,19 @@ public class Drive extends SubsystemBase {
          * read docs look up curvey drivey
          */
 //        TODO: BUGGGG implement this
+         WheelSpeeds speeds = Drive.curvatureDrive(speed, rotation / 1.5, Math.abs(speed) < 0.1, true);
 //        these two are irelevent
-        if (MathUtil.applyDeadband(speed,0.1) == 0) {
-            speedRateLimiter.reset(0);
-        }
-        if (MathUtil.applyDeadband(rotation,0.1) == 0) {
-            rotRateLimiter.reset(0);
-        }
-        double limitedSpeed = speedRateLimiter.calculate(speed);
-        double limitedRot = rotRateLimiter.calculate(rotation * Constants.DRIVE_TURNING_THROTTLE);
-
-//        use this when not getting attacked
-        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(limitedSpeed,0.1), MathUtil.applyDeadband(limitedRot,0.1), Math.abs(speed) < 0.1);
+//        if (MathUtil.applyDeadband(speed,0.1) == 0) {
+//            speedRateLimiter.reset(0);
+//        }
+//        if (MathUtil.applyDeadband(rotation,0.1) == 0) {
+//            rotRateLimiter.reset(0);
+//        }
+//        double limitedSpeed = speedRateLimiter.calculate(speed);
+//        double limitedRot = rotRateLimiter.calculate(rotation * Constants.DRIVE_TURNING_THROTTLE);
+//
+////        use this when not getting attacked
+//        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(limitedSpeed,0.1), MathUtil.applyDeadband(limitedRot,0.1), Math.abs(speed) < 0.1);
 
 //        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(speed,0.05), MathUtil.applyDeadband(rotation,0.05), Math.abs(speed) < 0.1);
 //        io.set(speeds.left * throttle, speeds.right * throttle);
@@ -207,6 +208,89 @@ public class Drive extends SubsystemBase {
      */
     public double getAngle() {
         return -Units.radiansToDegrees(inputs.gyroYawPositionRad);
+    }
+
+    public static WheelSpeeds curvatureDrive(double throttle, double turn, boolean isQuickTurn, boolean squaredInputs) {
+        throttle = handleDeadzone(throttle, 0.1);
+        turn = handleDeadzone(turn, 0.1);
+
+        double overPower;
+        double angularPower;
+
+        if (squaredInputs) {
+            // square the inputs (while preserving the sign) to increase fine control
+            // while permitting full power
+            if (throttle >= 0.0) {
+                throttle = throttle * throttle;
+            } else {
+                throttle = -(throttle * throttle);
+            }
+        }
+
+        if (isQuickTurn) {
+            if (Math.abs(throttle) < 0.2) {
+                double alpha = 0.1;
+                quickStopAccumulator = (1 - alpha) * quickStopAccumulator + alpha * limit(turn, 1.0) * 2;
+            }
+            overPower = 1.0;
+            angularPower = turn;
+        } else {
+            overPower = 0.0;
+            angularPower = Math.abs(throttle) * turn * 1.0 - quickStopAccumulator;
+            if (quickStopAccumulator > 1) {
+                quickStopAccumulator -= 1;
+            } else if (quickStopAccumulator < -1) {
+                quickStopAccumulator += 1;
+            } else {
+                quickStopAccumulator = 0.0;
+            }
+        }
+
+        double rightPwm = throttle - angularPower;
+        double leftPwm = throttle + angularPower;
+        if (leftPwm > 1.0) {
+            rightPwm -= overPower * (leftPwm - 1.0);
+            leftPwm = 1.0;
+        } else if (rightPwm > 1.0) {
+            leftPwm -= overPower * (rightPwm - 1.0);
+            rightPwm = 1.0;
+        } else if (leftPwm < -1.0) {
+            rightPwm += overPower * (-1.0 - leftPwm);
+            leftPwm = -1.0;
+        } else if (rightPwm < -1.0) {
+            leftPwm += overPower * (-1.0 - rightPwm);
+            rightPwm = -1.0;
+        }
+
+        return new WheelSpeeds(leftPwm, rightPwm);
+    }
+
+    /**
+     * Handles a deadzone
+     *
+     * @param value    The value to handle
+     * @param deadzone The deadzone
+     * @return The handled value
+     */
+    protected static double handleDeadzone(double value, double deadzone) {
+        return (Math.abs(value) > Math.abs(deadzone)) ? limit(value, 1.0) : 0.0;
+    }
+
+    /**
+     * Limits a number between a given range
+     *
+     * @param value The value to limit
+     * @param max   The absolute value of the maximum value
+     * @return The limited value
+     */
+    protected static double limit(double value, double max) {
+        if (value > max) {
+            return max;
+        }
+        if (value < -max) {
+            return -max;
+        }
+        return value;
     }
 
 }

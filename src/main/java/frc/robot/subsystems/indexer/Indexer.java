@@ -35,7 +35,7 @@ public class Indexer extends SubsystemBase {
     private boolean ballStillAtTower = false;
     private final Timer rejectionTimer = new Timer();
     private boolean rejectionTimerStarted = false;
-    private boolean rejectionEnabled = true;
+    private boolean rejectionEnabled = false; // TODO: enable this
 
     private final Ball[] balls = {new Ball(), new Ball()};
 
