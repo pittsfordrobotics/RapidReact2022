@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -71,6 +72,8 @@ public class Vision extends SubsystemBase {
         visionTab.addNumber("Distance", this::getDistance);
         visionTab.addNumber("Horizontal", this::getHorizontal);
         visionTab.addNumber("Vertical", this::getVertical);
+        visionTab.addNumber("LED", led::getNum);
+        visionTab.addBoolean("Heartbeat", () -> inputs.connected);
     }
 
     @Override
@@ -81,17 +84,16 @@ public class Vision extends SubsystemBase {
         limelightAlert.set(!inputs.connected);
 
         if (DriverStation.isDisabled() || RobotState.getInstance().isClimbing()) {
-            led = LED.OFF;
+            io.setLEDs(LED.OFF);
         }
         else {
-            led = LED.ON;
+            io.setLEDs(LED.ON);
         }
 
         if (!inputs.hasTarget) {
             RobotState.getInstance().setSnapped(false);
         }
 
-        io.setLEDs(led);
         io.setPipeline(pipeline);
         io.setCameraModes(camera);
 
@@ -341,6 +343,10 @@ public class Vision extends SubsystemBase {
 
     // switch to full field odometry
     public double getDistance() {
-        return (FieldConstants.visionTargetHeightCenter - Constants.LIMELIGHT_VEHICLE_TO_CAMERA_Z) / Math.tan(Constants.LIMELIGHT_CAMERA_ANGLE.getDegrees() + getVertical()) + FieldConstants.hubRadius;
-    }
+//        meters = better
+        return (Units.inchesToMeters(104) - Constants.LIMELIGHT_VEHICLE_TO_CAMERA_Z) / Math.tan(Units.degreesToRadians(Constants.LIMELIGHT_CAMERA_ANGLE.getDegrees() + getVertical())) + FieldConstants.hubRadius;
+
+//        we hate inches
+        // I think this is the problem. Math.tan takes a radian measure and you are passing degrees -Paras LMAO
+        }
 }

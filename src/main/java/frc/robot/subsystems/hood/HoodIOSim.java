@@ -6,7 +6,7 @@ public class HoodIOSim implements HoodIO {
 
     @Override
     public void updateInputs(HoodIOInputs inputs) {
-        inputs.absolutePositionRad = 0;
+        inputs.absolutePosition = 0;
         inputs.positionRad = 0;
         inputs.velocityRadPerSec = 0;
         inputs.appliedVolts = 0;

@@ -428,7 +428,7 @@ public class Indexer extends SubsystemBase {
         }
         if (state == State.REJECT1 || state == State.REJECT1INTAKE1 || state == State.REJECT1TOWER1) {
             Shooter.getInstance().setSetpoint(Constants.SHOOTER_INDEXER_REJECT_SPEED, true);
-            Hood.getInstance().setAngle(Constants.HOOD_ANGLE_MAX_RAD, true);
+            Hood.getInstance().setAngle(Constants.HOOD_ANGLE_MAX, true);
         }
         else {
             Shooter.getInstance().setSetpoint(-1, true);

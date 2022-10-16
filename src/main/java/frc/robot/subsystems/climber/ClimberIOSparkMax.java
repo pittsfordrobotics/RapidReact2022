@@ -1,6 +1,5 @@
 package frc.robot.subsystems.climber;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.RelativeEncoder;
@@ -30,10 +29,10 @@ public class ClimberIOSparkMax implements ClimberIO {
         leftEncoder.setPosition(0);
         rightEncoder.setPosition(0);
 
-        rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
-        rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
-        leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
-        leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
+//        rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
+//        rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
+//        leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 90);
+//        leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -90);
 
 //        rightMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
 //        rightMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);

@@ -4,7 +4,7 @@ package frc.robot.subsystems.hood;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +17,7 @@ import org.littletonrobotics.junction.Logger;
 public class Hood extends SubsystemBase {
     private final HoodIO io;
     private final HoodIOInputs inputs = new HoodIOInputs();
+    private final Timer timer = new Timer();
 
     private double position = Constants.ROBOT_IDLE_SHOOTER_ENABLED ? -1 : 0;
     private double forcedPosition = -1;
@@ -33,8 +34,9 @@ public class Hood extends SubsystemBase {
     private Hood(HoodIO io) {
         this.io = io;
         ShuffleboardTab hoodTab = Shuffleboard.getTab("Hood");
-        hoodTab.addNumber("Absolute with Offset Angle Rad", this::getAbsoluteWithOffset);
-        hoodTab.addNumber("Absolute Encoder Angle Rad", () -> inputs.absolutePositionRad);
+        hoodTab.addNumber("Absolute with Offset Angle", this::getAbsoluteWithOffset);
+        hoodTab.addNumber("Absolute Encoder Angle", () -> inputs.absolutePosition);
+        hoodTab.addNumber("Absolute Velocity", () -> inputs.absoluteVelocity);
         io.updateInputs(inputs);
 //        SmartDashboard.putNumber("Hood Angle", 0);
     }
@@ -59,36 +61,42 @@ public class Hood extends SubsystemBase {
         else if (position != -1) {
             moveHood(position);
         }
-        else if (Constants.ROBOT_IDLE_SHOOTER_ENABLED && !DriverStation.isAutonomous()) {
-            moveHood(Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()));
-        }
         else {
-//            moveHood(Constants.HOOD_ANGLE_MAX_RAD/2);
+//            idle hood position is in center
+//            moveHood(Constants.HOOD_ANGLE_MAX/2);
         }
-//        TODO: this
+//        TODO: this sucks
 //        io.setVoltage(pid.calculate(getAbsoluteWithOffset()));
     }
 
+    public double getAbsoluteVelocity() {
+        return inputs.absoluteVelocity;
+    }
+
+    public void resetCounter() {
+        io.resetCounter();
+    }
+
     private double getAbsoluteWithOffset() {
-        return Constants.HOOD_ANGLE_OFFSET_RAD - inputs.absolutePositionRad;
+        return inputs.absolutePosition - Constants.HOOD_ANGLE_OFFSET;
     }
 
     private void moveHood(double targetPosition) {
-        pid.setGoal(MathUtil.clamp(targetPosition, Constants.HOOD_ANGLE_MIN_RAD, Constants.HOOD_ANGLE_MAX_RAD));
+        pid.setGoal(MathUtil.clamp(targetPosition, Constants.HOOD_ANGLE_MIN, Constants.HOOD_ANGLE_MAX));
     }
 
     public void setVoltage(double voltage) {
 //        + is up
 //        - is down
-        if (getAbsoluteWithOffset() <= 0) {
-            io.setVoltage(voltage < 0 ? 0 : voltage);
-        }
-        else if (getAbsoluteWithOffset() >= Constants.HOOD_ANGLE_OFFSET_RAD - Constants.HOOD_ANGLE_MAX_RAD) {
-            io.setVoltage(voltage > 0 ? 0 : voltage);
-        }
-        else {
+//        if (getAbsoluteWithOffset() <= 0) {
+//            io.setVoltage(voltage < 0 ? 0 : voltage);
+//        }
+//        else if (getAbsoluteWithOffset() >= Constants.HOOD_ANGLE_OFFSET - Constants.HOOD_ANGLE_MAX) {
+//            io.setVoltage(voltage > 0 ? 0 : voltage);
+//        }
+//        else {
             io.setVoltage(voltage);
-        }
+//        }
     }
 
     /** Min: 0, Max: 76.5 */

@@ -1,35 +1,39 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.hood.Hood;
-import frc.robot.subsystems.shooter.Shooter;
 
-
-public class ShooterHoodLow extends CommandBase {
-    private final Shooter shooter = Shooter.getInstance();
+// TODO: someone do this i no want to
+public class HoodZero extends CommandBase {
     private final Hood hood = Hood.getInstance();
+    public final Timer timer = new Timer();
 
-    public ShooterHoodLow() {
-        addRequirements(this.shooter, this.hood);
+    public HoodZero() {
+        addRequirements(this.hood);
     }
 
     @Override
     public void initialize() {
+        timer.start();
+        timer.reset();
     }
 
     @Override
     public void execute() {
-        shooter.setSetpoint(Constants.SHOOTER_LOW_SPEED, false);
-        hood.setAngle(Constants.HOOD_ANGLE_MAX, false);
+        hood.setVoltage(-1);
     }
 
     @Override
     public boolean isFinished() {
+//        if
+//        timer.hasElapsed()
         return true;
     }
 
     @Override
     public void end(boolean interrupted) {
+        hood.resetCounter();
+        timer.reset();
     }
 }

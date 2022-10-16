@@ -53,7 +53,7 @@ public final class Constants {
 
     public static final boolean ROBOT_LOGGING_ENABLED = true;
     public static final String ROBOT_LOGGING_PATH = "/media/sda2/";
-    public static final boolean ROBOT_PID_TUNER_ENABLED = false;
+    public static final boolean ROBOT_PID_TUNER_ENABLED = true;
     public static final boolean ROBOT_IDLE_SHOOTER_ENABLED = false;
     public static final boolean ROBOT_DEMO_MODE = false;
 
@@ -98,7 +98,7 @@ public final class Constants {
     public static final double DRIVE_GEAR_RATIO = 6.818;
     public static final double DRIVE_WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
 
-    public static final double DRIVE_TURNING_THROTTLE = 0.2;
+    public static final double DRIVE_TURNING_THROTTLE = 0.3;
     public static final double DRIVE_CURVE_TURNING_THROTTLE = 0.2;
 
     public static final double DRIVE_POSITION_GAIN = 2.3546;
@@ -187,9 +187,9 @@ public final class Constants {
     public static final int HOOD_LEFT_CAN = 13;
 //    public static final int HOOD_RIGHT_CAN = 12;
     public static final int HOOD_REV_THROUGH_BORE_DIO_PORT = 0;
-    public static final double HOOD_ANGLE_OFFSET_RAD = 113;
-    public static final double HOOD_ANGLE_MIN_RAD = 0;
-    public static final double HOOD_ANGLE_MAX_RAD = 29; // 36.6 after offset calibration
+    public static final double HOOD_ANGLE_OFFSET = 0.258;
+    public static final double HOOD_ANGLE_MIN = 0;
+    public static final double HOOD_ANGLE_MAX = 0.880 - HOOD_ANGLE_OFFSET; // 0.880 after offset calibration
 
     public static final double HOOD_550_GEAR_RATIO = 20;
     public static final double HOOD_REV_THROUGH_BORE_GEAR_RATIO = 18.0;
@@ -254,7 +254,7 @@ public final class Constants {
             ROBOT_INDEXER_IO = new IndexerIOSparkMax();
             ROBOT_INTAKE_IO = new IntakeIOSparkMax();
             ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
-            ROBOT_VISION_IO = new VisionIO() {};
+            ROBOT_VISION_IO = new VisionIOLimelight();
         }
         else if (RobotBase.isReal()) {
             ROBOT_CLIMBER_IO = new ClimberIOSparkMax();

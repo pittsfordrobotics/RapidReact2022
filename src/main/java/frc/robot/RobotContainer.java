@@ -68,12 +68,18 @@ public class RobotContainer {
   private void testButtons() {
 //    + is up
 //    = is down
-    driverController.A.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(0.5), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
-    driverController.X.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(-0.5), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
+    driverController.A.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(2), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
+    driverController.X.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(-2), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0), Hood.getInstance()));
 //    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setVoltage(7), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setVoltage(0), Shooter.getInstance()));
-    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(1000, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(6000, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
     driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.RB.whileActiveOnce(new IndexerOverride(false));
+
+    operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
+    operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
+
+//  TODO: BUGGGGGGGG why tf is this broken
+    driverController.Start.and(operatorController.Start).whenActive(new ClimberSetState(!RobotState.getInstance().isClimbing()));
 //    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterHoodZero());
 //    driverController.X.whenActive(new CG_IntakeWiggle());
 //    driverController.Y.whenActive(new ShooterHoodLime());
@@ -105,8 +111,9 @@ public class RobotContainer {
     driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
 
 //    SHOOTING
-    operatorController.X.whileActiveOnce(new CG_LimeShot()).whenInactive(new ShooterHoodZero());
-    operatorController.Y.whileActiveOnce(new CG_FenderShot()).whenInactive(new ShooterHoodZero());
+    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+//    operatorController.X.whileActiveOnce(new CG_LimeShot()).whenInactive(new ShooterHoodZero());
+//    operatorController.Y.whileActiveOnce(new CG_FenderShot()).whenInactive(new ShooterHoodZero());
 
 //    INDEXER
     driverController.LB.and(operatorController.LB).whenActive(new InstantCommand(Indexer.getInstance()::resetEverything, indexer));
@@ -131,6 +138,8 @@ public class RobotContainer {
     driverController.A.whileActiveOnce(new IndexerOverride(false));
     driverController.LB.whenPressed(new InstantCommand(() -> indexer.setRejectionEnabled(false)));
     driverController.RB.whenPressed(new InstantCommand(() -> indexer.setRejectionEnabled(true)));
+
+    driverController.Start.whileActiveOnce(new HoodZero());
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.4));

@@ -1,12 +1,11 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotState;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.robot.util.BetterMath;
 import org.littletonrobotics.junction.Logger;
@@ -30,7 +29,7 @@ public class Shooter extends SubsystemBase {
         shooterTab.addNumber("Shooter Target RPM", () -> setpoint);
         shooterTab.addNumber("Shooter Actual", this::getVelocity);
         shooterTab.addBoolean("Shooter up to Speed", this::isAtSetpoint);
-//        SmartDashboard.putNumber("Shooter Speed", 0);
+        SmartDashboard.putNumber("Shooter Speed", 0);
     }
 
     @Override
@@ -42,24 +41,20 @@ public class Shooter extends SubsystemBase {
         Logger.getInstance().recordOutput("Shooter/ActualRMP", getVelocity());
         Logger.getInstance().recordOutput("Shooter/AtSetpoint", isAtSetpoint());
 
-//        double num = SmartDashboard.getNumber("Shooter Speed", 0);
-//        io.setVelocity(num, Constants.SHOOTER_FEEDFORWARD * num);
-        if (RobotState.getInstance().isClimbing()) {
-            io.setVelocity(0, 0);
-        }
-        else if (forcedSetpoint != -1) {
-            io.setVelocity(forcedSetpoint, Constants.SHOOTER_FEEDFORWARD * forcedSetpoint);
-        }
-        else if (setpoint != -1) {
-            io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
-        }
-        else if (Constants.ROBOT_IDLE_SHOOTER_ENABLED && !DriverStation.isAutonomous()) {
-//            TODO: use robot pose to estimate speed
-            io.setVelocity(Constants.SHOOTER_SPEED_MAP.lookup(RobotState.getInstance().getDistanceToHub()), Constants.SHOOTER_FEEDFORWARD * forcedSetpoint);
-        }
-        else {
-            io.setVelocity(0, 0);
-        }
+        double num = SmartDashboard.getNumber("Shooter Speed", 0);
+        io.setVelocity(num, Constants.SHOOTER_FEEDFORWARD * num);
+//        if (RobotState.getInstance().isClimbing()) {
+//            io.setVelocity(0, 0);
+//        }
+//        else if (forcedSetpoint != -1) {
+//            io.setVelocity(forcedSetpoint, Constants.SHOOTER_FEEDFORWARD * forcedSetpoint);
+//        }
+//        else if (setpoint != -1) {
+//            io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
+//        }
+//        else {
+//            io.setVelocity(0, 0);
+//        }
     }
 
     public void setVoltage(double voltage) {

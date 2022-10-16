@@ -10,9 +10,6 @@ public interface VisionIO {
         public double captureTimestamp = 0.0;
         public double[] cornerX = new double[] {};
         public double[] cornerY = new double[] {};
-        public double led = 0.0;
-        public double pipeline = 0.0;
-        public double camera = 0.0;
         public boolean hasTarget = false;
         public boolean connected = false;
         public double vAngle = 0.0;
@@ -22,9 +19,6 @@ public interface VisionIO {
             table.put("CaptureTimestamp", captureTimestamp);
             table.put("CornerX", cornerX);
             table.put("CornerY", cornerY);
-            table.put("LEDState", led);
-            table.put("Pipeline", pipeline);
-            table.put("Camera", camera);
             table.put("HasTarget", hasTarget);
             table.put("Connected", connected);
             table.put("AngleV", vAngle);
@@ -35,9 +29,6 @@ public interface VisionIO {
             captureTimestamp = table.getDouble("CaptureTimestamp", captureTimestamp);
             cornerX = table.getDoubleArray("CornerX", cornerX);
             cornerY = table.getDoubleArray("CornerY", cornerY);
-            led = table.getDouble("LEDState", led);
-            pipeline = table.getDouble("Pipeline", pipeline);
-            camera = table.getDouble("Camera", camera);
             hasTarget = table.getBoolean("HasTarget", hasTarget);
             connected = table.getBoolean("Connected", connected);
             vAngle = table.getDouble("AngleV", vAngle);

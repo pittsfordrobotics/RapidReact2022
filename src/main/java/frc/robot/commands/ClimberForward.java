@@ -23,7 +23,7 @@ public class ClimberForward extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return climber.forwardAtSoftLimit();
+        return climber.forwardAtHardLimit();
     }
 
     @Override

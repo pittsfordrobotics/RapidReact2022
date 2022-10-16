@@ -38,7 +38,8 @@ public class Climber extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
-        if (RobotState.getInstance().isClimbing()) io.set(speed);
+//        if (RobotState.getInstance().isClimbing())
+            io.set(speed);
     }
 
     public void resetEncoders() {

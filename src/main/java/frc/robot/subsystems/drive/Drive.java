@@ -30,7 +30,7 @@ public class Drive extends SubsystemBase {
     private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
     private Pose2d pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
-    private final SlewRateLimiter speedRateLimiter = new SlewRateLimiter(0.5,0);
+    private final SlewRateLimiter speedRateLimiter = new SlewRateLimiter(1,0);
     private final SlewRateLimiter rotRateLimiter = new SlewRateLimiter(0.5,0);
 
     private double lastLeftPositionMeters = 0.0;
@@ -111,15 +111,35 @@ public class Drive extends SubsystemBase {
     }
 
     public void driveCurve(double speed, double rotation) {
-//        TODO: implement this
+        /**
+         * can someone explain what this function is supposed to do
+         * https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html
+         * read docs look up curvey drivey
+         */
+//        TODO: BUGGGG implement this
+//        these two are irelevent
+        if (MathUtil.applyDeadband(speed,0.1) == 0) {
+            speedRateLimiter.reset(0);
+        }
+        if (MathUtil.applyDeadband(rotation,0.1) == 0) {
+            rotRateLimiter.reset(0);
+        }
         double limitedSpeed = speedRateLimiter.calculate(speed);
-        double limitedRot = rotRateLimiter.calculate(rotation);
-        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(limitedSpeed,0.05), MathUtil.applyDeadband(limitedRot,0.05), Math.abs(speed) < 0.15);
+        double limitedRot = rotRateLimiter.calculate(rotation * Constants.DRIVE_TURNING_THROTTLE);
+
+//        use this when not getting attacked
+        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(limitedSpeed,0.1), MathUtil.applyDeadband(limitedRot,0.1), Math.abs(speed) < 0.1);
+
+//        WheelSpeeds speeds = DifferentialDrive.curvatureDriveIK(MathUtil.applyDeadband(speed,0.05), MathUtil.applyDeadband(rotation,0.05), Math.abs(speed) < 0.1);
+//        io.set(speeds.left * throttle, speeds.right * throttle);
+
+//        TODO: how tf does the if statement break life
         if (Math.abs(speed) < 0.1) {
-            io.set(speeds.left * Constants.DRIVE_TURNING_THROTTLE, speeds.right * Constants.DRIVE_TURNING_THROTTLE);
+            io.set(speeds.left, speeds.right);
         }
         else {
-            io.set(speeds.left * throttle, speeds.right * Constants.DRIVE_CURVE_TURNING_THROTTLE);
+//            this should behvae the same as above, but it dont!!!!
+            io.set(speeds.left * throttle, speeds.right * throttle);
         }
     }
 
@@ -177,8 +197,8 @@ public class Drive extends SubsystemBase {
 
     public Pose2d getPose() {
         return pose;
-//        TODO: use this
-//        return RobotState.getInstance().getLatestPose();
+//        TODO: use this sucks (don't fix this) (its magic from other teams)
+//        return RobotState.getInstance().getLatestPose()
     }
 
     /**

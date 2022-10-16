@@ -11,7 +11,8 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 public interface HoodIO {
     /** Contains all the input data received from hardware. */
     class HoodIOInputs implements LoggableInputs {
-        public double absolutePositionRad = 0.0;
+        public double absolutePosition = 0.0;
+        public double absoluteVelocity = 0.0;
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
         public double appliedVolts = 0.0;
@@ -19,7 +20,8 @@ public interface HoodIO {
         public double[] tempCelcius = new double[] {};
 
         public void toLog(LogTable table) {
-            table.put("AbsolutePositionRad", absolutePositionRad);
+            table.put("AbsolutePosition", absolutePosition);
+            table.put("AbsoluteVelocity", absoluteVelocity);
             table.put("PositionRad", positionRad);
             table.put("VelocityRadPerSec", velocityRadPerSec);
             table.put("AppliedVolts", appliedVolts);
@@ -28,7 +30,8 @@ public interface HoodIO {
         }
 
         public void fromLog(LogTable table) {
-            absolutePositionRad = table.getDouble("AbsolutePositionRad", absolutePositionRad);
+            absolutePosition = table.getDouble("AbsolutePositionRad", absolutePosition);
+            absoluteVelocity = table.getDouble("AbsoluteVelocity", absoluteVelocity);
             velocityRadPerSec = table.getDouble("VelocityRadPerSec", velocityRadPerSec);
             appliedVolts = table.getDouble("AppliedVolts", appliedVolts);
             currentAmps = table.getDoubleArray("CurrentAmps", currentAmps);
@@ -38,6 +41,8 @@ public interface HoodIO {
 
     /** Updates the set of loggable inputs. */
     default void updateInputs(HoodIOInputs inputs) {}
+
+    default void resetCounter() {}
 
     /** Run open loop at the percentage of 12V from -1.0 to 1.0. */
     default void set(double percentage) {}
