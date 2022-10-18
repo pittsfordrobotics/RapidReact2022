@@ -453,7 +453,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean getRejecting() {
-        return state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse);
+        return !rejectionEnabled ||  state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse);
     }
 
     public void getAllianceColorFMS() {

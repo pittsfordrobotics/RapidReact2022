@@ -29,5 +29,6 @@ public class IndexerOverride extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         indexer.resetEverything();
+        indexer.setReverse(false);
     }
 }
