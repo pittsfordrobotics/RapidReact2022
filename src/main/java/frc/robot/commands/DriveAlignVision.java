@@ -30,7 +30,7 @@ public class DriveAlignVision extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return pidController.atSetpoint();
+        return pidController.atSetpoint() && vision.hasTarget();
     }
 
     @Override

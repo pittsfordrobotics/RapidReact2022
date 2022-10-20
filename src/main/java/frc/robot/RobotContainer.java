@@ -93,11 +93,11 @@ public class RobotContainer {
   }
 
   private void competitionButtons() {
-    JoystickButton driverShift = driverController.RB;
+//    JoystickButton driverShift = driverController.RB;
     JoystickButton operatorShift = operatorController.RB;
 
 //    DRIVING
-    driverController.Start.whileActiveOnce(new DriveAlignVision());
+    driverController.RB.whileActiveOnce(new DriveAlignVision());
 
 //    driverController.B.whenPressed(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
 //    driverController.B.whenPressed(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
@@ -112,10 +112,10 @@ public class RobotContainer {
 //    driverController.B.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.LEFT));
 //    driverController.A.and(driverShift).whileActiveOnce(new DriveSnap(SnapPosition.FORWARD));
 
-    driverController.DUp.whenPressed(new DriveSetThrottle(1));
-    driverController.DLeft.whenPressed(new DriveSetThrottle(0.4));
-    driverController.DRight.whenPressed(new DriveSetThrottle(0.7));
-    driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
+//    driverController.DUp.whenPressed(new DriveSetThrottle(1));
+//    driverController.DLeft.whenPressed(new DriveSetThrottle(0.4));
+//    driverController.DRight.whenPressed(new DriveSetThrottle(0.7));
+//    driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
 
 //    SHOOTING
     operatorController.X.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
