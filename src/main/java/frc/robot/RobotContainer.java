@@ -163,11 +163,13 @@ public class RobotContainer {
   private void autoConfig() {
     autoChooser.setDefaultOption("No auto", new WaitCommand(0));
     autoChooser.addOption("Run Back", new SequentialCommandGroup(new DrivePathing(Trajectories.THREE_METERS_BACKWARD, false)));
-    autoChooser.addOption("Shoot and Run Back", new AutoLimeShotAndRun());
-    autoChooser.addOption("2 Ball Top Reject 1", new AutoTop2Reject1());
-    autoChooser.addOption("1 Ball Top Left Reject 1", new AutoTopLeft1Reject1());
-    autoChooser.addOption("2 Ball Top Left Reject 2", new AutoTopLeft2Reject2());
-    autoChooser.addOption("5 Ball", new Auto5BallAuto());
+    autoChooser.addOption("5 Ball But Janko", new Auto5BallAutoButJank());
+    autoChooser.addOption("Back and Shoot", new AutoBackAndShoot());
+//    autoChooser.addOption("Shoot and Run Back", new AutoLimeShotAndRun());
+//    autoChooser.addOption("2 Ball Top Reject 1", new AutoTop2Reject1());
+//    autoChooser.addOption("1 Ball Top Left Reject 1", new AutoTopLeft1Reject1());
+//    autoChooser.addOption("2 Ball Top Left Reject 2", new AutoTopLeft2Reject2());
+//    autoChooser.addOption("5 Ball", new Auto5BallAuto());
 //    autoChooser.addOption("Test", new DrivePathing(PathPlanner.loadPath("New Path", Constants.DRIVE_MAX_VELOCITY_METERS_PER_SECOND, Constants.DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED), true));
 
     ballChooser.setDefaultOption("0", 0);

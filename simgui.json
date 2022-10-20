@@ -68,6 +68,7 @@
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Vision": "Subsystem",
       "/Shuffleboard/Climber/Calibrate Climber": "Command",
+      "/Shuffleboard/Hood/Reset Hood": "Command",
       "/Shuffleboard/Indexer/Reset": "Command",
       "/Shuffleboard/Indexer/Toggle Shooting": "Command",
       "/SmartDashboard/Auto Command": "String Chooser",
@@ -76,6 +77,11 @@
     },
     "windows": {
       "/SmartDashboard/Auto Command": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Position Chooser (Hanger opposite view)": {
         "window": {
           "visible": true
         }

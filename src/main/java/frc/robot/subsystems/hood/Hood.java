@@ -139,6 +139,7 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean atGoal() {
-        return (pid.atSetpoint());
+        return true;
+//        return (pid.atSetpoint());
     }
 }
