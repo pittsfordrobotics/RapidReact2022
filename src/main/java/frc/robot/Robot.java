@@ -125,7 +125,7 @@ public class Robot extends LoggedRobot {
     if (disabledTimer.hasElapsed(5) && Drive.getInstance().getAverageVelocity() == 0) {
       Drive.getInstance().coastMode();
     }
-    else {
+    else if (!disabledTimer.hasElapsed(5)){
       Drive.getInstance().brakeMode();
     }
   }
