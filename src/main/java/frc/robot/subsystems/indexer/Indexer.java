@@ -453,7 +453,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean getRejecting() {
-        return !rejectionEnabled ||  state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse);
+        return rejectionEnabled ||  state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse);
     }
 
     public void getAllianceColorFMS() {
@@ -634,7 +634,8 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean isWrongColorBall(int index) {
-        return (balls[index].getColor() != allianceColor) && (balls[index].getColor() != COLOR.UNKNOWN) && (allianceColor != COLOR.UNKNOWN);
+        return false;
+//        return (balls[index].getColor() != allianceColor) && (balls[index].getColor() != COLOR.UNKNOWN) && (allianceColor != COLOR.UNKNOWN);
     }
 
     public void setRejectionEnabled(boolean enabled) {

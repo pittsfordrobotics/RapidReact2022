@@ -73,7 +73,7 @@ public class ClimberIOSparkMax implements ClimberIO {
     @Override
     public void setVoltage(double volts) {
         leftMotor.setVoltage(volts);
-        rightMotorgc.setVoltage(volts);
+        rightMotor.setVoltage(volts);
     }
 
     @Override
