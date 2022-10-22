@@ -42,7 +42,7 @@ public class LazySparkMax extends CANSparkMax {
             new Alert("SparkMax Errors",Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ").", AlertType.ERROR).set(true);
         }
         else {
-            setCANTimeout(0);
+//            setCANTimeout(0);
         }
     }
 
@@ -85,7 +85,7 @@ public class LazySparkMax extends CANSparkMax {
             new Alert("SparkMax Errors",Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ").", AlertType.ERROR).set(true);
         }
         else {
-            setCANTimeout(0);
+//            setCANTimeout(0);
         }
     }
 

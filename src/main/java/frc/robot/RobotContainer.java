@@ -125,7 +125,7 @@ public class RobotContainer {
 //    INDEXER
     driverController.LB.and(operatorController.LB).whenActive(new InstantCommand(Indexer.getInstance()::resetEverything, indexer));
     operatorController.B.whileActiveOnce(new IndexerOverride(false));
-    operatorController.A.and(operatorShift).whileActiveOnce(new SequentialCommandGroup(new IntakeReverse(), new IndexerOverride(true)));
+//    operatorController.A.and(operatorShift).whileActiveOnce(new SequentialCommandGroup(new IntakeReverse(), new IndexerOverride(true)));
 
 //    INTAKE
     operatorController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
@@ -134,8 +134,8 @@ public class RobotContainer {
 //    driverController.Start.and(operatorController.Start).whenActive(new ClimberSetState(!RobotState.getInstance().isClimbing()));
 //    operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
 //    operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
-    operatorController.RT.and(operatorController.Start).whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
-    operatorController.LT.and(operatorController.Start).whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
+    operatorController.RT.and(operatorShift).whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
+    operatorController.LT.and(operatorShift).whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
 //    might not have time for auto implementation
 //    operatorController.Back.whileActiveContinuous(new CG_ClimberAuto()).whenInactive(new ClimberStop());
   }

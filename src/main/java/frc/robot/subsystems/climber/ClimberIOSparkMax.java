@@ -12,7 +12,7 @@ import frc.robot.util.LazySparkMax;
 
 public class ClimberIOSparkMax implements ClimberIO {
     private final LazySparkMax leftMotor = new LazySparkMax(Constants.CLIMBER_CAN_LEFT, IdleMode.kBrake, 60, true);
-    private final LazySparkMax rightMotor = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kBrake, 60, leftMotor, true);
+    private final LazySparkMax rightMotor = new LazySparkMax(Constants.CLIMBER_CAN_RIGHT, IdleMode.kBrake, 60, false);
 
     private final SparkMaxLimitSwitch leftForwardSwitch = leftMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     private final SparkMaxLimitSwitch leftReverseSwitch = leftMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
@@ -67,11 +67,13 @@ public class ClimberIOSparkMax implements ClimberIO {
     @Override
     public void set(double percent) {
         leftMotor.setVoltage(MathUtil.clamp(percent,-1, 1) * 12);
+        rightMotor.setVoltage(MathUtil.clamp(percent,-1, 1) * 12);
     }
 
     @Override
     public void setVoltage(double volts) {
         leftMotor.setVoltage(volts);
+        rightMotorgc.setVoltage(volts);
     }
 
     @Override
