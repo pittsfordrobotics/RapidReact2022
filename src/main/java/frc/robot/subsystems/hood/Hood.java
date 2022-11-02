@@ -1,6 +1,7 @@
 package frc.robot.subsystems.hood;
 
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.hood.HoodIO.HoodIOInputs;
+import frc.robot.util.BetterMath;
 import frc.robot.util.PIDTuner;
 import org.littletonrobotics.junction.Logger;
 
@@ -52,38 +54,38 @@ public class Hood extends SubsystemBase {
         Logger.getInstance().recordOutput("Hood/At Goal", atGoal());
 
 //        tuner.setPID(); // tune hood
-//        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
-//        double targetAngle = SmartDashboard.getNumber("Hood Angle", 0);
-//        if (RobotState.getInstance().isClimbing()) {
-//            moveHood(0);
-//        }
-//        else if (forcedPosition != -1) {
-//            moveHood(forcedPosition);
-//        }
-//        else if (position != -1) {
-//            moveHood(position);
-//        }
-//        else {
-////            idle hood position is in center
-////            moveHood(Constants.HOOD_ANGLE_MAX/2);
-//        }
-//        if (RobotState.getInstance().isClimbing()) {
-//            if (MathUtil.applyDeadband(getAbsoluteWithOffset(), 0.1) > Constants.HOOD_ANGLE_MIN) {
-//                setVoltage(-2, false);
-//            }
-//        }
-//        if ((getAbsoluteWithOffset() < position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
-//            setVoltage(2, false);
-//        }
-//        else if ((getAbsoluteWithOffset() > position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
-//            setVoltage(-2, false);
-//        }
-//        else{
-//            setVoltage(0, false);
-//        }
-//        double number = pid.calculate(getAbsoluteWithOffset());
-//        SmartDashboard.putNumber("number not working", number);
-//        setVoltage(number, false);
+        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
+        double targetAngle = SmartDashboard.getNumber("Hood Angle", 0);
+        if (RobotState.getInstance().isClimbing()) {
+            moveHood(0);
+        }
+        else if (forcedPosition != -1) {
+            moveHood(forcedPosition);
+        }
+        else if (position != -1) {
+            moveHood(position);
+        }
+        else {
+//            idle hood position is in center
+//            moveHood(Constants.HOOD_ANGLE_MAX/2);
+        }
+        if (RobotState.getInstance().isClimbing()) {
+            if (MathUtil.applyDeadband(getAbsoluteWithOffset(), 0.1) > Constants.HOOD_ANGLE_MIN) {
+                setVoltage(-2, false);
+            }
+        }
+        if ((getAbsoluteWithOffset() < position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
+            setVoltage(2, false);
+        }
+        else if ((getAbsoluteWithOffset() > position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
+            setVoltage(-2, false);
+        }
+        else{
+            setVoltage(0, false);
+        }
+        double number = pid.calculate(getAbsoluteWithOffset());
+        SmartDashboard.putNumber("number not working", number);
+        setVoltage(number, false);
     }
 
     public double getAbsoluteVelocity() {

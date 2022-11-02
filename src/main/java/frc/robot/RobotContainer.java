@@ -118,7 +118,7 @@ public class RobotContainer {
 //    driverController.DDown.whenPressed(new DriveSetThrottle(0.1));
 
 //    SHOOTING
-    operatorController.X.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+    operatorController.X.whileHeld(new InstantCommand(() -> Shooter.getInstance().setSetpoint(2000, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
 //    operatorController.X.whileActiveOnce(new CG_LimeShot()).whenInactive(new ShooterHoodZero());
 //    operatorController.Y.whileActiveOnce(new CG_FenderShot()).whenInactive(new ShooterHoodZero());
 

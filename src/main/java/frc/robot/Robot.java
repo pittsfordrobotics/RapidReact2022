@@ -85,7 +85,7 @@ public class Robot extends LoggedRobot {
     robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);
     intake.retract();
-    indexer.disable();
+//    indexer.disable();
 
     // this has to be here because of initialization order
     Shuffleboard.getTab("Climber").add("Calibrate Climber", new CG_ClimberCalibrate());
