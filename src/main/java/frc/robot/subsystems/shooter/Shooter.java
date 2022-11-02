@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
@@ -28,7 +29,8 @@ public class Shooter extends SubsystemBase {
         shooterTab.addNumber("Shooter Target RPM", () -> setpoint);
         shooterTab.addNumber("Shooter Actual", this::getVelocity);
         shooterTab.addBoolean("Shooter up to Speed", this::isAtSetpoint);
-//        SmartDashboard.putNumber("Shooter Speed", 0);
+        SmartDashboard.putNumber("ShooterP", 0);
+        SmartDashboard.putNumber("ShooterF", 0);
     }
 
     @Override
@@ -39,8 +41,8 @@ public class Shooter extends SubsystemBase {
         Logger.getInstance().recordOutput("Shooter/ForcedRMP", forcedSetpoint);
         Logger.getInstance().recordOutput("Shooter/ActualRMP", getVelocity());
         Logger.getInstance().recordOutput("Shooter/AtSetpoint", isAtSetpoint());
-
-            io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
+        io.configurePID(SmartDashboard.getNumber("ShooterP", 0),0, 0);
+            io.setVelocity(setpoint, SmartDashboard.getNumber("ShooterF",0) * setpoint);
 //        double num = SmartDashboard.getNumber("Shooter Speed", 0);
 //        io.setVelocity(num, Constants.SHOOTER_FEEDFORWARD * num);
 //        if (RobotState.getInstance().isClimbing()) {
