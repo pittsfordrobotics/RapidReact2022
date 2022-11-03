@@ -38,7 +38,6 @@ public class Shooter extends SubsystemBase {
         Logger.getInstance().recordOutput("Shooter/ForcedRMP", forcedSetpoint);
         Logger.getInstance().recordOutput("Shooter/ActualRMP", getVelocity());
         Logger.getInstance().recordOutput("Shooter/AtSetpoint", isAtSetpoint());
-        io.configurePID(Constants.SHOOTER_P,0, 0);
             io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
 //        double num = SmartDashboard.getNumber("Shooter Speed", 0);
 //        io.setVelocity(num, Constants.SHOOTER_FEEDFORWARD * num);
