@@ -99,7 +99,9 @@ public class Indexer extends SubsystemBase {
                     intakeBall();
                     state = State.INTAKE1;
                 }
-                break;
+                else {
+                    break;
+                }
             case INTAKE1:
                 stomachMotorOn();
                 towerMotorOff();
