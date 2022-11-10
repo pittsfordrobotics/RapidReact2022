@@ -168,8 +168,8 @@ public final class Constants {
     public static final int SHOOTER_AUTO_REJECT_SPEED = 2200;
     public static final int SHOOTER_INDEXER_REJECT_SPEED = 1000;
     public static final double SHOOTER_FENDER_SPEED = 3000;
-    public static final double SHOOTER_P = 0.00001;
-    public static final double SHOOTER_FEEDFORWARD = 0.00209;
+    public static final double SHOOTER_P = 0.0002;
+    public static final double SHOOTER_FEEDFORWARD = 0.00218;
 
     public static final double SHOOTER_TOLERANCE = 0.20;
 
