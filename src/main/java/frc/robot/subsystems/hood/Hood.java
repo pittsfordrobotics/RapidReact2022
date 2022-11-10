@@ -66,10 +66,10 @@ public class Hood extends SubsystemBase {
         else if (position != -1) {
             moveHood(position);
         }
-        else {
-//            idle hood position is in center
-//            moveHood(Constants.HOOD_ANGLE_MAX/2);
-        }
+//        else {
+////            idle hood position is in center
+////            moveHood(Constants.HOOD_ANGLE_MAX/2);
+//        }
         if (RobotState.getInstance().isClimbing()) {
             if (MathUtil.applyDeadband(getAbsoluteWithOffset(), 0.1) > Constants.HOOD_ANGLE_MIN) {
                 setVoltage(-2, false);
@@ -119,7 +119,7 @@ public class Hood extends SubsystemBase {
 
     /**
      * @param voltage (+) is up (-) is down
-     * @param reset
+     * @param reset idk
      */
     public void setVoltage(double voltage, boolean reset) {
 

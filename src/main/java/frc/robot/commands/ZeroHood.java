@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.hood.Hood;
 
 /**
- * Zeroes the hood
+ * Zeroes the {@link Hood} by lowering it until it hits the limit switch. Then setting angle to 0.
  */
 public class ZeroHood extends CommandBase {
     private final Hood hood = Hood.getInstance();
