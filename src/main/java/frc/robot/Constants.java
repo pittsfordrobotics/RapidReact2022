@@ -145,7 +145,7 @@ public final class Constants {
     public static final double INDEXER_LOADING_WAIT = 0.5;
     public static final double INDEXER_HUMAN_LOADING_WAIT = 1;
 
-    public static final double INDEXER_SHOOTER_REJECTION_TIME = 0.5;
+    public static final double INDEXER_SHOOTER_REJECTION_TIME = 2; // shorten later
     public static final double INDEXER_INTAKE_REJECTION_TIME = 1;
 
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
@@ -171,7 +171,7 @@ public final class Constants {
     public static final double SHOOTER_P = 0.00001;
     public static final double SHOOTER_FEEDFORWARD = 0.00209;
 
-    public static final double SHOOTER_TOLERANCE = 100;
+    public static final double SHOOTER_TOLERANCE = 0.20;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
     static {

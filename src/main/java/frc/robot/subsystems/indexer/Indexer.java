@@ -91,6 +91,7 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
         getAllianceColorFMS();
         Logger.getInstance().recordOutput("Indexer/AllianceColor", allianceColor.toString());
+        Logger.getInstance().recordOutput("Indexer/RejectiomTimerState", rejectionTimerStarted);
         switch (state) {
             case FIELD2:
                 stomachMotorOff();
