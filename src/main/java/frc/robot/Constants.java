@@ -145,7 +145,7 @@ public final class Constants {
     public static final double INDEXER_LOADING_WAIT = 0.5;
     public static final double INDEXER_HUMAN_LOADING_WAIT = 1;
 
-    public static final double INDEXER_SHOOTER_REJECTION_TIME = 2; // shorten later
+    public static final double INDEXER_SHOOTER_REJECTION_TIME = 2; // put back to .5 when using full battery
     public static final double INDEXER_INTAKE_REJECTION_TIME = 1;
 
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
