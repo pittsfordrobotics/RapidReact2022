@@ -91,7 +91,6 @@ public class Robot extends LoggedRobot {
     Shuffleboard.getTab("Climber").add("Calibrate Climber", new CG_ClimberCalibrate());
     Shuffleboard.getTab("Hood").add("Reset Hood", new HoodReset());
   }
-
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();

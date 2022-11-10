@@ -17,8 +17,9 @@ import java.util.TreeMap;
 /** Manages the robot's pose based on state data from various subsystems. Also manages climbing. */
 public class RobotState {
     private static final double historyLengthSecs = 1.0;
-    private static final double maxNoVisionLog = 0.25; // How long to wait with no vision data before
-    // clearing log visualization
+
+    /** How long to wait with no vision data before clearing log visualization */
+    private static final double maxNoVisionLog = 0.25;
     private static final double visionShiftPerSec = 0.999; // After one second of vision data, what %
     // of pose average should be vision
     private static final double visionMaxAngularVelocity =

@@ -53,6 +53,7 @@ public class Hood extends SubsystemBase {
         Logger.getInstance().recordOutput("Hood/Idle Position", Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()));
         Logger.getInstance().recordOutput("Hood/At Goal", atGoal());
 
+
 //        tuner.setPID(); // tune hood
         moveHood(SmartDashboard.getNumber("Hood Angle", 0));
         double targetAngle = SmartDashboard.getNumber("Hood Angle", 0);
@@ -82,6 +83,9 @@ public class Hood extends SubsystemBase {
         }
         else{
             setVoltage(0, false);
+        }
+        if (getLimit()) {
+            io.resetCounter();
         }
         double number = pid.calculate(getAbsoluteWithOffset());
         SmartDashboard.putNumber("number not working", number);
@@ -113,9 +117,12 @@ public class Hood extends SubsystemBase {
 //        pid.setSetpoint(MathUtil.clamp(targetPosition, Constants.HOOD_ANGLE_MIN, Constants.HOOD_ANGLE_MAX));
     }
 
+    /**
+     * @param voltage (+) is up (-) is down
+     * @param reset
+     */
     public void setVoltage(double voltage, boolean reset) {
-//        + is up
-//        - is down
+
         if (reset) {
             io.setVoltage(voltage);
         }
@@ -130,7 +137,10 @@ public class Hood extends SubsystemBase {
         }
     }
 
-    /** Min: 0, Max: 76.5 */
+    /**
+     * @param angle Min: 0, Max: 76.5 degrees
+     * @param forced if indexer is in the state where it should not happen force overrides this
+     */
     public void setAngle(double angle, boolean forced) {
         if (!forced) {
             this.position = angle;
@@ -140,6 +150,10 @@ public class Hood extends SubsystemBase {
         }
     }
 
+    /**
+     * idk?
+     * @return always true for some reason because we never got to test it
+     */
     public boolean atGoal() {
         return true;
 //        return (pid.atSetpoint());

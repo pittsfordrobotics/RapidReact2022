@@ -41,6 +41,7 @@ public class RobotContainer {
   private final SendableChooser<Integer> ballChooser = new SendableChooser<>();
   private final SendableChooser<Pose2d> positionChooser = new SendableChooser<>();
 
+
   public RobotContainer() {
     autoConfig();
     driverDashboardSetup();
@@ -77,6 +78,7 @@ public class RobotContainer {
     driverController.B.whenPressed(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
     driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.RB.whileActiveOnce(new IndexerOverride(false));
+    driverController.DDown.whenActive(new ZeroHood());
 //    driverController.RB.whenHeld(new DriveTurn(45));
 
     operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
