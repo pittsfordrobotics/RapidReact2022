@@ -23,7 +23,7 @@ public class Hood extends SubsystemBase {
     private double position = Constants.ROBOT_IDLE_SHOOTER_ENABLED ? -1 : 0;
     private double forcedPosition = -1;
 
-    private final PIDController pid = new PIDController(4,0,0);
+    private final PIDController pid = new PIDController(4, 0, 0);
     private final PIDTuner tuner = new PIDTuner("Hood", pid);
 
     private final static Hood INSTANCE = new Hood(Constants.ROBOT_HOOD_IO);
@@ -59,11 +59,9 @@ public class Hood extends SubsystemBase {
         double targetAngle = SmartDashboard.getNumber("Hood Angle", 0);
         if (RobotState.getInstance().isClimbing()) {
             moveHood(0);
-        }
-        else if (forcedPosition != -1) {
+        } else if (forcedPosition != -1) {
             moveHood(forcedPosition);
-        }
-        else if (position != -1) {
+        } else if (position != -1) {
             moveHood(position);
         }
 //        else {
@@ -77,11 +75,9 @@ public class Hood extends SubsystemBase {
         }
         if ((getAbsoluteWithOffset() < position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
             setVoltage(2, false);
-        }
-        else if ((getAbsoluteWithOffset() > position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
+        } else if ((getAbsoluteWithOffset() > position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
             setVoltage(-2, false);
-        }
-        else{
+        } else {
             setVoltage(0, false);
         }
         if (getLimit()) {
@@ -119,39 +115,36 @@ public class Hood extends SubsystemBase {
 
     /**
      * @param voltage (+) is up (-) is down
-     * @param reset idk
+     * @param reset   idk
      */
     public void setVoltage(double voltage, boolean reset) {
 
         if (reset) {
             io.setVoltage(voltage);
-        }
-        else if (getLimit() || getAbsoluteWithOffset() <= 0) {
+        } else if (getLimit() || getAbsoluteWithOffset() <= 0) {
             io.setVoltage(voltage < 0 ? 0 : voltage);
-        }
-        else if (getAbsoluteWithOffset() >= Constants.HOOD_ANGLE_MAX) {
+        } else if (getAbsoluteWithOffset() >= Constants.HOOD_ANGLE_MAX) {
             io.setVoltage(voltage > 0 ? 0 : voltage);
-        }
-        else {
+        } else {
             io.setVoltage(voltage);
         }
     }
 
     /**
-     * @param angle Min: 0, Max: 76.5 degrees
+     * @param angle  Min: 0, Max: 76.5 degrees
      * @param forced if indexer is in the state where it should not happen force overrides this
      */
     public void setAngle(double angle, boolean forced) {
         if (!forced) {
             this.position = angle;
-        }
-        else {
+        } else {
             forcedPosition = angle;
         }
     }
 
     /**
      * idk?
+     *
      * @return always true for some reason because we never got to test it
      */
     public boolean atGoal() {
