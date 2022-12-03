@@ -42,7 +42,7 @@ public class HoodIOSparkMax implements HoodIO {
         inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
         inputs.limit = input.get();
         inputs.currentAmps = new double[] {motor.getOutputCurrent()};
-        inputs.tempCelcius = new double[] {motor.getMotorTemperature()};
+        inputs.tempCelsius = new double[] {motor.getMotorTemperature()};
     }
 
     @Override
