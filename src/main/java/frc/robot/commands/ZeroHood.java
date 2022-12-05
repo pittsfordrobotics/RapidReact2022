@@ -16,28 +16,32 @@ public class ZeroHood extends CommandBase {
 
     @Override
     public void initialize() {
+        // no special initialization
     }
 
     @Override
-    // I chose -2 volts because it was used somewhere else, so it was probably a good value
+
     public void execute() {
+        // I chose -2 volts because it was used somewhere else, so it should be a reasonable speed.
         hood.setVoltage(-2, true);
     }
 
     @Override
     public boolean isFinished() {
         return hood.getLimit();
-
     }
 
-
+    /**
+     * called when the command ends
+     * @param interrupted whether the command was interrupted/canceled
+     */
     @Override
     public void end(boolean interrupted) {
+        // stop motor
         hood.setVoltage(0, true);
         // if it was interrupted we don't know if we should zero
         if (!interrupted) {
             hood.setAngle(0, false);
         }
     }
-
 }
