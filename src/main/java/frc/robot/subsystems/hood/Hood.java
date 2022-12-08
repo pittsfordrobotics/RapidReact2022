@@ -3,7 +3,6 @@ package frc.robot.subsystems.hood;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,27 +11,22 @@ import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.hood.HoodIO.HoodIOInputs;
 import frc.robot.util.BetterMath;
-import frc.robot.util.PIDTuner;
+import org.jetbrains.annotations.NotNull;
 import org.littletonrobotics.junction.Logger;
 
 public class Hood extends SubsystemBase {
     private final HoodIO io;
     private final HoodIOInputs inputs = new HoodIOInputs();
-    private final Timer timer = new Timer();
-
     private double position = Constants.ROBOT_IDLE_SHOOTER_ENABLED ? -1 : 0;
     private double forcedPosition = -1;
-
     private final PIDController pid = new PIDController(4, 0, 0);
-    private final PIDTuner tuner = new PIDTuner("Hood", pid);
-
     private final static Hood INSTANCE = new Hood(Constants.ROBOT_HOOD_IO);
 
     public static Hood getInstance() {
         return INSTANCE;
     }
 
-    private Hood(HoodIO io) {
+    private Hood(@NotNull HoodIO io) {
         this.io = io;
         pid.setTolerance(0.1);
         ShuffleboardTab hoodTab = Shuffleboard.getTab("Hood");
@@ -59,25 +53,27 @@ public class Hood extends SubsystemBase {
         double targetAngle = SmartDashboard.getNumber("Hood Angle", 0);
         if (RobotState.getInstance().isClimbing()) {
             moveHood(0);
-        } else if (forcedPosition != -1) {
+        }
+        else if (forcedPosition != -1) {
             moveHood(forcedPosition);
-        } else if (position != -1) {
+        }
+        else if (position != -1) {
             moveHood(position);
         }
-//        else {
-////            idle hood position is in center
-////            moveHood(Constants.HOOD_ANGLE_MAX/2);
-//        }
         if (RobotState.getInstance().isClimbing()) {
             if (MathUtil.applyDeadband(getAbsoluteWithOffset(), 0.1) > Constants.HOOD_ANGLE_MIN) {
                 setVoltage(-2, false);
             }
         }
-        if ((getAbsoluteWithOffset() < position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
+        // TODO: implement PID instead of this stuff.
+        int error = 1;
+        if ((getAbsoluteWithOffset() < position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, error)) {
             setVoltage(2, false);
-        } else if ((getAbsoluteWithOffset() > position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, 1)) {
+        }
+        else if ((getAbsoluteWithOffset() > position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, error)) {
             setVoltage(-2, false);
-        } else {
+        }
+        else {
             setVoltage(0, false);
         }
         if (getLimit()) {
@@ -108,8 +104,10 @@ public class Hood extends SubsystemBase {
         return Constants.HOOD_ANGLE_OFFSET - inputs.absolutePosition;
     }
 
+
+
     private void moveHood(double targetPosition) {
-        position = targetPosition;
+        setAngle(targetPosition, false);
 //        pid.setSetpoint(MathUtil.clamp(targetPosition, Constants.HOOD_ANGLE_MIN, Constants.HOOD_ANGLE_MAX));
     }
 
@@ -135,10 +133,11 @@ public class Hood extends SubsystemBase {
      * @param forced if indexer is in the state where it should not happen force overrides this
      */
     public void setAngle(double angle, boolean forced) {
-        if (!forced) {
+        if (forced) {
+            this.forcedPosition = angle;
+        }
+        else {
             this.position = angle;
-        } else {
-            forcedPosition = angle;
         }
     }
 
