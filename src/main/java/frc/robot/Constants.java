@@ -20,6 +20,7 @@ import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOSparkMax;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
+import frc.robot.subsystems.hood.HoodIOSparkMax;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSparkMax;
@@ -250,7 +251,7 @@ public final class Constants {
             ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
             ROBOT_COMPRESSOR_IO = new CompressorIORev();
             ROBOT_DRIVE_IO = new DriveIOSparkMax();
-            ROBOT_HOOD_IO = new HoodIO() {};
+            ROBOT_HOOD_IO = new HoodIOSparkMax();
             ROBOT_INDEXER_IO = new IndexerIOSparkMax();
             ROBOT_INTAKE_IO = new IntakeIOSparkMax();
             ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
@@ -260,7 +261,7 @@ public final class Constants {
             ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
             ROBOT_COMPRESSOR_IO = new CompressorIORev();
             ROBOT_DRIVE_IO = new DriveIOSparkMax();
-            ROBOT_HOOD_IO = new HoodIO() {};
+            ROBOT_HOOD_IO = new HoodIOSparkMax();
             ROBOT_INDEXER_IO = new IndexerIOSparkMax();
             ROBOT_INTAKE_IO = new IntakeIOSparkMax();
             ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
