@@ -7,22 +7,20 @@ import frc.robot.subsystems.hood.Hood;
 /**
  * Zeroes the {@link Hood} by lowering it until it hits the limit switch. Then it sets the hood angle to 0 degrees.
  */
-public class ZeroHood extends CommandBase {
+public class HoodZero extends CommandBase {
     private final Hood hood = Hood.getInstance();
 
-    public ZeroHood() {
+    public HoodZero() {
         addRequirements(this.hood);
     }
 
     @Override
     public void initialize() {
-        // no special initialization
     }
 
     @Override
 
     public void execute() {
-        // I chose -2 volts because it was used somewhere else, so it should be a reasonable speed.
         hood.setVoltage(-5, true);
     }
 
@@ -41,7 +39,8 @@ public class ZeroHood extends CommandBase {
         hood.setVoltage(0, true);
         // if it was interrupted we don't know if we should zero
         if (!interrupted) {
-            hood.setAngle(0, false);
+            hood.resetCounter();
+            hood.zeroed();
         }
     }
 }

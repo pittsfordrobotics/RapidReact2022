@@ -71,7 +71,7 @@ public class RobotContainer {
   private void testButtons() {
 //    + is up
 //    = is down
-    driverController.LB.whileHeld(new HoodReset());
+    driverController.LB.whileHeld(new HoodZero());
     driverController.A
             .whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(3, false), Hood.getInstance()))
             .whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0, false), Hood.getInstance()));
@@ -80,7 +80,7 @@ public class RobotContainer {
     driverController.B.whenPressed(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
     driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.RB.whileActiveOnce(new IndexerOverride(false));
-    driverController.DDown.whenActive(new ZeroHood());
+    driverController.DDown.whenActive(new HoodZero());
 //    driverController.RB.whenHeld(new DriveTurn(45));
 
     operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
@@ -152,7 +152,7 @@ public class RobotContainer {
     driverController.LB.whenPressed(new InstantCommand(() -> indexer.setRejectionEnabled(false)));
     driverController.RB.whenPressed(new InstantCommand(() -> indexer.setRejectionEnabled(true)));
 
-    driverController.Start.whileActiveOnce(new HoodReset());
+    driverController.Start.whileActiveOnce(new HoodZero());
 
     driverController.DUp.whenPressed(new DriveSetThrottle(1));
     driverController.DLeft.whenPressed(new DriveSetThrottle(0.4));

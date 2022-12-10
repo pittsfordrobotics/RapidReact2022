@@ -13,13 +13,14 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CG_ClimberCalibrate;
-import frc.robot.commands.HoodReset;
+import frc.robot.commands.HoodZero;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
 import frc.robot.util.PIDTuner;
+import frc.robot.util.UninterruptibleScheduleCommand;
 import frc.robot.util.controller.BetterXboxController;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -88,8 +89,8 @@ public class Robot extends LoggedRobot {
 //    indexer.disable();
 
     // this has to be here because of initialization order
-    Shuffleboard.getTab("Climber").add("Calibrate Climber", new CG_ClimberCalibrate());
-    Shuffleboard.getTab("Hood").add("Reset Hood", new HoodReset());
+    Shuffleboard.getTab("Climber").add("Calibrate Climber", new UninterruptibleScheduleCommand(new CG_ClimberCalibrate()));
+    Shuffleboard.getTab("Hood").add("Reset Hood", new UninterruptibleScheduleCommand(new HoodZero()));
   }
   @Override
   public void robotPeriodic() {
