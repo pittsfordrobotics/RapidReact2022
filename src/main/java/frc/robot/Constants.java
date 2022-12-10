@@ -190,7 +190,7 @@ public final class Constants {
     public static final int HOOD_DIO_PORT = 1;
     public static final double HOOD_ANGLE_OFFSET = 0.82;
     public static final double HOOD_ANGLE_MIN = 0;
-    public static final double HOOD_ANGLE_MAX = 1.248; // 0.880 after offset calibration
+    public static final double HOOD_ANGLE_MAX = 1.27; // 0.880 after offset calibration
 
     public static final double HOOD_550_GEAR_RATIO = 20;
     public static final double HOOD_REV_THROUGH_BORE_GEAR_RATIO = 18.0;

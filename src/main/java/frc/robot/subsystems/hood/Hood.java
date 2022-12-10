@@ -1,7 +1,6 @@
 package frc.robot.subsystems.hood;
 
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -10,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.hood.HoodIO.HoodIOInputs;
-import frc.robot.util.BetterMath;
 import org.jetbrains.annotations.NotNull;
 import org.littletonrobotics.junction.Logger;
 
@@ -19,7 +17,7 @@ public class Hood extends SubsystemBase {
     private final HoodIOInputs inputs = new HoodIOInputs();
     private double position = Constants.ROBOT_IDLE_SHOOTER_ENABLED ? -1 : 0;
     private double forcedPosition = -1;
-    private final PIDController pid = new PIDController(4, 0, 0);
+    private final PIDController pid = new PIDController(12, 0, 0);
     private final static Hood INSTANCE = new Hood(Constants.ROBOT_HOOD_IO);
 
     public static Hood getInstance() {
@@ -47,41 +45,39 @@ public class Hood extends SubsystemBase {
         Logger.getInstance().recordOutput("Hood/Idle Position", Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()));
         Logger.getInstance().recordOutput("Hood/At Goal", atGoal());
 
-
-//        tuner.setPID(); // tune hood
-        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
+//        io.setPID(); // tune hood
+//        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
         double targetAngle = SmartDashboard.getNumber("Hood Angle", 0);
-        if (RobotState.getInstance().isClimbing()) {
-            moveHood(0);
-        }
-        else if (forcedPosition != -1) {
-            moveHood(forcedPosition);
-        }
-        else if (position != -1) {
-            moveHood(position);
-        }
-        if (RobotState.getInstance().isClimbing()) {
-            if (MathUtil.applyDeadband(getAbsoluteWithOffset(), 0.1) > Constants.HOOD_ANGLE_MIN) {
-                setVoltage(-2, false);
-            }
-        }
-        // TODO: implement PID instead of this stuff.
-        int error = 1;
-        if ((getAbsoluteWithOffset() < position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, error)) {
-            setVoltage(2, false);
-        }
-        else if ((getAbsoluteWithOffset() > position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, error)) {
-            setVoltage(-2, false);
-        }
-        else {
-            setVoltage(0, false);
-        }
+//        if (RobotState.getInstance().isClimbing()) {
+//            moveHood(0);
+//        }
+//        else if (forcedPosition != -1) {
+//            moveHood(forcedPosition);
+//        }
+//        else if (position != -1) {
+//            moveHood(position);
+//        }
+//        if (RobotState.getInstance().isClimbing()) {
+//            if (MathUtil.applyDeadband(getAbsoluteWithOffset(), 0.1) > Constants.HOOD_ANGLE_MIN) {
+//                setVoltage(-2, false);
+//            }
+//        }
+//        // TODO: implement PID instead of this stuff.
+//        int error = 1;
+//        if ((getAbsoluteWithOffset() < position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, error)) {
+//            setVoltage(2, false);
+//        }
+//        else if ((getAbsoluteWithOffset() > position) && BetterMath.epsilonEquals(getAbsoluteWithOffset(), position, error)) {
+//            setVoltage(-2, false);
+//        }
+//        else {
+//            setVoltage(0, false);
+//        }
         if (getLimit()) {
             io.resetCounter();
         }
-        double number = pid.calculate(getAbsoluteWithOffset());
-        SmartDashboard.putNumber("number not working", number);
-        setVoltage(number, false);
+        double number = pid.calculate(getAbsoluteWithOffset() - targetAngle);
+        setVoltage(number + (Math.abs(number) < 0.1 ? 0 : Math.copySign(1.5, number)), false);
     }
 
     public double getAbsoluteVelocity() {
@@ -104,8 +100,6 @@ public class Hood extends SubsystemBase {
         return Constants.HOOD_ANGLE_OFFSET - inputs.absolutePosition;
     }
 
-
-
     private void moveHood(double targetPosition) {
         setAngle(targetPosition, false);
 //        pid.setSetpoint(MathUtil.clamp(targetPosition, Constants.HOOD_ANGLE_MIN, Constants.HOOD_ANGLE_MAX));
@@ -116,7 +110,6 @@ public class Hood extends SubsystemBase {
      * @param reset   idk
      */
     public void setVoltage(double voltage, boolean reset) {
-
         if (reset) {
             io.setVoltage(voltage);
         } else if (getLimit() || getAbsoluteWithOffset() <= 0) {
@@ -126,6 +119,7 @@ public class Hood extends SubsystemBase {
         } else {
             io.setVoltage(voltage);
         }
+
     }
 
     /**

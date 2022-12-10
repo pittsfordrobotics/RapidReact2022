@@ -23,7 +23,7 @@ public class ZeroHood extends CommandBase {
 
     public void execute() {
         // I chose -2 volts because it was used somewhere else, so it should be a reasonable speed.
-        hood.setVoltage(-2, true);
+        hood.setVoltage(-5, true);
     }
 
     @Override
