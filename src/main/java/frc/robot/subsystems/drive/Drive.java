@@ -84,7 +84,8 @@ public class Drive extends SubsystemBase {
         if (inputs.gyroConnected) {
             RobotState.getInstance().addDriveData(Timer.getFPGATimestamp(), new Twist2d(
                     avgPositionMetersDelta, 0.0, gyroRotationDelta.getRadians()));
-        } else {
+        }
+        else {
             RobotState.getInstance().addDriveData(Timer.getFPGATimestamp(),
                     new Twist2d(avgPositionMetersDelta, 0.0,
                             (rightPositionMetersDelta - leftPositionMetersDelta)

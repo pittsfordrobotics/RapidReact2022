@@ -436,6 +436,7 @@ public class Indexer extends SubsystemBase {
             Shooter.getInstance().setSetpoint(-1, true);
             Hood.getInstance().setAngle(-1, true);
         }
+
         if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {
             CommandScheduler.getInstance().schedule(false, new IntakeReverse());
         }

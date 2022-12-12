@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.robot.util.BetterMath;
 import org.littletonrobotics.junction.Logger;
@@ -38,21 +39,23 @@ public class Shooter extends SubsystemBase {
         Logger.getInstance().recordOutput("Shooter/ForcedRMP", forcedSetpoint);
         Logger.getInstance().recordOutput("Shooter/ActualRMP", getVelocity());
         Logger.getInstance().recordOutput("Shooter/AtSetpoint", isAtSetpoint());
-            io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
+
+//        io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
+
 //        double num = SmartDashboard.getNumber("Shooter Speed", 0);
 //        io.setVelocity(num, Constants.SHOOTER_FEEDFORWARD * num);
-//        if (RobotState.getInstance().isClimbing()) {
-//            io.setVelocity(0, 0);
-//        }
-//        else if (forcedSetpoint != -1) {
-//            io.setVelocity(forcedSetpoint, Constants.SHOOTER_FEEDFORWARD * forcedSetpoint);
-//        }
-//        else if (setpoint != -1) {
-//            io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
-//        }
-//        else {
-//            io.setVelocity(0, 0);
-//        }
+        if (RobotState.getInstance().isClimbing()) {
+            io.setVelocity(0, 0);
+        }
+        else if (forcedSetpoint != -1) {
+            io.setVelocity(forcedSetpoint, Constants.SHOOTER_FEEDFORWARD * forcedSetpoint);
+        }
+        else if (setpoint != -1) {
+            io.setVelocity(setpoint, Constants.SHOOTER_FEEDFORWARD * setpoint);
+        }
+        else {
+            io.setVelocity(0, 0);
+        }
     }
 
     public void setVoltage(double voltage) {
@@ -76,7 +79,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isAtSetpoint() {
-        return BetterMath.epsilonEquals(inputs.velocityRotPerMin, Constants.SHOOTER_TOLERANCE) || (Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation());
+        return BetterMath.epsilonEquals(inputs.velocityRotPerMin, Constants.SHOOTER_TOLERANCE) || (Constants.ROBOT_DEMO_MODE || RobotBase.isSimulation());
     }
 
 }
