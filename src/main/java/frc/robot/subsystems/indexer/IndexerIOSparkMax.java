@@ -1,7 +1,6 @@
 package frc.robot.subsystems.indexer;
 
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -18,7 +17,7 @@ public class IndexerIOSparkMax implements IndexerIO {
     private final RelativeEncoder encoderRight = motorRight.getEncoder();
     private final RelativeEncoder encoderTower = motorTower.getEncoder();
 
-    private ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
+//    private ColorSensorV3 colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
     private final DigitalInput sensorTower = new DigitalInput(Constants.INDEXER_SENSOR_TOWER_DIO_PORT);
     private final DigitalInput sensorShooter = new DigitalInput(Constants.INDEXER_SENSOR_SHOOTER_DIO_PORT);
 
@@ -45,18 +44,24 @@ public class IndexerIOSparkMax implements IndexerIO {
         inputs.towerCurrentAmps = new double[] {motorTower.getOutputCurrent()};
         inputs.towerTempCelcius = new double[] {motorTower.getMotorTemperature()};
 
-        inputs.colorConnected = colorSensorIntake.isConnected();
-        inputs.colorProximity = colorSensorIntake.getProximity();
-        inputs.colorRed = colorSensorIntake.getRed();
-        inputs.colorGreen = colorSensorIntake.getGreen();
-        inputs.colorBlue = colorSensorIntake.getBlue();
+//        inputs.colorConnected = colorSensorIntake.isConnected();
+//        inputs.colorProximity = colorSensorIntake.getProximity();
+//        inputs.colorRed = colorSensorIntake.getRed();
+//        inputs.colorGreen = colorSensorIntake.getGreen();
+//        inputs.colorBlue = colorSensorIntake.getBlue();
+
+        inputs.colorConnected = true;
+        inputs.colorProximity = 0;
+        inputs.colorRed = 0;
+        inputs.colorGreen = 0;
+        inputs.colorBlue = 0;
 
         inputs.towerDetected = sensorTower.get();
         inputs.shooterDetected = sensorShooter.get();
 
-        if (inputs.colorBlue == 0 && inputs.colorRed == 0 && inputs.colorGreen == 0) {
-            colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
-        }
+//        if (inputs.colorBlue == 0 && inputs.colorRed == 0 && inputs.colorGreen == 0) {
+//            colorSensorIntake = new ColorSensorV3(Constants.INDEXER_COLOR);
+//        }
     }
 
     @Override

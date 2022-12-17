@@ -18,7 +18,6 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.compressor7.Compressor7;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
@@ -55,7 +54,7 @@ public class RobotContainer {
     }
 
     drive.setDefaultCommand(new DriveXbox());
-    compressor.setDefaultCommand(new CompressorSmart());
+//    compressor.setDefaultCommand(new CompressorSmart());
   }
 
   private void driverDashboardSetup() {
@@ -71,23 +70,23 @@ public class RobotContainer {
   private void testButtons() {
 //    + is up
 //    = is down
-    driverController.LB.whileHeld(new HoodZero());
-    driverController.A
-            .whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(3, false), Hood.getInstance()))
-            .whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0, false), Hood.getInstance()));
-    driverController.X.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(-3, false), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0, false), Hood.getInstance()));
-//    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setVoltage(7), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setVoltage(0), Shooter.getInstance()));
-    driverController.B.whenPressed(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
-    driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
+//    driverController.LB.whileHeld(new HoodZero());
+//    driverController.A
+//            .whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(3, false), Hood.getInstance()))
+//            .whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0, false), Hood.getInstance()));
+//    driverController.X.whileHeld(new InstantCommand(() -> Hood.getInstance().setVoltage(-3, false), Hood.getInstance())).whenInactive(new InstantCommand(() -> Hood.getInstance().setVoltage(0, false), Hood.getInstance()));
+////    driverController.B.whileHeld(new InstantCommand(() -> Shooter.getInstance().setVoltage(7), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setVoltage(0), Shooter.getInstance()));
+//    driverController.B.whenPressed(new InstantCommand(() -> Shooter.getInstance().setSetpoint(4500, false), Shooter.getInstance())).whenInactive(new InstantCommand(() -> Shooter.getInstance().setSetpoint(0, false), Shooter.getInstance()));
+//    driverController.Y.whileActiveContinuous(new IntakeDown()).whenInactive(new IntakeUp());
     driverController.RB.whileActiveOnce(new IndexerOverride(false));
-    driverController.DDown.whenActive(new HoodZero());
+//    driverController.DDown.whenActive(new HoodZero());
 //    driverController.RB.whenHeld(new DriveTurn(45));
 
-    operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
-    operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
+//    operatorController.RT.whileActiveContinuous(new ClimberForward()).whenInactive(new ClimberStop());
+//    operatorController.LT.whileActiveContinuous(new ClimberReverse()).whenInactive(new ClimberStop());
 
 //  TODO: BUGGGGGGGG why tf is this broken
-    driverController.Start.and(operatorController.Start).whenActive(new ClimberSetState(!RobotState.getInstance().isClimbing()));
+//    driverController.Start.and(operatorController.Start).whenActive(new ClimberSetState(!RobotState.getInstance().isClimbing()));
 //    driverController.X.whileActiveOnce(new CG_LowShot()).whenInactive(new ShooterHoodZero());
 //    driverController.X.whenActive(new CG_IntakeWiggle());
 //    driverController.Y.whenActive(new ShooterHoodLime());

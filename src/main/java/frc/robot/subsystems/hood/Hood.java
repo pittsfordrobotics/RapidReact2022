@@ -5,6 +5,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
@@ -38,7 +39,7 @@ public class Hood extends SubsystemBase {
         hoodTab.addNumber("Absolute Velocity", () -> inputs.absoluteVelocity);
         hoodTab.addBoolean("Limit Switch", this::getLimit);
         io.updateInputs(inputs);
-//        SmartDashboard.putNumber("Hood Angle", 0);
+        SmartDashboard.putNumber("Hood Angle", 0);
     }
 
     @Override
@@ -53,17 +54,17 @@ public class Hood extends SubsystemBase {
         Logger.getInstance().recordOutput("Hood/Idle Position", Constants.HOOD_ANGLE_MAP.lookup(RobotState.getInstance().getDistanceToHub()));
         Logger.getInstance().recordOutput("Hood/At Goal", atGoal());
 
-//        double targetAngle = SmartDashboard.getNumber("Hood Angle", 0);
-//        moveHood(SmartDashboard.getNumber("Hood Angle", 0));
-        if (zeroed) {
-            if (RobotState.getInstance().isClimbing()) {
-                moveHood(0);
-            } else if (forcedPosition != -1) {
-                moveHood(forcedPosition);
-            } else if (position != -1) {
-                moveHood(position);
-            }
-        }
+        double targetAngle = SmartDashboard.getNumber("Hood Angle", 0);
+        moveHood(targetAngle);
+//        if (zeroed) {
+//            if (RobotState.getInstance().isClimbing()) {
+//                moveHood(0);
+//            } else if (forcedPosition != -1) {
+//                moveHood(forcedPosition);
+//            } else if (position != -1) {
+//                moveHood(position);
+//            }
+//        }
 
         if (getLimit()) {
             resetCounter();

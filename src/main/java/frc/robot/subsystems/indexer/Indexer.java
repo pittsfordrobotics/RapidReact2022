@@ -97,7 +97,7 @@ public class Indexer extends SubsystemBase {
                 towerMotorOff();
                 if (ballCurrentlyAtIntake) {
                     intakeBall();
-                    state = State.INTAKE1;
+//                    state = State.INTAKE1;
                 }
                 else {
                     break;
@@ -637,7 +637,8 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean isWrongColorBall(int index) {
-        return (balls[index].getColor() != allianceColor) && (balls[index].getColor() != COLOR.UNKNOWN) && (allianceColor != COLOR.UNKNOWN);
+//        return (balls[index].getColor() != allianceColor) && (balls[index].getColor() != COLOR.UNKNOWN) && (allianceColor != COLOR.UNKNOWN);
+        return false;
     }
 
     public void setRejectionEnabled(boolean enabled) {

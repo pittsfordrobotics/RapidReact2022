@@ -170,13 +170,14 @@ public final class Constants {
     public static final int SHOOTER_INDEXER_REJECT_SPEED = 1000;
     public static final double SHOOTER_FENDER_SPEED = 3000;
     public static final double SHOOTER_P = 0.0002;
-    public static final double SHOOTER_FEEDFORWARD = 0.00218;
+    public static final double SHOOTER_FEEDFORWARD = 0.00215;
 
     public static final double SHOOTER_TOLERANCE = 100;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
     static {
-        SHOOTER_SPEED_MAP.put(0, 3000);
+        SHOOTER_SPEED_MAP.put(2.96675, 4100);
+        SHOOTER_SPEED_MAP.put(3.3166, 4300);
     }
 
     /**
@@ -202,7 +203,8 @@ public final class Constants {
 
     public static final InterpolatingTreeMap HOOD_ANGLE_MAP = new InterpolatingTreeMap();
     static {
-        HOOD_ANGLE_MAP.put(0, 0);
+        HOOD_ANGLE_MAP.put(2.96675, 0.7);
+        HOOD_ANGLE_MAP.put(3.3166, 0.9);
     }
 
     /**
