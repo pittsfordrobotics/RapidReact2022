@@ -7,6 +7,8 @@ import frc.robot.Constants;
 import frc.robot.util.Alert.AlertType;
 import org.littletonrobotics.junction.Logger;
 
+import java.util.Objects;
+
 /**
  * This is a thick wrapper for CANSparkMax because I am lazy
  */
@@ -26,7 +28,7 @@ public class LazySparkMax extends CANSparkMax {
         while (errors > 0 && ++attempts <= 5) {
             if (attempts > 0) {
                 DriverStation.reportWarning("SparkMax " + port + "FAILED to initialize. Reinitializing attempt " + attempts, false);
-                Logger.getInstance().recordOutput("SparkMaxes/"+Constants.ROBOT_SPARKMAX_HASHMAP.get(port)+port,"Reinitializing attempt " + attempts);
+                Logger.getInstance().recordOutput("SparkMaxes/" + Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + port, "Reinitializing attempt " + attempts);
             }
             errors = 0;
             errors += check(restoreFactoryDefaults());
@@ -38,11 +40,8 @@ public class LazySparkMax extends CANSparkMax {
             errors += check(burnFlash());
         }
         if (errors > 0) {
-            Logger.getInstance().recordOutput("SparkMaxes/"+Constants.ROBOT_SPARKMAX_HASHMAP.get(port)+port,"FAILED");
-            new Alert("SparkMax Errors",Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ").", AlertType.ERROR).set(true);
-        }
-        else {
-//            setCANTimeout(0);
+            Logger.getInstance().recordOutput("SparkMaxes/" + Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + port, "INITIALIZE_ERROR");
+            new Alert("SparkMaxes",Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ")!", AlertType.ERROR).set(true);
         }
     }
 
@@ -69,7 +68,7 @@ public class LazySparkMax extends CANSparkMax {
         while (errors > 0 && ++attempts <= 5) {
             if (attempts > 0) {
                 DriverStation.reportWarning("SparkMax " + port + "FAILED to initialize. Reinitializing attempt " + attempts, false);
-                Logger.getInstance().recordOutput("SparkMaxes/"+Constants.ROBOT_SPARKMAX_HASHMAP.get(port)+port,"Reinitializing attempt " + attempts);
+                Logger.getInstance().recordOutput("SparkMaxes/" + Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + port, "Reinitializing attempt " + attempts);
             }
             errors = 0;
             errors += check(restoreFactoryDefaults());
@@ -81,11 +80,11 @@ public class LazySparkMax extends CANSparkMax {
             errors += check(burnFlash());
         }
         if (errors > 0) {
-            Logger.getInstance().recordOutput("SparkMaxes/"+Constants.ROBOT_SPARKMAX_HASHMAP.get(port)+port,"FAILED");
-            new Alert("SparkMax Errors",Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ").", AlertType.ERROR).set(true);
+            Logger.getInstance().recordOutput("SparkMaxes/" + Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + port, "INITIALIZE_ERROR");
+            new Alert("SparkMaxes",Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ")!", AlertType.ERROR).set(true);
         }
         else {
-//            setCANTimeout(0);
+            checkUpdated();
         }
     }
 
@@ -98,6 +97,20 @@ public class LazySparkMax extends CANSparkMax {
      */
     public LazySparkMax(int port, IdleMode mode, int currentLimit, CANSparkMax leader) {
         this(port, mode, currentLimit, leader, false);
+    }
+
+    public void checkAlive() {
+        if (check(getLastError()) != 0) {
+            Logger.getInstance().recordOutput("SparkMaxes/" + Constants.ROBOT_SPARKMAX_HASHMAP.get(getDeviceId()) + getDeviceId(), "ERROR");
+            new Alert("SparkMaxes",Constants.ROBOT_SPARKMAX_HASHMAP.get(getDeviceId()) + " PROBLEMED (" + getDeviceId() + ")!", AlertType.ERROR).set(true);
+        }
+    }
+
+    private void checkUpdated() {
+        if (!Objects.equals(getFirmwareString(), Constants.ROBOT_SPARK_MAX_FIRMWARE)) {
+            Logger.getInstance().recordOutput("SparkMaxes/" + Constants.ROBOT_SPARKMAX_HASHMAP.get(getDeviceId()) + getDeviceId(), "OUT_OF_DATE");
+            new Alert("SparkMaxes",Constants.ROBOT_SPARKMAX_HASHMAP.get(getDeviceId()) + " needs to be updated (" + getDeviceId() + ")!", AlertType.INFO).set(true);
+        }
     }
 
     /**

@@ -58,6 +58,7 @@ public final class Constants {
 
     public static final int ROBOT_PDP_CAN = 1;
     public static final int ROBOT_PNEUMATIC_HUB_CAN = 1;
+    public static final String ROBOT_SPARK_MAX_FIRMWARE = "1.5.2";
 
     public static final double ROBOT_WEIGHT_KILO = Units.lbsToKilograms(120);
 
