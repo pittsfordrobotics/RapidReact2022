@@ -91,6 +91,7 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
         getAllianceColorFMS();
         Logger.getInstance().recordOutput("Indexer/AllianceColor", allianceColor.toString());
+        Logger.getInstance().recordOutput("Indexer/RejectiomTimerState", rejectionTimerStarted);
         switch (state) {
             case FIELD2:
                 stomachMotorOff();
@@ -336,12 +337,13 @@ public class Indexer extends SubsystemBase {
                     shootBall();
                     intakeBall();
                     rejectionTimerStarted = false;
-                    state = State.INTAKE1;
+                    state = State.FIELD2;
                 }
+                /* This shouldn't happen, it would be at a state with 2 balls not 1
                 else if (ballCurrentlyAtIntake) {
                     intakeBall();
                     state = State.REJECT1INTAKE1;
-                }
+                } */
                 else if (rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
                     shootBall();
                     rejectionTimerStarted = false;

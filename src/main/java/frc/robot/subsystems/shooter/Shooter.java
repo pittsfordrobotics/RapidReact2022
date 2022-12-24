@@ -67,7 +67,8 @@ public class Shooter extends SubsystemBase {
             this.setpoint = setpoint;
         }
         else {
-            forcedSetpoint = setpoint;
+            this.setpoint = setpoint;
+            // forcedSetpoint = setpoint;
         }
     }
 
@@ -76,7 +77,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isAtSetpoint() {
-        return BetterMath.epsilonEquals(inputs.velocityRotPerMin, Constants.SHOOTER_TOLERANCE) || (Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation());
+        return BetterMath.epsilonEquals(inputs.velocityRotPerMin, this.setpoint, Constants.SHOOTER_TOLERANCE*this.setpoint) || (Constants.ROBOT_DEMO_MODE && RobotBase.isSimulation());
     }
 
 }
