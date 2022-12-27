@@ -7,6 +7,7 @@ import frc.robot.Constants;
 import frc.robot.util.Alert.AlertType;
 import org.littletonrobotics.junction.Logger;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -15,6 +16,7 @@ import java.util.Objects;
 public class LazySparkMax extends CANSparkMax {
     private int errors = 1;
     private int attempts = -1;
+    private static final ArrayList<LazySparkMax> sparkMaxes = new ArrayList<LazySparkMax>();
 
     /**
      * Lazy Spark Max
@@ -42,6 +44,10 @@ public class LazySparkMax extends CANSparkMax {
         if (errors > 0) {
             Logger.getInstance().recordOutput("SparkMaxes/" + Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + port, "INITIALIZE_ERROR");
             new Alert("SparkMaxes",Constants.ROBOT_SPARKMAX_HASHMAP.get(port) + " FAILED to initialize (" + port + ")!", AlertType.ERROR).set(true);
+        }
+        else {
+            checkUpdated();
+            sparkMaxes.add(this);
         }
     }
 
@@ -85,6 +91,7 @@ public class LazySparkMax extends CANSparkMax {
         }
         else {
             checkUpdated();
+            sparkMaxes.add(this);
         }
     }
 
@@ -99,10 +106,12 @@ public class LazySparkMax extends CANSparkMax {
         this(port, mode, currentLimit, leader, false);
     }
 
-    public void checkAlive() {
-        if (check(getLastError()) != 0) {
-            Logger.getInstance().recordOutput("SparkMaxes/" + Constants.ROBOT_SPARKMAX_HASHMAP.get(getDeviceId()) + getDeviceId(), "ERROR");
-            new Alert("SparkMaxes",Constants.ROBOT_SPARKMAX_HASHMAP.get(getDeviceId()) + " PROBLEMED (" + getDeviceId() + ")!", AlertType.ERROR).set(true);
+    public static void checkAlive() {
+        for (LazySparkMax i : sparkMaxes) {
+            if (LazySparkMax.check(i.getLastError()) != 0) {
+                Logger.getInstance().recordOutput("SparkMaxes/" + Constants.ROBOT_SPARKMAX_HASHMAP.get(i.getDeviceId()) + i.getDeviceId(), "ERROR");
+                new Alert("SparkMaxes", Constants.ROBOT_SPARKMAX_HASHMAP.get(i.getDeviceId()) + " PROBLEMED (" + i.getDeviceId() + ")!", AlertType.ERROR).set(true);
+            }
         }
     }
 
@@ -117,7 +126,7 @@ public class LazySparkMax extends CANSparkMax {
      * Used for checking RevLib functions
      * @return 1 for error, 0 for no error
      */
-    private int check(REVLibError err) {
+    private static int check(REVLibError err) {
         return err == REVLibError.kOk ? 0 : 1;
     }
 }

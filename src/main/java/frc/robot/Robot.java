@@ -19,6 +19,7 @@ import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
+import frc.robot.util.LazySparkMax;
 import frc.robot.util.PIDTuner;
 import frc.robot.util.controller.BetterXboxController;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -112,6 +113,7 @@ public class Robot extends LoggedRobot {
 
     driverControllerAlert.set(!DriverStation.isJoystickConnected(0));
     operatorControllerAlert.set(!DriverStation.isJoystickConnected(1));
+    LazySparkMax.checkAlive();
   }
 
   @Override
