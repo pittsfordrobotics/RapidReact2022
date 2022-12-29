@@ -147,7 +147,7 @@ public final class Constants {
     public static final double INDEXER_HUMAN_LOADING_WAIT = 1;
 
     public static final double INDEXER_SHOOTER_REJECTION_TIME = 0.5;
-    public static final double INDEXER_INTAKE_REJECTION_TIME = 1;
+    public static final double INDEXER_INTAKE_REJECTION_TIME = 0.5;
 
     public static final I2C.Port INDEXER_COLOR = I2C.Port.kMXP;
     public static final int INDEXER_COLOR_PROXIMITY = 200;
