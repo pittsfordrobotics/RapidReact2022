@@ -61,8 +61,8 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Intake Extended", intake.isExtended());
     SmartDashboard.putBoolean("Able to Shoot", indexer.ableToShoot());
     SmartDashboard.putBoolean("Is Empty", indexer.isEmpty());
-    SmartDashboard.putBoolean("1 Ball", indexer.getBallCount() == 1);
-    SmartDashboard.putBoolean("Fully Loaded", indexer.fullyLoaded());
+    SmartDashboard.putBoolean("1 Ball", indexer.isOneBall());
+    SmartDashboard.putBoolean("Fully Loaded", indexer.isFull());
     SmartDashboard.putBoolean("Snapped", RobotState.getInstance().isSnapped());
     SmartDashboard.putBoolean("Climber Enabled", RobotState.getInstance().isClimbing());
   }

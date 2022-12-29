@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ball;
 import frc.robot.Ball.COLOR;
-import frc.robot.Ball.LOCATION;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeReverse;
 import frc.robot.commands.IntakeUp;
@@ -31,6 +30,7 @@ public class Indexer extends SubsystemBase {
 
     private boolean reverse = false;
     private boolean shooting = false;
+    private boolean ballAtShooter = false;
     private boolean ballStillAtIntake = false;
     private boolean ballStillAtTower = false;
     private final Timer rejectionTimer = new Timer();
@@ -39,10 +39,14 @@ public class Indexer extends SubsystemBase {
 
     private final Ball[] balls = {new Ball(), new Ball()};
 
-    private enum State {
-        DISABLED, FIELD2, INTAKE1, INTAKE2, TOWER1INTAKE1, TOWER1, INTAKE1REJECT1, TOWER1REJECT1, ARMED1REJECT1, ARMED1INTAKE1, ARMED1, ARMED2, REJECT1INTAKE1, REJECT1, REJECT1TOWER1, SHOOTING1INTAKE1, SHOOTING1, SHOOTING2, OVERRIDE
+    private enum SystemState {
+        DISABLED, STOMACH, TOWER, STOMACH_TOWER, STOMACH_REVERSE
     }
-    private State state = State.DISABLED;
+    private enum BallState {
+        DISABLED, FIELD2, REJECT, BALL1, BALL2, OVERRIDE
+    }
+    private SystemState systemState = SystemState.DISABLED;
+    private BallState ballState = BallState.DISABLED;
 
     private COLOR allianceColor = COLOR.UNKNOWN;
 
@@ -61,7 +65,7 @@ public class Indexer extends SubsystemBase {
         indexerTab.add("Reset", new DisabledInstantCommand(this::resetEverything));
         indexerTab.add("Toggle Shooting", new InstantCommand(() -> shooting = !shooting));
         indexerTab.addString("Alliance Color", () -> allianceColor.toString());
-        indexerTab.addString("Indexer state", () -> state.toString());
+        indexerTab.addString("Indexer state", () -> systemState.toString());
         indexerTab.addString("Ball 1 Color", () -> balls[0].getColor().toString());
         indexerTab.addString("Ball 2 Color", () -> balls[1].getColor().toString());
         indexerTab.addString("Ball 1 Location", () -> balls[0].getLocation().toString());
@@ -80,7 +84,8 @@ public class Indexer extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("Indexer", inputs);
-        Logger.getInstance().recordOutput("Indexer/State", state.toString());
+        Logger.getInstance().recordOutput("Indexer/SystemState", systemState.toString());
+        Logger.getInstance().recordOutput("Indexer/BallState", ballState.toString());
         colorSensorAlert.set(!inputs.colorConnected);
         cargoRejectionAlert.set(!rejectionEnabled);
         boolean ballCurrentlyAtIntake = getBallAtIntake();
@@ -91,371 +96,113 @@ public class Indexer extends SubsystemBase {
         Logger.getInstance().recordOutput("Indexer/InstantShooterBall", ballCurrentlyAtShooter);
         getAllianceColorFMS();
         Logger.getInstance().recordOutput("Indexer/AllianceColor", allianceColor.toString());
-        switch (state) {
-            case FIELD2:
-                stomachMotorOff();
-                towerMotorOff();
-                if (ballCurrentlyAtIntake) {
-                    intakeBall();
-                    state = State.INTAKE1;
-                }
-                else {
-                    break;
-                }
-            case INTAKE1:
+        switch (systemState) {
+            case STOMACH:
                 stomachMotorOn();
                 towerMotorOff();
-                if (ballCurrentlyAtTower && ballCurrentlyAtIntake) {
-                    advanceToTower();
-                    intakeBall();
-                    if (isWrongColorBall(1) && rejectionEnabled) {
-                        state = State.TOWER1REJECT1;
-                    }
-                    else {
-                        state = State.TOWER1INTAKE1;
-                    }
-                    break;
-                }
-                if (!ballCurrentlyAtTower && ballCurrentlyAtIntake) {
-                    intakeBall();
-                    if (isWrongColorBall(1) && rejectionEnabled) {
-                        state = State.INTAKE1REJECT1;
-                    }
-                    else {
-                        state = State.INTAKE2;
-                    }
-                    break;
-                }
-                if (ballCurrentlyAtTower && !ballCurrentlyAtIntake) {
-                    advanceToTower();
-                    state = State.TOWER1;
-                    break;
-                }
                 break;
-            case INTAKE1REJECT1:
+            case TOWER:
+                stomachMotorOff();
+                towerMotorOn();
+                break;
+            case STOMACH_TOWER:
+                stomachMotorOn();
+                towerMotorOn();
+                break;
+            case STOMACH_REVERSE:
                 towerMotorOff();
                 stomachMotorReverse();
-                if (!rejectionTimerStarted) {
-                    rejectionTimer.reset();
-                    rejectionTimerStarted = true;
-                }
-                if (rejectionTimer.hasElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
-                    intakeReject();
-                    rejectionTimerStarted = false;
-                    state = State.INTAKE1;
-                }
                 break;
-            case INTAKE2:
-                stomachMotorOn();
-                towerMotorOff();
-                if (ballCurrentlyAtTower) {
-                    advanceToTower();
-                    state = State.TOWER1INTAKE1;
-                }
-                break;
-            case TOWER1INTAKE1:
-                stomachMotorOn();
-                towerMotorOn();
-                if (ballCurrentlyAtShooter && !ballCurrentlyAtTower) {
-                    advanceToShooter();
-                    state = State.ARMED1INTAKE1;
-                    break;
-                }
-                if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
-                    advanceToShooter();
-                    advanceToTower();
-                    state = State.ARMED2;
-                    break;
-                }
-                break;
-            case TOWER1REJECT1:
-                towerMotorOn();
-                stomachMotorReverse();
-                if (!rejectionTimerStarted) {
-                    rejectionTimer.reset();
-                    rejectionTimerStarted = true;
-                }
-                if (ballCurrentlyAtShooter && rejectionTimer.hasElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
-                    intakeReject();
-                    advanceToShooter();
-                    rejectionTimerStarted = false;
-                    state = State.ARMED1;
-                }
-                else if (ballCurrentlyAtShooter) {
-                    advanceToShooter();
-                    state = State.ARMED1REJECT1;
-                }
-                else if (rejectionTimer.hasElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
-                    intakeReject();
-                    rejectionTimerStarted = false;
-                    state = State.TOWER1;
-                }
-                break;
-            case TOWER1:
-                stomachMotorOn();
-                towerMotorOn();
-                if (ballCurrentlyAtShooter && !ballCurrentlyAtIntake) {
-                    advanceToShooter();
-                    state = State.ARMED1;
-                    break;
-                }
-                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
-                    advanceToShooter();
-                    intakeBall();
-                    if (isWrongColorBall(1) && rejectionEnabled) {
-                        state = State.ARMED1REJECT1;
-                    }
-                    else {
-                        state = State.ARMED1INTAKE1;
-                    }
-                    break;
-                }
-                if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
-                    intakeBall();
-                    if (isWrongColorBall(1) && rejectionEnabled) {
-                        state = State.TOWER1REJECT1;
-                    }
-                    else {
-                        state = State.TOWER1INTAKE1;
-                    }
-                    break;
-                }
-                break;
-            case ARMED1INTAKE1:
-                stomachMotorOn();
-                towerMotorOff();
-                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && isWrongColorBall(0) && rejectionEnabled) {
-                    advanceToTower();
-                    state = State.REJECT1TOWER1;
-                    break;
-                }
-                else if (ballCurrentlyAtShooter && !ballCurrentlyAtTower && isWrongColorBall(0) && rejectionEnabled) {
-                    state = State.REJECT1INTAKE1;
-                    break;
-                }
-                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && shooting) {
-                    advanceToTower();
-                    state = State.SHOOTING2;
-                }
-                else if (shooting) {
-                    state = State.SHOOTING1INTAKE1;
-                }
-                else if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
-                    advanceToTower();
-                    state = State.ARMED2;
-                }
-                break;
-            case ARMED1REJECT1:
-                towerMotorOff();
-                stomachMotorReverse();
-                if (!rejectionTimerStarted) {
-                    rejectionTimer.reset();
-                    rejectionTimerStarted = true;
-                }
-                if (rejectionTimer.hasElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
-                    intakeReject();
-                    rejectionTimerStarted = false;
-                    state = State.ARMED1;
-                }
-                break;
-            case ARMED1:
-                stomachMotorOff();
-                towerMotorOff();
-                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake && isWrongColorBall(0) && rejectionEnabled) {
-                    intakeBall();
-                    state = State.REJECT1INTAKE1;
-                    break;
-                }
-                else if (ballCurrentlyAtShooter && isWrongColorBall(0) && rejectionEnabled) {
-                    state = State.REJECT1;
-                    break;
-                }
-                if (ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
-                    intakeBall();
-                    if (isWrongColorBall(1) && rejectionEnabled) {
-                        state = State.ARMED1REJECT1;
-                    }
-                    else if (shooting) {
-                        state = State.SHOOTING1INTAKE1;
-                    }
-                    else {
-                        state = State.ARMED1INTAKE1;
-                    }
-                }
-                else if (shooting) {
-                    state = State.SHOOTING1;
-                }
-                break;
-            case ARMED2:
-                stomachMotorOff();
-                towerMotorOff();
-                if (shooting) {
-                    state = State.SHOOTING2;
-                }
-                break;
-            case REJECT1INTAKE1:
-                if (rejectionTimerStarted) {
-                    towerMotorOn();
-                }
-                else {
-                    towerMotorOff();
-                }
-                stomachMotorOn();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atGoal() && !rejectionTimerStarted) {
-                    rejectionTimer.reset();
-                    rejectionTimerStarted = true;
-                }
-                if (ballCurrentlyAtTower && rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
-                    shootBall();
-                    rejectionTimerStarted = false;
-                    state = State.TOWER1;
-                }
-                else if (ballCurrentlyAtTower) {
-                    advanceToTower();
-                    state = State.REJECT1TOWER1;
-                }
-                else if (rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
-                    shootBall();
-                    rejectionTimerStarted = false;
-                    state = State.INTAKE1;
-                }
-                break;
-            case REJECT1:
-                if (rejectionTimerStarted) {
-                    towerMotorOn();
-                }
-                else {
-                    towerMotorOff();
-                }
-                stomachMotorOff();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atGoal() && !rejectionTimerStarted) {
-                    rejectionTimer.reset();
-                    rejectionTimerStarted = true;
-                }
-                if (ballCurrentlyAtIntake && rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
-                    shootBall();
-                    intakeBall();
-                    rejectionTimerStarted = false;
-                    state = State.INTAKE1;
-                }
-                else if (ballCurrentlyAtIntake) {
-                    intakeBall();
-                    state = State.REJECT1INTAKE1;
-                }
-                else if (rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
-                    shootBall();
-                    rejectionTimerStarted = false;
-                    state = State.FIELD2;
-                }
-                break;
-            case REJECT1TOWER1:
-                if (rejectionTimerStarted) {
-                    towerMotorOn();
-                }
-                else {
-                    towerMotorOff();
-                }
-                stomachMotorOff();
-                if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atGoal() && !rejectionTimerStarted) {
-                    rejectionTimer.reset();
-                    rejectionTimerStarted = true;
-                }
-                if (rejectionTimerStarted && rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
-                    shootBall();
-                    rejectionTimerStarted = false;
-                    state = State.TOWER1;
-                }
-                break;
-            case SHOOTING1INTAKE1:
-                stomachMotorOn();
-                towerMotorOn();
-                if (!ballCurrentlyAtShooter && !ballCurrentlyAtTower) {
-                    shootBall();
-                    state = State.INTAKE1;
-                    break;
-                }
-                if (ballCurrentlyAtShooter && ballCurrentlyAtTower && shooting) {
-                    advanceToTower();
-                    state = State.SHOOTING2;
-                    break;
-                }
-                if (ballCurrentlyAtShooter && ballCurrentlyAtTower) {
-                    advanceToTower();
-                    state = State.ARMED2;
-                    break;
-                }
-                if (!ballCurrentlyAtShooter && ballCurrentlyAtTower) {
-                    advanceToTower();
-                    state = State.TOWER1;
-                    break;
-                }
-                break;
-            case SHOOTING1:
-                stomachMotorOff();
-                towerMotorOn();
-                if (!ballCurrentlyAtShooter && ballCurrentlyAtIntake) {
-                    intakeBall();
-                    shootBall();
-                    state = State.INTAKE1;
-                    break;
-                }
-                if (!ballCurrentlyAtShooter) {
-                    shootBall();
-                    state = State.FIELD2;
-                    break;
-                }
-                break;
-            case SHOOTING2:
-                stomachMotorOn();
-                towerMotorOn();
-                if (!ballCurrentlyAtShooter) {
-                    shootBall();
-                    state = State.TOWER1;
-                }
-                break;
-            case OVERRIDE:
-                if (!reverse) {
-                    stomachMotorOn();
-                    towerMotorOn();
-                }
-                else {
-                    stomachMotorReverse();
-                    towerMotorReverse();
-
-                }
-                break;
+            case DISABLED:
             default:
                 stomachMotorOff();
                 towerMotorOff();
         }
-        if (state == State.REJECT1 || state == State.REJECT1INTAKE1 || state == State.REJECT1TOWER1) {
-            Shooter.getInstance().setSetpoint(Constants.SHOOTER_INDEXER_REJECT_SPEED, true);
-            Hood.getInstance().setAngle(Constants.HOOD_ANGLE_MAX, true);
+        switch (ballState) {
+            case FIELD2:
+                systemState = SystemState.DISABLED;
+                if (ballCurrentlyAtIntake && !isWrongColorBall()) {
+                    systemState = SystemState.STOMACH_TOWER;
+                } else if (ballCurrentlyAtIntake && isWrongColorBall()) {
+                    systemState = SystemState.STOMACH_TOWER;
+                }
+                break;
+            case BALL1:
+                if (ballCurrentlyAtShooter) {
+                    systemState = SystemState.DISABLED;
+                }
+                if (ballCurrentlyAtIntake && !isWrongColorBall()) {
+                    systemState = SystemState.STOMACH;
+                    ballState = BallState.BALL2;
+                } else if (ballCurrentlyAtIntake && isWrongColorBall()) {
+                    systemState = SystemState.STOMACH_REVERSE;
+                    rejectionTimer.start();
+                    rejectionTimerStarted = true;
+                }
+                if (rejectionTimerStarted) {
+                    CommandScheduler.getInstance().schedule(false, new IntakeReverse());
+                    if (rejectionTimer.hasElapsed(Constants.INDEXER_INTAKE_REJECTION_TIME)) {
+                        rejectionTimer.stop();
+                        rejectionTimer.reset();
+                        rejectionTimerStarted = false;
+                        systemState = SystemState.DISABLED;
+                    }
+                }
+                if (shooting) {
+                    systemState = SystemState.STOMACH_TOWER;
+                    if (ballCurrentlyAtShooter) {
+                        ballAtShooter = true;
+                    } else if (ballAtShooter) {
+                        ballAtShooter = false;
+                        ballState = BallState.FIELD2;
+                    }
+                }
+                break;
+            case REJECT:
+                if (ballCurrentlyAtShooter) {
+                    systemState = SystemState.DISABLED;
+                    Shooter.getInstance().setSetpoint(Constants.SHOOTER_INDEXER_REJECT_SPEED, true);
+                    Hood.getInstance().setAngle(Constants.HOOD_ANGLE_MAX, true);
+                    if (Shooter.getInstance().isAtSetpoint() && Hood.getInstance().atGoal()) {
+                        rejectionTimer.start();
+                    }
+                }
+                if (rejectionTimer.hasElapsed(Constants.INDEXER_SHOOTER_REJECTION_TIME)) {
+                    systemState = SystemState.DISABLED;
+                    ballState = BallState.FIELD2;
+                    Shooter.getInstance().setSetpoint(-1, true);
+                    Hood.getInstance().setAngle(-1, true);
+                    rejectionTimer.stop();
+                    rejectionTimer.reset();
+                }
+                break;
+            case BALL2:
+                if (ballCurrentlyAtTower) {
+                    systemState = SystemState.DISABLED;
+                }
+                if (shooting) {
+                    systemState = SystemState.STOMACH_TOWER;
+                    if (!ballCurrentlyAtShooter) {
+                        ballState = BallState.BALL1;
+                    }
+                }
+                break;
+            case OVERRIDE:
+                systemState = SystemState.STOMACH_TOWER;
+                break;
+            case DISABLED:
+            default:
+                systemState = SystemState.DISABLED;
         }
-        else {
-            Shooter.getInstance().setSetpoint(-1, true);
-            Hood.getInstance().setAngle(-1, true);
-        }
-        if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {
-            CommandScheduler.getInstance().schedule(false, new IntakeReverse());
-        }
-        else if (isFull() && !DriverStation.isAutonomous()) {
+
+        if (isFull() && !DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(false, new IntakeUpNoInterrupt());
         }
         else if (!DriverStation.isAutonomous()) {
             CommandScheduler.getInstance().schedule(true, new IntakeUp());
         }
-        Logger.getInstance().recordOutput("Indexer/Ball0Color", getBall0().getColor().toString());
-        Logger.getInstance().recordOutput("Indexer/Ball0Location", getBall0().getLocation().toString());
-        Logger.getInstance().recordOutput("Indexer/Ball1Color", getBall1().getColor().toString());
-        Logger.getInstance().recordOutput("Indexer/Ball1Location", getBall1().getLocation().toString());
         Logger.getInstance().recordOutput("Indexer/Shooting", shooting);
-        Logger.getInstance().recordOutput("Indexer/NumberOfBalls", getBallCount());
         Logger.getInstance().recordOutput("Indexer/IsFull", isFull());
-    }
-
-    public boolean getRejecting() {
-        return rejectionEnabled ||  state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse);
     }
 
     public void getAllianceColorFMS() {
@@ -476,25 +223,21 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean isDisabled() {
-        return state == State.DISABLED;
+        return systemState == SystemState.DISABLED;
     }
 
     public void resetEverything() {
-        state = State.FIELD2;
-        resetBalls();
+        systemState = SystemState.DISABLED;
+        ballState = BallState.FIELD2;
     }
 
     public void override() {
-        state = State.OVERRIDE;
+        ballState = BallState.OVERRIDE;
     }
 
-    public void disable() {
-        this.state = State.DISABLED;
-    }
 
     public void addBallToTower() {
-        balls[0] = new Ball(LOCATION.TOWER, allianceColor);
-        state = State.TOWER1;
+        ballState = BallState.BALL1;
     }
 
     public void setStateShoot() {
@@ -524,37 +267,27 @@ public class Indexer extends SubsystemBase {
         io.setTower(Constants.INDEXER_TOWER_SPEED);
     }
 
-    public void towerMotorReverse() {
-        io.setTower(-Constants.INDEXER_TOWER_SPEED);
-    }
-
     public void towerMotorOff() {
         io.setTower(0);
     }
 
-    public Ball getBall0() {
-        return balls[0];
-    }
-
-    public Ball getBall1() {
-        return balls[1];
-    }
-
-    public void resetBalls() {
-        balls[0] = new Ball();
-        balls[1] = new Ball();
-    }
-
     public boolean isFull() {
-        return balls[0].getLocation() != LOCATION.FIELD && balls[1].getLocation() != LOCATION.FIELD && balls[0].getColor() == balls[1].getColor() && balls[0].getColor() == allianceColor;
+        return ballState == BallState.BALL2;
     }
 
     public boolean isEmpty() {
-        return balls[0].getLocation() == LOCATION.FIELD && balls[1].getLocation() == LOCATION.FIELD;
+        return ballState == BallState.FIELD2;
+    }
+
+    public boolean isOneBall() {
+        return ballState == BallState.BALL1;
     }
 
     public int getBallCount() {
-        return (balls[0].getLocation() != LOCATION.FIELD ? 1 : 0) + (balls[1].getLocation() != LOCATION.FIELD ? 1 : 0);
+        if (ballState == BallState.FIELD2) return 0;
+        if (ballState == BallState.BALL1) return 1;
+        if (ballState == BallState.BALL2) return 2;
+        return 0;
     }
 
     public boolean getBallAtIntake() {
@@ -588,62 +321,20 @@ public class Indexer extends SubsystemBase {
         return inputs.shooterDetected;
     }
 
-    public void intakeBall() {
-        COLOR color = inputs.colorRed > inputs.colorBlue ? COLOR.RED : COLOR.BLUE;
-        if (!inputs.colorConnected) {
-            color = COLOR.UNKNOWN;
-        }
-        if (balls[0].getLocation() == LOCATION.FIELD) {
-            balls[0].setLocationColor(LOCATION.INTAKE, color);
-        }
-        else if (balls[1].getLocation() == LOCATION.FIELD) {
-            balls[1].setLocationColor(LOCATION.INTAKE, color);
-        }
-    }
-
-    public void intakeReject() {
-        balls[1] = new Ball();
-    }
-
-    public void shootBall() {
-        balls[0] = balls[1];
-        balls[1] = new Ball();
-    }
-
-    public void advanceToTower() {
-        if (balls[0].getLocation() == LOCATION.INTAKE) {
-            balls[0].setLocation(LOCATION.TOWER);
-        }
-        else if (balls[1].getLocation() == LOCATION.INTAKE) {
-            balls[1].setLocation(LOCATION.TOWER);
-        }
-    }
-
-    public void advanceToShooter() {
-        balls[0].setLocation(LOCATION.SHOOTER);
-    }
-
     public void setReverse(boolean reverse) {
         this.reverse = reverse;
     }
 
     public boolean ableToShoot() {
-        return state == State.ARMED1 || state == State.ARMED2 || state == State.ARMED1INTAKE1;
+        return ballState != BallState.REJECT && ballState != BallState.DISABLED && ballState != BallState.FIELD2;
     }
 
-    public boolean fullyLoaded() {
-        return state == State.ARMED2;
-    }
-
-    public boolean isWrongColorBall(int index) {
-        return (balls[index].getColor() != allianceColor) && (balls[index].getColor() != COLOR.UNKNOWN) && (allianceColor != COLOR.UNKNOWN);
+    public boolean isWrongColorBall() {
+        COLOR color = inputs.colorRed > inputs.colorBlue ? COLOR.RED : COLOR.BLUE;
+        return (allianceColor != COLOR.UNKNOWN) && (allianceColor != color);
     }
 
     public void setRejectionEnabled(boolean enabled) {
         this.rejectionEnabled = enabled;
-    }
-
-    public boolean allianceIsUnknown() {
-        return allianceColor == COLOR.UNKNOWN;
     }
 }
