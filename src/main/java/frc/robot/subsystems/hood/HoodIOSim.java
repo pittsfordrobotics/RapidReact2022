@@ -11,6 +11,6 @@ public class HoodIOSim implements HoodIO {
         inputs.velocityRadPerSec = 0;
         inputs.appliedVolts = 0;
         inputs.currentAmps = new double[] {0};
-        inputs.tempCelcius = new double[] {0};
+        inputs.tempCelsius = new double[] {0};
     }
 }

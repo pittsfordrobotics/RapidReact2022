@@ -20,6 +20,7 @@ import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOSparkMax;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
+import frc.robot.subsystems.hood.HoodIOSparkMax;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSparkMax;
@@ -169,13 +170,14 @@ public final class Constants {
     public static final int SHOOTER_INDEXER_REJECT_SPEED = 1000;
     public static final double SHOOTER_FENDER_SPEED = 3000;
     public static final double SHOOTER_P = 0.0002;
-    public static final double SHOOTER_FEEDFORWARD = 0.00218;
+    public static final double SHOOTER_FEEDFORWARD = 0.00215;
 
     public static final double SHOOTER_TOLERANCE = 100;
 
     public static final InterpolatingTreeMap SHOOTER_SPEED_MAP = new InterpolatingTreeMap();
     static {
-        SHOOTER_SPEED_MAP.put(0, 3000);
+        SHOOTER_SPEED_MAP.put(2.96675, 4100);
+        SHOOTER_SPEED_MAP.put(3.3166, 4300);
     }
 
     /**
@@ -189,7 +191,7 @@ public final class Constants {
     public static final int HOOD_DIO_PORT = 1;
     public static final double HOOD_ANGLE_OFFSET = 0.82;
     public static final double HOOD_ANGLE_MIN = 0;
-    public static final double HOOD_ANGLE_MAX = 1.248; // 0.880 after offset calibration
+    public static final double HOOD_ANGLE_MAX = 1.27; // 0.880 after offset calibration
 
     public static final double HOOD_550_GEAR_RATIO = 20;
     public static final double HOOD_REV_THROUGH_BORE_GEAR_RATIO = 18.0;
@@ -201,7 +203,8 @@ public final class Constants {
 
     public static final InterpolatingTreeMap HOOD_ANGLE_MAP = new InterpolatingTreeMap();
     static {
-        HOOD_ANGLE_MAP.put(0, 0);
+        HOOD_ANGLE_MAP.put(2.96675, 0.7);
+        HOOD_ANGLE_MAP.put(3.3166, 0.9);
     }
 
     /**
@@ -250,7 +253,7 @@ public final class Constants {
             ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
             ROBOT_COMPRESSOR_IO = new CompressorIORev();
             ROBOT_DRIVE_IO = new DriveIOSparkMax();
-            ROBOT_HOOD_IO = new HoodIO() {};
+            ROBOT_HOOD_IO = new HoodIOSparkMax();
             ROBOT_INDEXER_IO = new IndexerIOSparkMax();
             ROBOT_INTAKE_IO = new IntakeIOSparkMax();
             ROBOT_SHOOTER_IO = new ShooterIOSparkMax();
@@ -260,7 +263,7 @@ public final class Constants {
             ROBOT_CLIMBER_IO = new ClimberIOSparkMax();
             ROBOT_COMPRESSOR_IO = new CompressorIORev();
             ROBOT_DRIVE_IO = new DriveIOSparkMax();
-            ROBOT_HOOD_IO = new HoodIO() {};
+            ROBOT_HOOD_IO = new HoodIOSparkMax();
             ROBOT_INDEXER_IO = new IndexerIOSparkMax();
             ROBOT_INTAKE_IO = new IntakeIOSparkMax();
             ROBOT_SHOOTER_IO = new ShooterIOSparkMax();

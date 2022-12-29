@@ -25,6 +25,7 @@ public class Ball {
 
     public LOCATION getLocation() {
         return location;
+
     }
 
     public COLOR getColor() {
