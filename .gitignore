@@ -165,3 +165,5 @@ simgui*.json
 
 # Version file
 src/main/java/frc/robot/GitConstants.java
+
+.idea/

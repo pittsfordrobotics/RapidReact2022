@@ -18,7 +18,7 @@ public interface HoodIO {
         public double appliedVolts = 0.0;
         public boolean limit = false;
         public double[] currentAmps = new double[] {};
-        public double[] tempCelcius = new double[] {};
+        public double[] tempCelsius = new double[] {};
 
         public void toLog(LogTable table) {
             table.put("AbsolutePosition", absolutePosition);
@@ -28,7 +28,7 @@ public interface HoodIO {
             table.put("AppliedVolts", appliedVolts);
             table.put("LimitSwitch", limit);
             table.put("CurrentAmps", currentAmps);
-            table.put("TempCelcius", tempCelcius);
+            table.put("TempCelsius", tempCelsius);
         }
 
         public void fromLog(LogTable table) {
@@ -38,7 +38,7 @@ public interface HoodIO {
             appliedVolts = table.getDouble("AppliedVolts", appliedVolts);
             limit = table.getBoolean("Limit", limit);
             currentAmps = table.getDoubleArray("CurrentAmps", currentAmps);
-            tempCelcius = table.getDoubleArray("TempCelcius", tempCelcius);
+            tempCelsius = table.getDoubleArray("TempCelsius", tempCelsius);
         }
     }
 

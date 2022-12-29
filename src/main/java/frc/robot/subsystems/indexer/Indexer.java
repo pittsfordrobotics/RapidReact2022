@@ -97,7 +97,7 @@ public class Indexer extends SubsystemBase {
                 towerMotorOff();
                 if (ballCurrentlyAtIntake) {
                     intakeBall();
-                    state = State.INTAKE1;
+//                    state = State.INTAKE1;
                 }
                 else {
                     break;
@@ -434,7 +434,8 @@ public class Indexer extends SubsystemBase {
         }
         else {
             Shooter.getInstance().setSetpoint(-1, true);
-            Hood.getInstance().setAngle(-1, true);
+            // TODO: FIX
+            // Hood.getInstance().setAngle(-1, true);
         }
         if (state == State.ARMED1REJECT1 || state == State.TOWER1REJECT1 || state == State.INTAKE1REJECT1 || (state == State.OVERRIDE && reverse)) {
             CommandScheduler.getInstance().schedule(false, new IntakeReverse());
@@ -636,7 +637,8 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean isWrongColorBall(int index) {
-        return (balls[index].getColor() != allianceColor) && (balls[index].getColor() != COLOR.UNKNOWN) && (allianceColor != COLOR.UNKNOWN);
+//        return (balls[index].getColor() != allianceColor) && (balls[index].getColor() != COLOR.UNKNOWN) && (allianceColor != COLOR.UNKNOWN);
+        return false;
     }
 
     public void setRejectionEnabled(boolean enabled) {
