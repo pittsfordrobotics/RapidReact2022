@@ -48,7 +48,7 @@ public class Drive extends SubsystemBase {
     private Drive(DriveIO io) {
         this.io = io;
 
-        setThrottle(0.7);
+        setThrottle(Constants.ROBOT_DEMO_MODE ? 0.4 : 0.7);
 
         ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
         driveTab.addNumber("Pigeon", this::getAngle);
